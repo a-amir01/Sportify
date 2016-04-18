@@ -121,8 +121,7 @@ public class SportListFragment extends Fragment {
         /*only one sport will change at a time*/
         else {
             /*notify on sports's update*/
-            mAdapter.notifyDataSetChanged();
-            //mAdapter.notifyItemChanged(mSportPosition);
+            mAdapter.notifyItemChanged(mSportPosition);
 
         }/*end else*/
 

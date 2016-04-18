@@ -95,10 +95,13 @@ public class LoginActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_SIGNUP) {
             /*empty intent passed in*/
-            if(data == null) return;
+            //TODO this needs to be verified later
+            //if(data == null) return;
 
                 // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
+                Intent intent = new Intent(getApplicationContext(), SportListActivity.class);
+                startActivity(intent);
                 finish();
             } //end if
 

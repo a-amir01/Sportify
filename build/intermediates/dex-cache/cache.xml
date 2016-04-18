@@ -2,18 +2,18 @@
 <items version="2" >
 
     <item
-        jar="/home/amir/Android/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="cabe1700547a0e428e7e6099b88599ff48b0f94e">
-        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_c678b1a6b217792e6a9125831bf931600775468b/classes.dex" />
-    </item>
-    <item
         jar="/home/amir/Android/SportsApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0-alpha1/jars/libs/internal_impl-24.0.0-alpha1.jar"
         jumboMode="true"
         revision="23.0.3"
         sha1="e57fba0a2d57d3501d8f4ff44c23092978804845">
         <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.0.0-alpha1_bcc8e3be5d66cec8e4cbf82a33f38c4a1658243a/classes.dex" />
+    </item>
+    <item
+        jar="/home/amir/Android/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="c36a974e9f4f01e7dc1106a687a4d5f4226368e2">
+        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_c678b1a6b217792e6a9125831bf931600775468b/classes.dex" />
     </item>
     <item
         jar="/home/amir/Android/SportsApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0-alpha1/jars/classes.jar"
@@ -40,7 +40,7 @@
         jar="/home/amir/Android/SportsApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="a48685322f94b474439effdbcc6de541e7533ed7">
+        sha1="49b23e3471ac1db5c3d09a74c7dadfb5552700df">
         <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_3a58ccb42cbc9f183ef0c22452ece0960c6b000f/classes.dex" />
     </item>
     <item
@@ -86,11 +86,11 @@
         <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-databind-2.2.2_1e44052e6da900215b69fd7987120dc49bf418f8/classes.dex" />
     </item>
     <item
-        jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
+        jar="/home/amir/Android/SportsApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/jars/classes.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
-        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/butterknife-7.0.1_20568fe81a89c716ef54c287c013deb877119fbb/classes.dex" />
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.2.1_e98c6ae7e67010c8dcea470c99832c56e338db0b/classes.dex" />
     </item>
     <item
         jar="/home/amir/Android/SportsApp/app/build/intermediates/exploded-aar/com.android.support/design/23.2.1/jars/classes.jar"
@@ -100,11 +100,11 @@
         <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.2.1_8b272fdfd8e2aec9eb44e2a04810909792a38fb9/classes.dex" />
     </item>
     <item
-        jar="/home/amir/Android/SportsApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/jars/classes.jar"
+        jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.jakewharton/butterknife/7.0.1/d5d13ea991eab0252e3710e5df3d6a9d4b21d461/butterknife-7.0.1.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
-        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.2.1_e98c6ae7e67010c8dcea470c99832c56e338db0b/classes.dex" />
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/butterknife-7.0.1_20568fe81a89c716ef54c287c013deb877119fbb/classes.dex" />
     </item>
     <item
         jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-jvm/2.5.2/91731b8f5868a3e8a8a773f29b8d06b5c358f5bb/firebase-client-jvm-2.5.2.jar"
