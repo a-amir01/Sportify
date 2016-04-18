@@ -45,8 +45,8 @@ public class MainActivity extends Activity {
 
         else {
             Log.i(TAG, "Not first Run");
-            /*start the home activity*/            /*needs to change*/
-            intent = new Intent(MainActivity.this, SignupActivity.class); //Default Activity
+            /*start the home activity*/
+            intent = new Intent(MainActivity.this, SportListActivity.class); //Default Activity
         } //end else
 
         /*start the correct activity*/

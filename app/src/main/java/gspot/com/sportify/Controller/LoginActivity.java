@@ -188,12 +188,13 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess() {
         Log.i(TAG, "onLoginSuccess()");
         mLoginButton.setEnabled(true);
+
         //TODO on successful sign in retrieve the User's info and send them to the home page
-         /*
-        Intent intent = new Intent(getApplicationContext(), home.class);
+
+        Intent intent = new Intent(getApplicationContext(), SportListActivity.class);
         startActivity(intent);  //redirect to home page
         finish();               //kill this activity
-        */
+
     }//end onLoginSuccess
 
     /*
@@ -208,5 +209,13 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginButton.setEnabled(true);
     } //end onLoginFailed
+
+    @Override
+    public void onDestroy()
+    {//Called when the view hierarchy associated with the Activity is being removed.
+        super.onDestroy();
+        Log.i(TAG, "onDestroy()");
+        ButterKnife.unbind(this);
+    }
 
 }

@@ -174,5 +174,13 @@ public class SignupActivity extends Activity{
 
         return valid;
     }//end validate()
+
+    @Override
+    public void onDestroy()
+    {//Called when the view hierarchy associated with the Activity is being removed.
+        super.onDestroy();
+        Log.i(TAG, "onDestroy()");
+        ButterKnife.unbind(this);
+    }
 }// end SignupActivity
 
