@@ -110,7 +110,7 @@ public class SportListFragment extends Fragment {
         List<Sport> sports = sportLab.getSports();
 
         /*there are currently no sports listed*/
-        if(mAdapter == null){
+        if(mAdapter == null) {
             Log.d(TAG, "updateUI() mAdapter == null");
             /*populate screen with all sports*/
             mAdapter = new SportAdapter(sports);
