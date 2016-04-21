@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.firebase.client.Firebase;
+
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -16,6 +18,7 @@ import butterknife.OnTextChanged;
 import gspot.com.sportify.Model.Sport;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Created by amir on 4/17/16.
@@ -72,6 +75,14 @@ public class SportFragment extends Fragment {
         ButterKnife.bind(this, view);
         /**show the sport*/
         mTitleField.setText(mSport.getSportName());
+
+        //Makes a new reference to the database (needed everytime you want to access the data base
+        Firebase refSportTitle = new Firebase(Constants.FIREBASE_URL);
+
+        String title = mTitleField.getText().toString();
+
+        //Writes to the database a key of "Test" and a value of the title of the sport selected
+        refSportTitle.child("Test").setValue(title);
 
         /**root of the fragments layout, return null if no layout.*/
         return view;
