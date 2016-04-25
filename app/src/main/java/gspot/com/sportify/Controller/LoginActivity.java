@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     /* onClick()
      * Annotation listener for the login button
      * Once the button is clicked the login() is called
-     * to log the User in
+     * to log the User i
      * */
     @OnClick(R.id.btn_login)
     void onClick(Button button) { login(); }
