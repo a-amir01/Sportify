@@ -1,4 +1,5 @@
 <resources>
+    <string name="action_settings">something</string>
     <string name="app_name">Sportify</string>
     <string name="sport_title_label">Title</string>
     <string name="sport_title_hint">Enter a title for the sport.</string>

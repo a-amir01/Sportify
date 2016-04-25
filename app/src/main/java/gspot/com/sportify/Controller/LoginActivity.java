@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -13,11 +14,13 @@ import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.Constants;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
 
     /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
+
+    /*Dialog box */
+    ProgressDialog progressDialog;
 
 
     /*link to the widgets*/
@@ -69,6 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
 
+        mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+        progressDialog = new ProgressDialog(LoginActivity.this,
+                R.style.AppTheme);
         setContentView(R.layout.activity_login);
 
         /*link the widgets to the members*/
@@ -98,12 +107,12 @@ public class LoginActivity extends AppCompatActivity {
             //TODO this needs to be verified later
             //if(data == null) return;
 
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                Intent intent = new Intent(getApplicationContext(), SportListActivity.class);
-                startActivity(intent);
-                finish();
-            } //end if
+            // TODO: Implement successful signup logic here
+            // By default we just finish the Activity and log them in automatically
+            Intent intent = new Intent(getApplicationContext(), SportListActivity.class);
+            startActivity(intent);
+            finish();
+        } //end if
 
     } //end onActivityResult
 
@@ -123,95 +132,98 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         Log.d(TAG, "Login");
 
-        if (!validate()) {
-            onLoginFailed();
+        String email = mEmailText.getText().toString();
+        String password = mPasswordText.getText().toString();
+
+        //Checks user input
+        if(email.equals(""))
+        {
+            mEmailText.setError("Please enter a valid email");
             return;
-        } //end if
+        }
 
-        mLoginButton.setEnabled(false);
+        //Checks user input
+        if(password.equals(""))
+        {
+            mPasswordText.setError("Please enter a valid password");
+            return;
+        }
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
+        //Show dialog box
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("Authenticating..");
         progressDialog.show();
 
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        //Authenticate user input through firebase
+        mFirebaseRef.authWithPassword(email, password,
+                new MyAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
-        // TODO: Implement authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     } //end login()
 
-    /*
-    * validate()
-    * This utility function will check and make sure that the
-    * User has entered the correct email and password syntax
-    * */
-    private boolean validate() {
-        Log.i(TAG, "validate()");
+    //Authenticator class
+    private class MyAuthResultHandler implements Firebase.AuthResultHandler
+    {
+        private final String provider;
+        public MyAuthResultHandler(String provider)
+        {
+           this.provider = provider;
+        }
 
-        boolean valid = true;
+        //Successful Login
+        @Override
+        public void onAuthenticated(AuthData authData)
+        {
+            progressDialog.dismiss();
+            Log.i(TAG, provider + " " + "SUCCESSFUL LOGIN");
 
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mEmailText.setError("enter a valid email address");
-            valid = false;
-        } //end if
-        else {
-            mEmailText.setError(null);
-        } //end else
+            if(authData != null)
+            {
+                //Goes to the SportsList page
+                Intent intent = new Intent(LoginActivity.this, SportListActivity.class);
+                startActivity(intent);
+                finish();
+            }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mPasswordText.setError("between 4 and 10 alphanumeric characters");
-            valid = false;
-        } //end if
-        else {
-            mPasswordText.setError(null);
-        } //end else
+        }
 
-        return valid;
-    }//end validate()
+        /*Function name : onAuthetication Error(FirebaseError firebaseError)
+          Description : If user login fails this program will check what error
+          caused it to fail and display to the user
+         */
+        @Override
+        public void onAuthenticationError(FirebaseError firebaseError)
+        {
+            //Gets rid of the dialog box
+           progressDialog.dismiss();
+            Log.i(TAG, provider + " " + "UNCESSFUL LOGIN");
 
-    /*
-    * onLoginSuccess()
-    * re enables the login button and closes the activity
-    * */
-    public void onLoginSuccess() {
-        Log.i(TAG, "onLoginSuccess()");
-        mLoginButton.setEnabled(true);
+            //Error case
+            switch(firebaseError.getCode())
+            {
+                case FirebaseError.INVALID_EMAIL:
+                case FirebaseError.USER_DOES_NOT_EXIST:
+                    mEmailText.setError("Invalid email");
+                    break;
+                case FirebaseError.INVALID_PASSWORD:
+                    mPasswordText.setError("Wrong Password");
+                    break;
+                case FirebaseError.NETWORK_ERROR:
+                    showErrorToast("No Network connection , please your connection and " +
+                            "try again ");
+                    break;
+                default:
+                    showErrorToast(firebaseError.toString());
 
-        //TODO on successful sign in retrieve the User's info and send them to the home page
+            }
+        }
+    }
 
-        Intent intent = new Intent(getApplicationContext(), SportListActivity.class);
-        startActivity(intent);  //redirect to home page
-        finish();               //kill this activity
+    private void showErrorToast(String message)
+    {
+        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
+    }
 
-    }//end onLoginSuccess
-
-    /*
-    * onLoginFailed()
-    * Function to notify User of a failed login
-    * reenables the login button
-    * */
-    public void onLoginFailed() {
-        Log.d(TAG, "onLoginFailed()");
-
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
-        mLoginButton.setEnabled(true);
-    } //end onLoginFailed
 
     @Override
     public void onDestroy()

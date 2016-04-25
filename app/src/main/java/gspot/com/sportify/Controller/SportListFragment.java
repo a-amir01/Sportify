@@ -46,7 +46,7 @@ public class SportListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle SavedInstanceState){
         Log.d(TAG, "onCreateView()");
-
+getActivity().getIntent().getFlags();
         View view = inflater.inflate(R.layout.fragment_sport_list, container, false);
 
        mSportRecyclerView = (RecyclerView)view.findViewById(R.id.sport_recycler_view);

@@ -11,14 +11,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gspot.com.sportify.R;
 
+
 /**
+ *
  * Created by amir on 4/17/16.
  */
 public class SignupActivity extends Activity{
@@ -39,6 +45,11 @@ public class SignupActivity extends Activity{
     @Bind(R.id.btn_signup) Button mSignupButton;
     @Bind(R.id.link_login) TextView mSigninText;
     @Bind(R.id.input_name) EditText mNameText;
+
+    /*Holds user info*/
+    String name;
+    String email;
+    String password;
 
     /* onClick()
     * Annotation listener for the signup button
@@ -84,14 +95,16 @@ public class SignupActivity extends Activity{
 
         mSignupButton.setEnabled(false);  //disable the button
 
+        /*Progress dialog*/
         final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this, R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        String name = mNameText.getText().toString();
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        /*Store user's info into variables*/
+        name = mNameText.getText().toString();
+        email = mEmailText.getText().toString();
+        password = mPasswordText.getText().toString();
 
         // TODO: Implement your signup logic here.
 
@@ -119,6 +132,34 @@ public class SignupActivity extends Activity{
         //this is how we pass data back to the function onActivityForResult
         setResult(RESULT_OK, null);
         //terminate activity
+
+        /*Leave here for reference*/
+        //Root (user)
+        //Firebase ref = new Firebase(Constants.FIREBASE_URL);
+
+        //Firebase childName = new Firebase("https://gspot.firebaseio.com/users").child(name);
+
+        /*This tell it not to overwrite old data*/
+        //childName.push();
+
+        /*Set values*/
+        //childName.setValue(email);
+        //childName.child("email").setValue(email);
+        //childName.child("password").setValue(password);
+
+        /*Create user in database*/
+        Firebase ref = new Firebase("https://gspot.firebaseio.com/");
+        ref.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
+            @Override
+            public void onSuccess(Map<String, Object> result) {
+                System.out.println("Successfully created user account with uid: " + result.get("uid"));
+            }
+
+            @Override
+            public void onError(FirebaseError firebaseError) {
+                // there was an error
+            }
+        });
         finish();
     }//end onSignupSuccess
 

@@ -29,8 +29,8 @@ public class MainActivity extends Activity {
         /*see if the flag exists if not return the default value*/
         boolean firstRun = settings.getBoolean("firstRun",true);
 
-        //if running for first time
-        if(firstRun){
+        //if running for first time !!!!CHANGED TO TRUE FOR NOW FOR DEBUGGING
+        if(true){
             Log.i(TAG, "first Run");
             SharedPreferences.Editor editor = settings.edit();
 
