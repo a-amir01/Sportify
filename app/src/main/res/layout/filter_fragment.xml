@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Private Events"
+            android:paddingRight="20dp"
+            android:id="@+id/Event_access_specifier"
+            android:checked="false"
+            android:layout_gravity="center_horizontal" />
+
+        <MultiAutoCompleteTextView
+            android:id="@+id/multiAutoCompleteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="7"
+            android:layout_alignLeft="@id/Event_access_specifier"
+            android:layout_alignStart="@id/Event_access_specifier"
+            android:hint="Enter sports" />
+    </LinearLayout>
+
+    <ExpandableListView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/expandableListView" />
+
+</LinearLayout>

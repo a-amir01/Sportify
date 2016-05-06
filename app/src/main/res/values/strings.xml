@@ -1,7 +1,19 @@
 <resources>
     <string name="action_settings">something</string>
     <string name="app_name">Sportify</string>
-    <string name="sport_title_label">Title</string>
-    <string name="sport_title_hint">Enter a title for the sport.</string>
+    <string name="gathering_title_label">Title</string>
+    <string name="gathering_title_hint">Enter a title for the event.</string>
+    <string name="title_activity_view_profile">ViewProfileActivity</string>
+    <string name="calendar">Calendar</string>
+    <string name="description_hint">\"Enter a description</string>
+    <string name="hint_location">Enter a location</string>
+    <string name="hint_time">Enter a time</string>
+    <string name="log_out">Log Out</string>
+    <string name="home">Events</string>
+    <string name="profile">Profile</string>
+    <string name="history">History</string>
+    <string name="active">Active</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_add">Add</string>
 
 </resources>

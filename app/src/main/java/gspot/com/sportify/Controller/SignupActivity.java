@@ -2,7 +2,9 @@ package gspot.com.sportify.Controller;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,15 +22,18 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
-
+import gspot.com.sportify.utils.Constants;
 
 /**
+ * The controller for the sign up page. Handles creating a new user and validating
+ * whether the email and password are valid. If the user successfully makes an account, it
+ * creates a default profile for them and stores it in firebase.
  *
- * Created by amir on 4/17/16.
  */
 public class SignupActivity extends Activity{
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = SignupActivity.class.getSimpleName();
 
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
@@ -47,9 +52,7 @@ public class SignupActivity extends Activity{
     @Bind(R.id.input_name) EditText mNameText;
 
     /*Holds user info*/
-    String name;
-    String email;
-    String password;
+    private String name, email, password;
 
     /* onClick()
     * Annotation listener for the signup button
@@ -127,11 +130,9 @@ public class SignupActivity extends Activity{
      * */
     public void onSignupSuccess() {
 
-        Log.i(TAG, "onSignupSuccess");
+        Log.e(TAG, "onSignupSuccess");
         mSignupButton.setEnabled(true);
-        //this is how we pass data back to the function onActivityForResult
-        setResult(RESULT_OK, null);
-        //terminate activity
+
 
         /*Leave here for reference*/
         //Root (user)
@@ -148,18 +149,32 @@ public class SignupActivity extends Activity{
         //childName.child("password").setValue(password);
 
         /*Create user in database*/
-        Firebase ref = new Firebase("https://gspot.firebaseio.com/");
-        ref.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
+        mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+        mFirebaseRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
             @Override
             public void onSuccess(Map<String, Object> result) {
-                System.out.println("Successfully created user account with uid: " + result.get("uid"));
+
+                //store the information in firebase web
+                Profile profile = new Profile(name, (String) result.get("uid"));
+                mFirebaseRef.child("profiles").child((String)result.get("uid")).setValue(profile);
+
+                /*store the users uid in shared preferences so we know who they are */
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignupActivity.this);
+                SharedPreferences.Editor spe = sp.edit();
+                spe.putString(Constants.KEY_UID, (String) result.get("uid")).apply();
             }
 
             @Override
             public void onError(FirebaseError firebaseError) {
-                // there was an error
+
+                Log.e(TAG,"ERROR THROWN WHEN CREATING USER");
             }
         });
+
+        //this is how we pass data back to the function onActivityForResult
+        setResult(RESULT_OK, null);
+        //terminate activity
+
         finish();
     }//end onSignupSuccess
 
@@ -224,4 +239,3 @@ public class SignupActivity extends Activity{
         ButterKnife.unbind(this);
     }
 }// end SignupActivity
-

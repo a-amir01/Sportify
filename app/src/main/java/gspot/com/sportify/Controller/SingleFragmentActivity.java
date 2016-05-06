@@ -4,14 +4,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import gspot.com.sportify.R;
 
 /**
- * Created by amir on 4/17/16.
+ * Author amir assad on 4/17/16.
  */
-public abstract class SingleFragmentActivity extends FragmentActivity {
+public abstract class SingleFragmentActivity extends BaseNavBarActivity {
 
     /*for Other classes to say which fragment to use*/
     protected abstract Fragment createFragment();

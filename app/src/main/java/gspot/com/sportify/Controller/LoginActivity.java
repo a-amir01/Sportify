@@ -2,9 +2,11 @@ package gspot.com.sportify.Controller;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Telephony;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -22,6 +24,12 @@ import butterknife.OnClick;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 
+/**
+ * Authors: Amir Assad, Aaron
+ * This class will authenticate the user input with the databse
+ * and log the user in to the system.
+ */
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -38,20 +46,27 @@ public class LoginActivity extends AppCompatActivity {
     /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
 
+    private SharedPreferences mSharedPref;
+    private SharedPreferences.Editor mSharedPrefEditor;
+
+
     /*Dialog box */
     ProgressDialog progressDialog;
 
 
     /*link to the widgets*/
     @Bind(R.id.input_email) EditText mEmailText;
-    @Bind(R.id.input_password) EditText mPasswordText;
-    @Bind(R.id.btn_login) Button mLoginButton;
-    @Bind(R.id.link_signup) TextView mSignupText;
+    @Bind(R.id.input_password)
+    EditText mPasswordText;
+    @Bind(R.id.btn_login)
+    Button mLoginButton;
+    @Bind(R.id.link_signup)
+    TextView mSignupText;
 
     /* onClick()
      * Annotation listener for the login button
      * Once the button is clicked the login() is called
-     * to log the User i
+     * to log the User in
      * */
     @OnClick(R.id.btn_login)
     void onClick(Button button) { login(); }
@@ -80,6 +95,9 @@ public class LoginActivity extends AppCompatActivity {
                 R.style.AppTheme);
         setContentView(R.layout.activity_login);
 
+        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPrefEditor = mSharedPref.edit();
+
         /*link the widgets to the members*/
         ButterKnife.bind(this);
 
@@ -103,13 +121,17 @@ public class LoginActivity extends AppCompatActivity {
         } //end if
 
         if (requestCode == REQUEST_SIGNUP) {
+            /*successful sign up do not show the log in page anymore*/
+            setFirstTimePreference();
             /*empty intent passed in*/
             //TODO this needs to be verified later
             //if(data == null) return;
 
             // TODO: Implement successful signup logic here
             // By default we just finish the Activity and log them in automatically
-            Intent intent = new Intent(getApplicationContext(), SportListActivity.class);
+
+            //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
             startActivity(intent);
             finish();
         } //end if
@@ -166,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         private final String provider;
         public MyAuthResultHandler(String provider)
         {
-           this.provider = provider;
+            this.provider = provider;
         }
 
         //Successful Login
@@ -179,8 +201,11 @@ public class LoginActivity extends AppCompatActivity {
 
             if(authData != null)
             {
+                setFirstTimePreference();
+                //add the user id to shared prefences so we can id the user on any page
+                mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
                 //Goes to the SportsList page
-                Intent intent = new Intent(LoginActivity.this, SportListActivity.class);
+                Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -195,7 +220,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onAuthenticationError(FirebaseError firebaseError)
         {
             //Gets rid of the dialog box
-           progressDialog.dismiss();
+            progressDialog.dismiss();
             Log.i(TAG, provider + " " + "UNCESSFUL LOGIN");
 
             //Error case
@@ -218,6 +243,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    /*This function will set the preferences so that the app will
+    * not start at the login page and the user will
+    * immediately got to home page*/
+    private void setFirstTimePreference(){
+        SharedPreferences settings=getSharedPreferences(Constants.STARTER_ID, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=settings.edit();
+
+        /*flag to search if app was run before and login successful*/
+        editor.putBoolean("logged_in",true).commit();
+    }//end setFirstTimePreference
 
     private void showErrorToast(String message)
     {

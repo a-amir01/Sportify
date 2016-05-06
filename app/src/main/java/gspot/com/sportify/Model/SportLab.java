@@ -17,19 +17,19 @@ public class SportLab {
     private static final String TAG = SportLab.class.getSimpleName();
 
     private static SportLab sSportLab;
-    private List<Sport> mSports;
+    private List<Gathering> mGatherings;
 
     private SportLab(Context context){
         Log.i(TAG, "SportLab()");
 
         /*hold an array of test sports*/
-        mSports = new ArrayList<>();
+        mGatherings = new ArrayList<>();
 
         /*create a list of fake sports*/
         for (int i = 0; i < 50; i++){
-            Sport sport = new Sport();
-            sport.setSportName("Sport # " + i);
-            mSports.add(sport);
+            Gathering gathering = new Gathering();
+            gathering.setSportName("Gathering # " + i);
+            mGatherings.add(gathering);
         }//end for
     }//end SportLab()
 
@@ -42,16 +42,16 @@ public class SportLab {
         return sSportLab;
     }//end get()
 
-    public List<Sport> getSports() { return mSports; }
+    public List<Gathering> getSports() { return mGatherings; }
 
-    public Sport getSport(UUID id){
+    public Gathering getSport(UUID id){
         Log.i(TAG, "getSport()");
 
-        for(Sport sport : mSports) {
+        for(Gathering gathering : mGatherings) {
             /*crime.getId() == id (only true if they are same object
              * must use equals for different but identical objects */
-            if (sport.getId().equals(id))
-                return sport;
+            if (gathering.getId().equals(id))
+                return gathering;
         }//end for
 
         /*sport not found*/
