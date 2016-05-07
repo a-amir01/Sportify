@@ -37,7 +37,7 @@ import gspot.com.sportify.utils.Constants;
  *
  * Made by Don Vo and Patrick Hayes.
  */
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseNavBarActivity {
 
     /** State Enum Class
      * ProfileActivity exists in 3 types of states:
@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     /* A TAG to each log statement to indicate the source of the log message */
-    private static final String TAG = ProfileActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     /* Member Variables */
     private String mCurrentUser;
@@ -87,10 +87,10 @@ public class ProfileActivity extends AppCompatActivity {
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
     // @Bind(R.id.profile_picture) ImageView mProfilePicture;
-    @Bind(R.id.user_name) TextView mName;
+    @Bind(R.id.user_name) EditText mName;
     @Bind(R.id.edit_save_button) Button mEditSaveButton;
-    @Bind(R.id.bio_content) TextView mBio;
-    @Bind(R.id.contact_content) TextView mContactInfo;
+    @Bind(R.id.bio_content) EditText mBio;
+    @Bind(R.id.contact_content) EditText mContactInfo;
     @Bind(R.id.profile_picture) ImageView mProfilePicture;
     @Bind(R.id.add_sport) Button mAddSport;
 
@@ -126,58 +126,51 @@ public class ProfileActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
 
-        Toast.makeText(getApplicationContext(), mCurrentUser, Toast.LENGTH_SHORT);
-        Log.i(TAG, mCurrentUser);
-
-
-        if (false) {
-
-            //mAddSport.setVisibility(View.INVISIBLE);
-            Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
+        //mAddSport.setVisibility(View.INVISIBLE);
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
 
         /* Populate the page with the user's information */
-            profileRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+        profileRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
                 /* Create a user profile object from data in the database */
-                    mProfile = dataSnapshot.getValue(Profile.class);
+                mProfile = dataSnapshot.getValue(Profile.class);
 
                 /* Retrieve text information from the database */
-                    mName.setText(mProfile.getmName());
-                    mBio.setText(mProfile.getmBio());
-                    mContactInfo.setText(mProfile.getmOwner());
-                    mOwner = mProfile.getmOwner();
-                    mCalendar = mProfile.getmCalendar();
+                mName.setText(mProfile.getmName());
+                mBio.setText(mProfile.getmBio());
+                mContactInfo.setText(mProfile.getmContactInfo());
+                mOwner = mProfile.getmOwner();
+                mCalendar = mProfile.getmCalendar();
 
                 /* Set up the calendar with times from the database */
-                    populateCalendar();
+                populateCalendar();
 
                 /* Give editing power to the owner of the profile */
-                    if (mCurrentUser.equals(mOwner)) {
-                        mState = State.VIEW_MINE;
-                        toggleToViewMine();
+                if (mCurrentUser.equals(mOwner)) {
+                    mState = State.VIEW_MINE;
+                    toggleToViewMine();
 
                 /* Ensure that an arbitrary user does not have access to edit profile */
-                    } else {
-                        Log.e(TAG, "mCurrentUser " + mCurrentUser);
-                        Log.e(TAG, "mOwner " + mOwner);
-                        mState = State.VIEW_OTHER;
-                        toggleToViewOther();
-                    }
+                } else {
+                    Log.e(TAG, "mCurrentUser " + mCurrentUser);
+                    Log.e(TAG, "mOwner " + mOwner);
+                    mState = State.VIEW_OTHER;
+                    toggleToViewOther();
                 }
+            }
 
-                /* Otherwise, never mind */
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                    Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
+            /* Otherwise, never mind */
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
 
-                }
-            });
+            }
+        });
 
 
-        }//end if
-    } //end onCreate
+    }
 
     /** On Destroy Method
      * Destroys the activity and destroys its contents.
@@ -206,9 +199,12 @@ public class ProfileActivity extends AppCompatActivity {
         if (mState.equals(State.VIEW_MINE)) {
             toggleToEdit();
 
-        /* Save and View if the button is pressed in Save Mode */
+        /* Save and View if the button is pressed in Editm Mode */
         } else {
-            saveToDatabase();
+            mProfile.setmName(mName.getText().toString());
+            mProfile.setmBio(mBio.getText().toString());
+            mProfile.setmContactInfo(mContactInfo.getText().toString());
+            updateProfile(mProfile);
             toggleToViewMine();
         }
     }
@@ -248,8 +244,18 @@ public class ProfileActivity extends AppCompatActivity {
      * Saves all data inputted in edit mode and sends this
      * information the database.
      */
-    private void saveToDatabase() {
-        // TODO: Implement so that data is saved to the database.
+    private void updateProfile(Profile profile) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
+
+        profileRef.setValue(profile, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(getBaseContext(), "Save Successful", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
 
@@ -271,6 +277,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         /* Remove the add sport button */
         mAddSport.setVisibility(View.GONE);
+        mState = State.VIEW_MINE;
     }
 
 
@@ -289,6 +296,7 @@ public class ProfileActivity extends AppCompatActivity {
         /* Ensure that the edit/save and add sport button are not visible */
         mEditSaveButton.setVisibility(View.INVISIBLE);
         mAddSport.setVisibility(View.GONE);
+        mState = State.VIEW_OTHER;
     }
 
     /** Toggle To "Edit" Method
@@ -309,6 +317,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         /* Remove the add sport button */
         mAddSport.setVisibility(View.VISIBLE);
+        mState = State.EDIT;
     }
 
 
@@ -322,6 +331,13 @@ public class ProfileActivity extends AppCompatActivity {
         mName.setEnabled(false);
         mBio.setEnabled(false);
         mContactInfo.setEnabled(false);
+
+        //disable calendar
+        for (int i=0; i<7; ++i) {
+            for (int j=0; j<4; ++j) {
+                mDaysOfWeek[i][j].setEnabled(false);
+            }
+        }
     }
 
 
@@ -335,6 +351,13 @@ public class ProfileActivity extends AppCompatActivity {
         mName.setEnabled(true);
         mBio.setEnabled(true);
         mContactInfo.setEnabled(true);
+
+        //enable calendar
+        for (int i=0; i<7; ++i) {
+            for (int j=0; j<4; ++j) {
+                mDaysOfWeek[i][j].setEnabled(true);
+            }
+        }
     }
 
 
@@ -415,4 +438,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+
+
 }

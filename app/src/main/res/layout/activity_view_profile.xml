@@ -37,13 +37,14 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|center_horizontal">
 
-                    <TextView
+                    <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="Name"
                         android:id="@+id/user_name"
-                        android:gravity="center_vertical|center_horizontal" />
+                        android:gravity="center_vertical|center_horizontal"
+                        android:inputType="text" />
 
                     <Button
                         android:layout_width="wrap_content"
