@@ -30,6 +30,7 @@
         <activity
             android:name=".Controller.ProfileActivity" android:label="@string/title_activity_view_profile" android:theme="@style/Theme.AppCompat"></activity>
 
+        <activity android:name=".Controller.ForgotPasswordActivity" android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
