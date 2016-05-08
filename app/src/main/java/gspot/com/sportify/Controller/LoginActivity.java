@@ -37,6 +37,9 @@ public class LoginActivity extends AppCompatActivity {
     /*Code for when the User requests sign up*/
     private static final int REQUEST_SIGNUP = 0;
 
+    /* Code for when the User requests forgot password */
+    private static final int REQUEST_PASSWORD = 1;
+
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
 
@@ -62,6 +65,8 @@ public class LoginActivity extends AppCompatActivity {
     Button mLoginButton;
     @Bind(R.id.link_signup)
     TextView mSignupText;
+    @Bind(R.id.link_forgot_pwd)
+    TextView mForgotPwdText;
 
     /* onClick()
      * Annotation listener for the login button
@@ -83,6 +88,20 @@ public class LoginActivity extends AppCompatActivity {
 
         /*expecting data to be returned by SignupActivity*/
         startActivityForResult(intent, REQUEST_SIGNUP);
+    }//end onClick()
+
+    /* onClick()
+     * Annotation listener for the forgot password link
+     * Once the link is clicked the forgot password activity is started
+     * */
+    @OnClick(R.id.link_forgot_pwd)
+    void onClick (TextView view) {
+        Log.i(TAG, "onClick for forgot password");
+        /*create an intent to start the activity*/
+        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+
+        /*expecting data to be returned by SignupActivity*/
+        startActivityForResult(intent, REQUEST_PASSWORD);
     }//end onClick()
 
     @Override

@@ -48,4 +48,13 @@
             android:text="Sign up"
             android:gravity="center"
             android:textSize="16dip"/>
+
+        <TextView
+            android:id="@+id/link_forgot_pwd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/forgot_pwd"
+            android:gravity="center"
+            android:textSize="16dip"/>
 </LinearLayout>

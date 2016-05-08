@@ -15,5 +15,6 @@
     <string name="active">Active</string>
     <string name="action_filter">Filter</string>
     <string name="action_add">Add</string>
+    <string name="forgot_pwd">Forgot Password?</string>
 
 </resources>
