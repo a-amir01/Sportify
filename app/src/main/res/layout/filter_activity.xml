@@ -17,20 +17,14 @@
             android:checked="false"
             android:layout_gravity="center_horizontal" />
 
-        <MultiAutoCompleteTextView
-            android:id="@+id/multiAutoCompleteTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="7"
-            android:layout_alignLeft="@id/Event_access_specifier"
-            android:layout_alignStart="@id/Event_access_specifier"
-            android:hint="Enter sports" />
     </LinearLayout>
 
     <ExpandableListView
-        android:layout_width="200dp"
+        android:layout_width="168dp"
         android:layout_height="wrap_content"
-        android:id="@+id/expandableListView" />
+        android:id="@+id/expandableListView"
+        android:divider="#add8e6"
+        android:dividerHeight="5dp"
+        android:layout_gravity="right" />
 
 </LinearLayout>
