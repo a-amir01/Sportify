@@ -10,9 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,11 +23,17 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.core.Context;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import gspot.com.sportify.Model.GspotCalendar;
+import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
@@ -39,11 +48,12 @@ import gspot.com.sportify.utils.Constants;
  */
 public class ProfileActivity extends BaseNavBarActivity {
 
-    /** State Enum Class
+    /**
+     * State Enum Class
      * ProfileActivity exists in 3 types of states:
-     *   - View Mine State: The user is viewing their own profile
-     *   - Edit State: The user is editing their own profile
-     *   - View Other State: The user is viewing someone else's profile
+     * - View Mine State: The user is viewing their own profile
+     * - Edit State: The user is editing their own profile
+     * - View Other State: The user is viewing someone else's profile
      * Depending on the state that ProfileActivity is in, the user
      * may or may not be able to edit particular parts of the page.
      */
@@ -69,7 +79,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
     /* A TAG to each log statement to indicate the source of the log message */
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = ProfileActivity.class.getSimpleName();
 
     /* Member Variables */
     private String mCurrentUser;
@@ -77,54 +87,80 @@ public class ProfileActivity extends BaseNavBarActivity {
     private State mState = State.VIEW_OTHER;
     private Profile mProfile;
     private GspotCalendar mCalendar;
-    ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
+    private ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
+
+    //adapter for expandable list
+    private ExpandableListAdapter listAdapter;
+    private ExpandableListView expListView;
+    private List<String> sportsParent;
+    private HashMap<String, MySport> sportsChildren;
 
     /* Magic Numbers */
     private static final int NUM_TIMES_OF_DAY = 4;
     private static final int NUM_DAYS_OF_WEEK = 7;
     private static final int TAG_CODE = 10; // Decrypts the time in calendar
 
+
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
     // @Bind(R.id.profile_picture) ImageView mProfilePicture;
-    @Bind(R.id.user_name) EditText mName;
-    @Bind(R.id.edit_save_button) Button mEditSaveButton;
-    @Bind(R.id.bio_content) EditText mBio;
-    @Bind(R.id.contact_content) EditText mContactInfo;
-    @Bind(R.id.profile_picture) ImageView mProfilePicture;
-    @Bind(R.id.add_sport) Button mAddSport;
+    @Bind(R.id.user_name)
+    EditText mName;
+    @Bind(R.id.edit_save_button)
+    Button mEditSaveButton;
+    @Bind(R.id.bio_content)
+    EditText mBio;
+    @Bind(R.id.contact_content)
+    EditText mContactInfo;
+    @Bind(R.id.profile_picture)
+    ImageView mProfilePicture;
+    @Bind(R.id.add_sport)
+    Button mAddSport;
+    @Bind(R.id.sports_list)
+    ExpandableListView mSportsList;
+
 
     /* Bind each time cell in the calendar */
     @Bind({R.id.sun_morning, R.id.sun_afternoon,
-            R.id.sun_evening, R.id.sun_night}) ImageView[] mSunday;
+            R.id.sun_evening, R.id.sun_night})
+    ImageView[] mSunday;
     @Bind({R.id.mon_morning, R.id.mon_afternoon,
-            R.id.mon_evening, R.id.mon_night}) ImageView[] mMonday;
+            R.id.mon_evening, R.id.mon_night})
+    ImageView[] mMonday;
     @Bind({R.id.tue_morning, R.id.tue_afternoon,
-            R.id.tue_evening, R.id.tue_night}) ImageView[] mTuesday;
+            R.id.tue_evening, R.id.tue_night})
+    ImageView[] mTuesday;
     @Bind({R.id.wed_morning, R.id.wed_afternoon,
-            R.id.wed_evening, R.id.wed_night}) ImageView[] mWednesday;
+            R.id.wed_evening, R.id.wed_night})
+    ImageView[] mWednesday;
     @Bind({R.id.thu_morning, R.id.thu_afternoon,
-            R.id.thu_evening, R.id.thu_night}) ImageView[] mThursday;
+            R.id.thu_evening, R.id.thu_night})
+    ImageView[] mThursday;
     @Bind({R.id.fri_morning, R.id.fri_afternoon,
-            R.id.fri_evening, R.id.fri_night}) ImageView[] mFriday;
+            R.id.fri_evening, R.id.fri_night})
+    ImageView[] mFriday;
     @Bind({R.id.sat_morning, R.id.sat_afternoon,
-            R.id.sat_evening, R.id.sat_night}) ImageView[] mSaturday;
+            R.id.sat_evening, R.id.sat_night})
+    ImageView[] mSaturday;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_profile);
+        setContentView(R.layout.profile);
 
         /* link the widgets to the members */
         ButterKnife.bind(this);
 
-        /* Updates and creates listeners for each calendar time cell */
-        updateCalendarView();
-
         /* Get the uid from shared preferences */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+
+        /* Updates and creates listeners for each calendar time cell */
+        updateCalendarView();
+
+        final android.content.Context context = this.getApplicationContext();
+
 
         //mAddSport.setVisibility(View.INVISIBLE);
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
@@ -146,6 +182,14 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 /* Set up the calendar with times from the database */
                 populateCalendar();
+                 /* adapter */
+                prepareListData();
+
+                listAdapter = new ExpandableListAdapter(context, sportsParent, sportsChildren);
+
+                // setting list adapter
+                mSportsList.setAdapter(listAdapter);
+
 
                 /* Give editing power to the owner of the profile */
                 if (mCurrentUser.equals(mOwner)) {
@@ -172,7 +216,8 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     }
 
-    /** On Destroy Method
+    /**
+     * On Destroy Method
      * Destroys the activity and destroys its contents.
      * Called when the view hierarchy associated with the
      * Activity is being removed.
@@ -184,7 +229,8 @@ public class ProfileActivity extends BaseNavBarActivity {
         ButterKnife.unbind(this);
     }
 
-    /** Toggle Edit Save
+    /**
+     * Toggle Edit Save
      * Creates a listener for the Edit/Save Button.
      * If the edit button is tapped in view mode, the
      * system will transition to edit mode.
@@ -209,10 +255,12 @@ public class ProfileActivity extends BaseNavBarActivity {
         }
     }
 
-    /** On Tap Change Color And Toggle Method
+    /**
+     * On Tap Change Color And Toggle Method
      * When tapped, change the color of the corresponding
      * cell so that it changes color (red to green, green to red).
      * This will also send information to the models for updating.
+     *
      * @param view - each cell in the calendar
      */
     @OnClick({R.id.sun_morning, R.id.sun_afternoon, R.id.sun_evening, R.id.sun_night,
@@ -230,7 +278,7 @@ public class ProfileActivity extends BaseNavBarActivity {
         mCalendar.toggleTime(day, time);
 
         /* If the user is available at this time, set button to green */
-        if (mCalendar.getAvailability(day,time)) {
+        if (mCalendar.getAvailability(day, time)) {
             mDaysOfWeek[day][time].setImageResource(R.color.available);
 
         /* If the user is busy at this time, set button to red */
@@ -240,7 +288,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-    /** Save To Database Method
+    /**
+     * Save To Database Method
      * Saves all data inputted in edit mode and sends this
      * information the database.
      */
@@ -259,7 +308,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-    /** Toggle To "View Mine" Method
+    /**
+     * Toggle To "View Mine" Method
      * This method should be called when the the user taps on the
      * 'Save' button. This method will exit 'Edit' mode, and
      * return the 'View' mode where the user will only have view
@@ -281,7 +331,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-    /** Toggle To "View Other" Method
+    /**
+     * Toggle To "View Other" Method
      * This method should be called under the assumption that the
      * the user is viewing another user's profile.
      * Similar to toggleToViewMine(), the user will be able to view
@@ -299,7 +350,8 @@ public class ProfileActivity extends BaseNavBarActivity {
         mState = State.VIEW_OTHER;
     }
 
-    /** Toggle To "Edit" Method
+    /**
+     * Toggle To "Edit" Method
      * This method should be called after the user taps the
      * 'Edit Profile' button. Once this is tapped, the user
      * should be able to freely edit the contents of their
@@ -321,7 +373,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-    /** Disable All Inputs Method
+    /**
+     * Disable All Inputs Method
      * Ensures that all fields are not editable.
      */
     private void disableAllInputs() {
@@ -333,15 +386,16 @@ public class ProfileActivity extends BaseNavBarActivity {
         mContactInfo.setEnabled(false);
 
         //disable calendar
-        for (int i=0; i<7; ++i) {
-            for (int j=0; j<4; ++j) {
+        for (int i = 0; i < 7; ++i) {
+            for (int j = 0; j < 4; ++j) {
                 mDaysOfWeek[i][j].setEnabled(false);
             }
         }
     }
 
 
-    /** Enable All Inputs Method
+    /**
+     * Enable All Inputs Method
      * Ensures that all fields are editable.
      */
     private void enableAllInputs() {
@@ -353,15 +407,16 @@ public class ProfileActivity extends BaseNavBarActivity {
         mContactInfo.setEnabled(true);
 
         //enable calendar
-        for (int i=0; i<7; ++i) {
-            for (int j=0; j<4; ++j) {
+        for (int i = 0; i < 7; ++i) {
+            for (int j = 0; j < 4; ++j) {
                 mDaysOfWeek[i][j].setEnabled(true);
             }
         }
     }
 
 
-    /** Populate Calendar Method
+    /**
+     * Populate Calendar Method
      * Using data from the user profile object,
      * this method updates all buttons from the user
      * database.
@@ -369,11 +424,11 @@ public class ProfileActivity extends BaseNavBarActivity {
     private void populateCalendar() {
 
         /* For each button the availability matrix, set its color */
-        for (int i=0; i < NUM_DAYS_OF_WEEK; ++i) {
-            for (int j=0; j < NUM_TIMES_OF_DAY; ++j) {
+        for (int i = 0; i < NUM_DAYS_OF_WEEK; ++i) {
+            for (int j = 0; j < NUM_TIMES_OF_DAY; ++j) {
 
                 /* Set the color to green if available */
-                if (mCalendar.getAvailability(i,j)) {
+                if (mCalendar.getAvailability(i, j)) {
                     mDaysOfWeek[i][j].setImageResource(R.color.available);
 
                 /* Set the color to red if busy */
@@ -386,7 +441,8 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     }
 
-    /** Save Availability Times Method
+    /**
+     * Save Availability Times Method
      * Using the availability table generated, this method
      * determines whether each 'time box' represents an
      * available or busy time,
@@ -400,7 +456,8 @@ public class ProfileActivity extends BaseNavBarActivity {
         }
     }
 
-    /** Update Calendar View Method
+    /**
+     * Update Calendar View Method
      * For each column in the calendar, retrieve the row of
      * time cells into a storage location for simpler manipuation.
      */
@@ -420,13 +477,15 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-    /** Tag The Calendar Method
+    /**
+     * Tag The Calendar Method
      * For each cell in the calendar, label each box so we
      * can always identify what column and hat row it is in.
-     *    - getTag() / 10 (tag code) = column (corresponds to day of week)
-     *    - getTag() % 10 (tag code) = row (corresponds to time of day)
+     * - getTag() / 10 (tag code) = column (corresponds to day of week)
+     * - getTag() % 10 (tag code) = row (corresponds to time of day)
      * In other words, first digit represents the day of the week (0-6)
-     *                 second digit represents the time of the day (0-4)
+     * second digit represents the time of the day (0-4)
+     *
      * @param calendar - the matrix whose time cells that we want to label
      */
     private void tagTheCalendar(ImageView[][] calendar) {
@@ -434,12 +493,25 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* For each time of the week and each time of the day, label each box */
         for (int i = 0; i < NUM_DAYS_OF_WEEK; ++i) {
             for (int j = 0; j < NUM_TIMES_OF_DAY; ++j) {
-                calendar[i][j].setTag(new Integer(i*TAG_CODE+j));
+                calendar[i][j].setTag(new Integer(i * TAG_CODE + j));
             }
         }
     }
 
+    /*
+     * Preparing the list data
+     */
+    private void prepareListData() {
+        sportsParent = new ArrayList<String>();
+        sportsChildren = new HashMap<String, MySport>();
 
+        List<MySport> mySports = mProfile.getmMySports();
+
+        for (int i = 0; i < mySports.size(); i++) {
+            sportsParent.add(mySports.get(i).getmSport());
+            sportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
+        }
+    }
 
 
 

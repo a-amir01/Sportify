@@ -43,6 +43,10 @@ public class MySport {
         return mSkillLevel;
     }
 
+    public String skillLevelToString() {
+        return mSkillLevel.toString();
+    }
+
     public String getmBio() {
         return mBio;
     }
