@@ -1,13 +1,13 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -23,28 +23,26 @@ import gspot.com.sportify.utils.Constants;
 public class ForgotPasswordActivity extends Activity {
     private static final String TAG = ForgotPasswordActivity.class.getSimpleName();
 
+    /* Code for when the User requests forgot password */
+    private static final int REQUEST_CHANGE = 0;
+
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
 
-    /* Data from the authenticated User */
-    private AuthData mAuthData;
-
-    /* Listener for Firebase session changes */
-    private Firebase.AuthStateListener mAuthStateListener;
-
     /*link to the widgets*/
-    @Bind(R.id.input_email)
+    @Bind(R.id.input_email_fpwd)
     EditText mEmailText;
     @Bind(R.id.btn_forgot_password_email)
     Button mForgotPwdButton;
 
-    String email;
+    // Will hold the email from the form
+    String mEmail;
 
     /* onClick()
-    * Annotation listener for the signup button
-    * Once the button is clicked the signup() is called
-    * to create an account for the User
-    * */
+     * Annotation listener for the signup button
+     * Once the button is clicked the signup() is called
+     * to create an account for the User
+     * */
     @OnClick(R.id.btn_forgot_password_email)
     void onClick(Button button) { sendEmail(); }
 
@@ -61,39 +59,63 @@ public class ForgotPasswordActivity extends Activity {
 
     } //end onCreate
 
-    /*
-    * sendEmail()
-    * utility function to sing the User with the app and save their
-    * information in our database*/
+    /* sendEmail()
+     * utility function to send an email to the user with a randomly created
+     * password that has replaced theirs
+     * */
     private void sendEmail() {
         Log.i(TAG, "in sendEmail()");
-        // Get the firebase refernce
+        // Get the Firebase reference
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
 
+        // Disable the button
         mForgotPwdButton.setEnabled(false);
 
         // Get user provided email
-        email = mEmailText.getText().toString();
+        mEmail = mEmailText.getText().toString();
 
-        mFirebaseRef.resetPassword(email, new Firebase.ResultHandler() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(getApplicationContext(), "Password reset email sent", Toast.LENGTH_LONG).show();
-                finish();
-            }
+        // Ensure the email is of a valid format
+        if (mEmail.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()) {
+            mEmailText.setError("Enter a valid email address");
+            mForgotPwdButton.setEnabled(true);
+        } //end if
+        else {
+            mEmailText.setError(null);
+            // Call Firebase's resetPassword method
+            mFirebaseRef.resetPassword(mEmail, new Firebase.ResultHandler() {
+                @Override
+                public void onSuccess() {
+                    // Let the user know that the email was sent
+                    Toast.makeText(getApplicationContext(),
+                            "Password reset email sent",
+                            Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onError(FirebaseError firebaseError) {
-                switch(firebaseError.getCode()){
-                    case FirebaseError.INVALID_EMAIL:
-                        mEmailText.setError("Enter a valid email address");
-                        break;
-                    case FirebaseError.USER_DOES_NOT_EXIST:
-                        mEmailText.setError("The email you specified is not associated with an account");
-                        break;
+                    // Create an intent to send the user to change the
+                    // password
+                    Intent intent = new Intent(getApplicationContext(),
+                            ChangePasswordActivity.class);
+                    // Send the user's email with the intent
+                    intent.putExtra("Email", mEmail);
+                    // Start the intent
+                    startActivityForResult(intent, REQUEST_CHANGE);
+
+                    finish();
                 }
-                mForgotPwdButton.setEnabled(true);
-            }
-        });
+
+                @Override
+                public void onError(FirebaseError firebaseError) {
+                    /* Check for errors */
+                    switch(firebaseError.getCode()){
+                        case FirebaseError.USER_DOES_NOT_EXIST:
+                            mEmailText.setError("The email you specified is not valid");
+                            break;
+                    }
+
+                    // Re-enable the button
+                    mForgotPwdButton.setEnabled(true);
+                }
+            });
+        } //end else
+
     }
 }
