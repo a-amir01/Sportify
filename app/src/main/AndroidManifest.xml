@@ -28,7 +28,10 @@
         </activity>
 
         <activity
-            android:name=".Controller.ProfileActivity" android:label="@string/title_activity_view_profile" android:theme="@style/Theme.AppCompat"></activity>
+            android:name=".Controller.ProfileActivity"
+            android:label="@string/title_activity_view_profile"
+            android:theme="@style/Theme.AppCompat"
+            android:windowSoftInputMode="adjustPan"></activity>
 
     </application>
 

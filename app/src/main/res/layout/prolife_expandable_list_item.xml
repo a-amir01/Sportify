@@ -31,11 +31,17 @@
         android:id="@+id/sport_bio"
         android:numeric="integer|decimal" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Sports Content"
-        android:id="@+id/bio_sports_content" />
+        android:id="@+id/sport_bio_content"
+        android:inputType="textMultiLine"
+        android:text="What do you want people to know about you and this sport?" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Sport"
+        android:id="@+id/delete_sport_button" />
 
 </LinearLayout>

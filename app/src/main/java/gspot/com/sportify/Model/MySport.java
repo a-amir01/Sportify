@@ -29,9 +29,9 @@ public class MySport {
         }
     }
 
-    SkillLevel mSkillLevel;
-    String mBio;
-    String mSport;
+    private SkillLevel mSkillLevel;
+    private String mBio;
+    private String mSport;
 
     public MySport() {
         this.mSkillLevel = SkillLevel.INTERMIDIATE;
@@ -53,5 +53,13 @@ public class MySport {
 
     public String getmSport() {
         return mSport;
+    }
+
+    public void setmSkillLevel(SkillLevel mSkillLevel) {
+        this.mSkillLevel = mSkillLevel;
+    }
+
+    public void setmBio(String mBio) {
+        this.mBio = mBio;
     }
 }

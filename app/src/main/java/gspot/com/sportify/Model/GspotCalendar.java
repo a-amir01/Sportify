@@ -11,7 +11,7 @@ import java.util.List;
 public class GspotCalendar {
 
     /* Represents the times that the user is available */
-    List<List<Boolean>> calendarGrid;
+    private List<List<Boolean>> calendarGrid;
 
     /* Magic Numbers */
     private static final int NUM_TIMES_OF_DAY = 4;

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,7 @@ import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
+import gspot.com.sportify.utils.StateWrapper;
 
 /*
  * Class that handles viewing and editing a profile. We only have one profile activity, but it has
@@ -48,43 +51,13 @@ import gspot.com.sportify.utils.Constants;
  */
 public class ProfileActivity extends BaseNavBarActivity {
 
-    /**
-     * State Enum Class
-     * ProfileActivity exists in 3 types of states:
-     * - View Mine State: The user is viewing their own profile
-     * - Edit State: The user is editing their own profile
-     * - View Other State: The user is viewing someone else's profile
-     * Depending on the state that ProfileActivity is in, the user
-     * may or may not be able to edit particular parts of the page.
-     */
-    public static enum State {
-        VIEW_MINE("View Mine"),
-        EDIT("Edit"),
-        VIEW_OTHER("View Other");
-
-        private final String name;
-
-        State(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return this.name;
-        }
-    }
-
     /* A TAG to each log statement to indicate the source of the log message */
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     /* Member Variables */
     private String mCurrentUser;
     private String mOwner;
-    private State mState = State.VIEW_OTHER;
+    private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_OTHER);
     private Profile mProfile;
     private GspotCalendar mCalendar;
     private ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
@@ -95,30 +68,28 @@ public class ProfileActivity extends BaseNavBarActivity {
     private List<String> sportsParent;
     private HashMap<String, MySport> sportsChildren;
 
-    /* Magic Numbers */
-    private static final int NUM_TIMES_OF_DAY = 4;
-    private static final int NUM_DAYS_OF_WEEK = 7;
-    private static final int TAG_CODE = 10; // Decrypts the time in calendar
+    // Decrypts the time in calendar
 
 
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
     // @Bind(R.id.profile_picture) ImageView mProfilePicture;
     @Bind(R.id.user_name)
-    EditText mName;
+        EditText mName;
     @Bind(R.id.edit_save_button)
-    Button mEditSaveButton;
+        Button mEditSaveButton;
     @Bind(R.id.bio_content)
-    EditText mBio;
+        EditText mBio;
     @Bind(R.id.contact_content)
-    EditText mContactInfo;
+        EditText mContactInfo;
     @Bind(R.id.profile_picture)
-    ImageView mProfilePicture;
+        ImageView mProfilePicture;
     @Bind(R.id.add_sport)
-    Button mAddSport;
+        Button mAddSport;
     @Bind(R.id.sports_list)
-    ExpandableListView mSportsList;
-
+        ExpandableListView mSportsList;
+    @Bind(R.id.no_sports)
+        TextView mNoSports;
 
     /* Bind each time cell in the calendar */
     @Bind({R.id.sun_morning, R.id.sun_afternoon,
@@ -161,6 +132,8 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         final android.content.Context context = this.getApplicationContext();
 
+        Log.e(TAG, "This is the current user  " + mCurrentUser);
+
 
         //mAddSport.setVisibility(View.INVISIBLE);
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
@@ -180,27 +153,40 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mOwner = mProfile.getmOwner();
                 mCalendar = mProfile.getmCalendar();
 
+                if (mCurrentUser.equals(mOwner)) {
+                    mState.setState(StateWrapper.State.VIEW_MINE);
+                }
+
                 /* Set up the calendar with times from the database */
                 populateCalendar();
                  /* adapter */
                 prepareListData();
 
-                listAdapter = new ExpandableListAdapter(context, sportsParent, sportsChildren);
+                listAdapter = new ExpandableListAdapter(context, sportsParent, sportsChildren, mState, mProfile);
 
                 // setting list adapter
                 mSportsList.setAdapter(listAdapter);
+                mSportsList.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+
+                //if the person doesn't have any sport profiles tell them
+                if (mProfile.getmMySports() == null) {
+                    mNoSports.setVisibility(View.VISIBLE);
+                    mNoSports.setText("" + mProfile.getmName().toString() + " doesn't have any "
+                                        + "sports profiles");
+                }
+                else {
+                    mNoSports.setVisibility(View.INVISIBLE);
+                }
 
 
                 /* Give editing power to the owner of the profile */
                 if (mCurrentUser.equals(mOwner)) {
-                    mState = State.VIEW_MINE;
                     toggleToViewMine();
 
                 /* Ensure that an arbitrary user does not have access to edit profile */
                 } else {
                     Log.e(TAG, "mCurrentUser " + mCurrentUser);
                     Log.e(TAG, "mOwner " + mOwner);
-                    mState = State.VIEW_OTHER;
                     toggleToViewOther();
                 }
             }
@@ -242,7 +228,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     public void toggleEditSave() {
 
         /* Edit if the button is pressed in View Mode */
-        if (mState.equals(State.VIEW_MINE)) {
+        if (mState.getState() == StateWrapper.State.VIEW_MINE) {
             toggleToEdit();
 
         /* Save and View if the button is pressed in Editm Mode */
@@ -250,7 +236,7 @@ public class ProfileActivity extends BaseNavBarActivity {
             mProfile.setmName(mName.getText().toString());
             mProfile.setmBio(mBio.getText().toString());
             mProfile.setmContactInfo(mContactInfo.getText().toString());
-            updateProfile(mProfile);
+            mProfile.updateProfile();
             toggleToViewMine();
         }
     }
@@ -273,8 +259,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     public void onTapChangeColorAndToggle(ImageView view) {
 
         /* Get the row and column of the button, and toggle availability */
-        int day = (int) view.getTag() / TAG_CODE;
-        int time = (int) view.getTag() % TAG_CODE;
+        int day = (int) view.getTag() / Constants.TAG_CODE;
+        int time = (int) view.getTag() % Constants.TAG_CODE;
         mCalendar.toggleTime(day, time);
 
         /* If the user is available at this time, set button to green */
@@ -288,24 +274,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-    /**
-     * Save To Database Method
-     * Saves all data inputted in edit mode and sends this
-     * information the database.
-     */
-    private void updateProfile(Profile profile) {
 
-        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
-
-        profileRef.setValue(profile, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                Toast.makeText(getBaseContext(), "Save Successful", Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-    }
 
 
     /**
@@ -327,7 +296,8 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Remove the add sport button */
         mAddSport.setVisibility(View.GONE);
-        mState = State.VIEW_MINE;
+        mState.setState(StateWrapper.State.VIEW_MINE);
+        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -347,7 +317,8 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* Ensure that the edit/save and add sport button are not visible */
         mEditSaveButton.setVisibility(View.INVISIBLE);
         mAddSport.setVisibility(View.GONE);
-        mState = State.VIEW_OTHER;
+        mState.setState(StateWrapper.State.VIEW_OTHER);
+        listAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -358,7 +329,7 @@ public class ProfileActivity extends BaseNavBarActivity {
      * profile.
      */
     private void toggleToEdit() {
-        Log.i(TAG, "edit");
+        Log.e(TAG, "edit");
 
         /* Allow all fields to be editable */
         enableAllInputs();
@@ -369,7 +340,9 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Remove the add sport button */
         mAddSport.setVisibility(View.VISIBLE);
-        mState = State.EDIT;
+        mState.setState(StateWrapper.State.EDIT);
+        Log.e(TAG, "THis is the state" + mState);
+        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -424,8 +397,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     private void populateCalendar() {
 
         /* For each button the availability matrix, set its color */
-        for (int i = 0; i < NUM_DAYS_OF_WEEK; ++i) {
-            for (int j = 0; j < NUM_TIMES_OF_DAY; ++j) {
+        for (int i = 0; i < Constants.NUM_DAYS_OF_WEEK; ++i) {
+            for (int j = 0; j < Constants.NUM_TIMES_OF_DAY; ++j) {
 
                 /* Set the color to green if available */
                 if (mCalendar.getAvailability(i, j)) {
@@ -439,21 +412,6 @@ public class ProfileActivity extends BaseNavBarActivity {
             }
         }
 
-    }
-
-    /**
-     * Save Availability Times Method
-     * Using the availability table generated, this method
-     * determines whether each 'time box' represents an
-     * available or busy time,
-     */
-    private void saveAvailabilityTimes() {
-
-        for (int i = 0; i < NUM_DAYS_OF_WEEK; i++) {
-            for (int j = 0; j < NUM_TIMES_OF_DAY; j++) {
-                // TODO: Save times that the user inputted to the database.
-            }
-        }
     }
 
     /**
@@ -491,9 +449,9 @@ public class ProfileActivity extends BaseNavBarActivity {
     private void tagTheCalendar(ImageView[][] calendar) {
 
         /* For each time of the week and each time of the day, label each box */
-        for (int i = 0; i < NUM_DAYS_OF_WEEK; ++i) {
-            for (int j = 0; j < NUM_TIMES_OF_DAY; ++j) {
-                calendar[i][j].setTag(new Integer(i * TAG_CODE + j));
+        for (int i = 0; i < Constants.NUM_DAYS_OF_WEEK; ++i) {
+            for (int j = 0; j < Constants.NUM_TIMES_OF_DAY; ++j) {
+                calendar[i][j].setTag(new Integer(i * Constants.TAG_CODE + j));
             }
         }
     }
@@ -507,9 +465,11 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         List<MySport> mySports = mProfile.getmMySports();
 
-        for (int i = 0; i < mySports.size(); i++) {
-            sportsParent.add(mySports.get(i).getmSport());
-            sportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
+        if (mySports != null) {
+            for (int i = 0; i < mySports.size(); i++) {
+                sportsParent.add(mySports.get(i).getmSport());
+                sportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
+            }
         }
     }
 

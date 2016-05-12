@@ -504,7 +504,13 @@
                 android:id="@+id/sports" />
 
 
-            <Button
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This person has no sports profiles"
+        android:id="@+id/no_sports" />
+
+    <Button
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
