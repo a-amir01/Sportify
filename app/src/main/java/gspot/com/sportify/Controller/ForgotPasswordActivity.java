@@ -1,7 +1,6 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -24,7 +23,7 @@ public class ForgotPasswordActivity extends Activity {
     private static final String TAG = ForgotPasswordActivity.class.getSimpleName();
 
     /* Code for when the User requests forgot password */
-    private static final int REQUEST_CHANGE = 0;
+    //private static final int REQUEST_CHANGE = 0;
 
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
@@ -35,7 +34,7 @@ public class ForgotPasswordActivity extends Activity {
     @Bind(R.id.btn_forgot_password_email)
     Button mForgotPwdButton;
 
-    // Will hold the email from the form
+    /* Will hold the email from the form */
     String mEmail;
 
     /* onClick()
@@ -90,14 +89,14 @@ public class ForgotPasswordActivity extends Activity {
                             "Password reset email sent",
                             Toast.LENGTH_LONG).show();
 
-                    // Create an intent to send the user to change the
-                    // password
-                    Intent intent = new Intent(getApplicationContext(),
-                            ChangePasswordActivity.class);
-                    // Send the user's email with the intent
-                    intent.putExtra("Email", mEmail);
-                    // Start the intent
-                    startActivityForResult(intent, REQUEST_CHANGE);
+//                    // Create an intent to send the user to change the
+//                    // password
+//                    Intent intent = new Intent(getApplicationContext(),
+//                            ChangePasswordActivity.class);
+//                    // Send the user's email with the intent
+//                    intent.putExtra("Email", mEmail);
+//                    // Start the intent
+//                    startActivityForResult(intent, REQUEST_CHANGE);
 
                     finish();
                 }

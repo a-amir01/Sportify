@@ -19,7 +19,7 @@
     <string name="email">Email</string>
     <string name="email_password">Send Email</string>
     <string name="change_password">Change Password</string>
-    <string name="temp_pwd_hint">Temporary Password</string>
     <string name="new_pwd_hint">New Password</string>
+    <string name="re_pwd_hint">Re-Enter New Password</string>
 
 </resources>

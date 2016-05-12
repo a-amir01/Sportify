@@ -56,6 +56,9 @@ public class LoginActivity extends AppCompatActivity {
     /*Dialog box */
     ProgressDialog progressDialog;
 
+    /* Will hold the email and password from the form */
+    String mEmail, mPassword;
+
 
     /*link to the widgets*/
     @Bind(R.id.input_email) EditText mEmailText;
@@ -173,18 +176,18 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         Log.d(TAG, "Login");
 
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        mEmail = mEmailText.getText().toString();
+        mPassword = mPasswordText.getText().toString();
 
         //Checks user input
-        if(email.equals(""))
+        if(mEmail.equals(""))
         {
             mEmailText.setError("Please enter a valid email");
             return;
         }
 
         //Checks user input
-        if(password.equals(""))
+        if(mPassword.equals(""))
         {
             mPasswordText.setError("Please enter a valid password");
             return;
@@ -196,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
         //Authenticate user input through firebase
-        mFirebaseRef.authWithPassword(email, password,
+        mFirebaseRef.authWithPassword(mEmail, mPassword,
                 new MyAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
     } //end login()
@@ -221,8 +224,24 @@ public class LoginActivity extends AppCompatActivity {
             if(authData != null)
             {
                 setFirstTimePreference();
-                //add the user id to shared prefences so we can id the user on any page
+                //add the user id to shared preferences so we can id the user on any page
                 mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
+
+                /* Send the user to change their password if the password is temporary */
+                if((Boolean) authData.getProviderData().get("isTemporaryPassword")) {
+                    // Create an intent to send the user to change the
+                    // password
+                    Intent intent = new Intent(getApplicationContext(),
+                            ChangePasswordActivity.class);
+
+                    // Send the user's email and temporary password with the intent
+                    intent.putExtra("Email", mEmail);
+                    intent.putExtra("TempPwd", mPassword);
+
+                    // Start the intent
+                    startActivity(intent);
+                } //end if
+
                 //Goes to the SportsList page
                 Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
                 startActivity(intent);

@@ -28,10 +28,10 @@ public class ChangePasswordActivity extends Activity {
     /*link to the widgets*/
 //    @Bind(R.id.input_email_cpwd)
 //    EditText mEmailText;
-    @Bind(R.id.tempPassword)
-    EditText mTempPwdText;
     @Bind(R.id.newPassword)
     EditText mNewPwdText;
+    @Bind(R.id.rePassword)
+    EditText mRePwdText;
     @Bind(R.id.btn_change_password)
     Button mChangePwdButton;
 
@@ -39,7 +39,7 @@ public class ChangePasswordActivity extends Activity {
      * mTempPwd: will hold the temporary password from the form
      * mNewPwd: will hold the new password from the form
      * */
-    String mEmail, mTempPwd, mNewPwd;
+    String mEmail, mTempPwd, mNewPwd, mRePwd;
 
     /* onClick()
      * Annotation listener for the change password button
@@ -76,19 +76,24 @@ public class ChangePasswordActivity extends Activity {
         // Disable the button
         mChangePwdButton.setEnabled(false);
 
-        // Get the email passed by the intent
+        // Get the email and temporary password passed by the intent
         Bundle bundle = getIntent().getExtras();
         mEmail = bundle.getString("Email");
+        mTempPwd = bundle.getString("TempPwd");
 
         // Get the Temporary and New passwords
-        mTempPwd = mTempPwdText.getText().toString();
         mNewPwd = mNewPwdText.getText().toString();
+        mRePwd = mRePwdText.getText().toString();
 
         // Ensure the new password is the correct length
         if (mNewPwd.isEmpty() || mNewPwd.length() < 4 || mNewPwd.length() > 10) {
             mNewPwdText.setError("Between 4 and 10 alphanumeric characters");
             mChangePwdButton.setEnabled(true);
         }//end if
+        // Ensure the entered passwords match
+        else if (!mNewPwd.equals(mRePwd)) {
+            mRePwdText.setError("Does not match original password");
+        }//end else if
         else {
             mNewPwdText.setError(null);
 
@@ -111,9 +116,9 @@ public class ChangePasswordActivity extends Activity {
 //                        case FirebaseError.INVALID_EMAIL:
 //                            mEmailText.setError("Enter a valid email address");
 //                            break;
-                        case FirebaseError.INVALID_PASSWORD:
-                            mTempPwdText.setError("The password you specified is incorrect");
-                            break;
+//                        case FirebaseError.INVALID_PASSWORD:
+//                            mTempPwdText.setError("The password you specified is incorrect");
+//                            break;
                     }
 
                     // Re-enable the button
