@@ -103,13 +103,14 @@ public class ForgotPasswordActivity extends Activity {
 
                 @Override
                 public void onError(FirebaseError firebaseError) {
+                    //Log.v(TAG, String.valueOf(FirebaseError.NETWORK_ERROR));
+
                     /* Check for errors */
                     switch(firebaseError.getCode()){
                         case FirebaseError.USER_DOES_NOT_EXIST:
                             mEmailText.setError("The email you specified is not valid");
                             break;
-                        case FirebaseError.DISCONNECTED:
-                            Log.v(TAG, "Disconnected");
+                        case FirebaseError.NETWORK_ERROR:
                             Toast.makeText(getApplicationContext(),
                                     "Cannot connect to internet",
                                     Toast.LENGTH_LONG).show();

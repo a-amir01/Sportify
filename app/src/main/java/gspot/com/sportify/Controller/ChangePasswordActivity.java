@@ -123,8 +123,7 @@ public class ChangePasswordActivity extends Activity {
 //                        case FirebaseError.INVALID_PASSWORD:
 //                            mTempPwdText.setError("The password you specified is incorrect");
 //                            break;
-                        case FirebaseError.DISCONNECTED:
-                            Log.v(TAG, "Disconnected");
+                        case FirebaseError.NETWORK_ERROR:
                             Toast.makeText(getApplicationContext(),
                                     "Cannot connect to internet",
                                     Toast.LENGTH_LONG).show();
