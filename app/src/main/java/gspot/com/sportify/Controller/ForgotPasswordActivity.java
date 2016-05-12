@@ -108,6 +108,12 @@ public class ForgotPasswordActivity extends Activity {
                         case FirebaseError.USER_DOES_NOT_EXIST:
                             mEmailText.setError("The email you specified is not valid");
                             break;
+                        case FirebaseError.DISCONNECTED:
+                            Log.v(TAG, "Disconnected");
+                            Toast.makeText(getApplicationContext(),
+                                    "Cannot connect to internet",
+                                    Toast.LENGTH_LONG).show();
+                            break;
                     }
 
                     // Re-enable the button

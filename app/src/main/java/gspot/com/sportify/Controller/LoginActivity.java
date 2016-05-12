@@ -223,28 +223,31 @@ public class LoginActivity extends AppCompatActivity {
 
             if(authData != null)
             {
+                Log.v(TAG, "Data is not null");
                 setFirstTimePreference();
                 //add the user id to shared preferences so we can id the user on any page
                 mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
 
-                /* Send the user to change their password if the password is temporary */
-                if((Boolean) authData.getProviderData().get("isTemporaryPassword")) {
-                    // Create an intent to send the user to change the
-                    // password
-                    Intent intent = new Intent(getApplicationContext(),
-                            ChangePasswordActivity.class);
-
-                    // Send the user's email and temporary password with the intent
-                    intent.putExtra("Email", mEmail);
-                    intent.putExtra("TempPwd", mPassword);
-
-                    // Start the intent
-                    startActivity(intent);
-                } //end if
-
                 //Goes to the SportsList page
                 Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
                 startActivity(intent);
+
+                /* Send the user to change their password if the password is temporary */
+                if((Boolean) authData.getProviderData().get("isTemporaryPassword")) {
+                    Log.v(TAG, "Password Is Temporary");
+                    // Create an intent to send the user to change the
+                    // password
+                    Intent cPIntent = new Intent(LoginActivity.this,
+                            ChangePasswordActivity.class);
+
+                    // Send the user's email and temporary password with the intent
+                    cPIntent.putExtra("Email", mEmail);
+                    cPIntent.putExtra("TempPwd", mPassword);
+
+                    // Start the intent
+                    startActivity(cPIntent);
+                } //end if
+
                 finish();
             }
 

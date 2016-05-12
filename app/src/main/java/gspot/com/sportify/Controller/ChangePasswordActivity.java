@@ -85,15 +85,19 @@ public class ChangePasswordActivity extends Activity {
         mNewPwd = mNewPwdText.getText().toString();
         mRePwd = mRePwdText.getText().toString();
 
-        // Ensure the new password is the correct length
+        /* Ensure the new password is the correct length */
         if (mNewPwd.isEmpty() || mNewPwd.length() < 4 || mNewPwd.length() > 10) {
             mNewPwdText.setError("Between 4 and 10 alphanumeric characters");
             mChangePwdButton.setEnabled(true);
         }//end if
-        // Ensure the entered passwords match
+
+        /* Ensure the entered passwords match */
         else if (!mNewPwd.equals(mRePwd)) {
-            mRePwdText.setError("Does not match original password");
+            mRePwdText.setError("Passwords must match");
+            mChangePwdButton.setEnabled(true);
         }//end else if
+
+        /* If passwords are good, attempt to change them */
         else {
             mNewPwdText.setError(null);
 
@@ -119,6 +123,12 @@ public class ChangePasswordActivity extends Activity {
 //                        case FirebaseError.INVALID_PASSWORD:
 //                            mTempPwdText.setError("The password you specified is incorrect");
 //                            break;
+                        case FirebaseError.DISCONNECTED:
+                            Log.v(TAG, "Disconnected");
+                            Toast.makeText(getApplicationContext(),
+                                    "Cannot connect to internet",
+                                    Toast.LENGTH_LONG).show();
+                            break;
                     }
 
                     // Re-enable the button
