@@ -10,7 +10,7 @@ public class MySport {
     //Enum class increases readability
     public static enum SkillLevel {
         BEGINNER("Beginner"),
-        INTERMIDIATE("Intermidiate"),
+        INTERMEDIATE("Intermediate"),
         ADVANCED("Advanced");
 
         private final String skillLevel;
@@ -34,7 +34,7 @@ public class MySport {
     private String mSport;
 
     public MySport() {
-        this.mSkillLevel = SkillLevel.INTERMIDIATE;
+        this.mSkillLevel = SkillLevel.INTERMEDIATE;
         this.mBio = "This is where you should put information about how you like to play this sport";
         this.mSport = "Muay Thai";
     }

@@ -26,29 +26,33 @@ import gspot.com.sportify.utils.StateWrapper;
 
 /**
  * Created by patrickhayes on 5/6/16.
+ * Adapter class for the expandable list widget. We pass it in a list of parents and
+ * a hash map that maps the parents to their children.
+ * Handles retriving the location of a button when a user clicks on a specific child.
  */
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private Context _context;
-    private List<String> _listDataHeader; // header titles
+    private Context mContext;
+    private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, MySport> _listDataChild;
-    private StateWrapper _state;
-    private Profile _profile;
+    private HashMap<String, MySport> mListDataChild;
+    private StateWrapper mState;
+    private Profile mProfile;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader,
+    public ProfileExpandableListAdapter(Context context, List<String> listDataHeader,
                                  HashMap<String, MySport> listChildData,
                                  StateWrapper state, Profile profile) {
-        this._context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
-        this._state = state;
-        this._profile = profile;
+        this.mContext = context;
+        this.mListDataHeader = listDataHeader;
+        this.mListDataChild = listChildData;
+        this.mState = state;
+        this.mProfile = profile;
     }
 
+    /*Returns the MySport that was just clicked on */
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition));
+        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition));
     }
 
     @Override
@@ -56,18 +60,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return childPosition;
     }
 
+    /* Returns the view of the child needed for rendering the expandable list */
     @Override
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-
-        Log.e("ExpandableListAdapter", "in getChildView group position: " + groupPosition + " childpos: " + childPosition );
-        Log.e("ExpandableListAdapter", "State " + _state );
 
 
         final MySport childSport = (MySport) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
+            LayoutInflater infalInflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.prolife_expandable_list_item, null);
         }
@@ -80,11 +82,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         //always set the bio
         sportBioContent.setText(childSport.getmBio());
 
-        if (_state.getState() == StateWrapper.State.EDIT) {
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(_context, R.array.skill_lv_array, android.R.layout.simple_spinner_item);
+        //If we are in the editable state, enable everything
+        if (mState.getState() == StateWrapper.State.EDIT) {
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.skill_lv_array, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             skillLevelSpinner.setAdapter(adapter);
             skillLevelSpinner.setVisibility(View.VISIBLE);
+            String defaultSelection = mProfile.getmMySports().get(groupPosition).getmSkillLevel().getSkillLevel();
+            if (!defaultSelection.equals(null)) {
+                int spinnerPosition = adapter.getPosition(defaultSelection);
+                skillLevelSpinner.setSelection(spinnerPosition);
+            }
+
             skillLevelText.setVisibility(View.GONE);
             sportBioContent.setEnabled(true);
             deleteSport.setVisibility(View.VISIBLE);
@@ -92,15 +101,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             deleteSport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(_profile.getmMySports().size() > 0) {
-                        _profile.getmMySports().remove(groupPosition);
+                    if(mProfile.getmMySports().size() > 0) {
+                        mProfile.getmMySports().remove(groupPosition);
                         //TODO instead of save the profile it should ideally just remove it from the view
                         //TODO until they click the save button
-                        _profile.updateProfile();
+                        mProfile.updateProfile(mContext);
                     }
                 }
             });
 
+            //save what they write immediatly so if they scroll away the recycler doesn't eat it up
             sportBioContent.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -115,12 +125,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(_profile.getmMySports().size() > 0) {
-                        _profile.getmMySports().get(groupPosition).setmBio(editable.toString());
+                    if(mProfile.getmMySports().size() > 0) {
+                        mProfile.getmMySports().get(groupPosition).setmBio(editable.toString());
                     }
                 }
             });
         }
+
+        //if we are in view mode, then disable everything
         else {
             skillLevelSpinner.setVisibility(View.GONE);
             skillLevelText.setVisibility(View.VISIBLE);
@@ -138,12 +150,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this.mListDataHeader.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this.mListDataHeader.size();
     }
 
     @Override
@@ -151,12 +163,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return groupPosition;
     }
 
+    /* Return the view for each parent */
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
+            LayoutInflater infalInflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.profile_expandable_list_group, null);
         }

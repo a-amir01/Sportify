@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.InvalidObjectException;
 
 /**
+ * Author: Anshul with help from stack overflow
+ *
  * Creates resized images without exploding memory. Uses the method described in android
  * documentation concerning bitmap allocation, which is to subsample the image to a smaller size,
  * close to some expected size. This is required because the android standard library is unable to
@@ -27,8 +29,6 @@ import java.io.InvalidObjectException;
  *
  * implementation by user @hdante
  * http://stackoverflow.com/users/1797000/hdante
- *
- * YOU CAN PROBABLY JUST USE THIS WHOLE FILE AND CHANGE THE PACKAGE NAME
  */
 
 public class UserPicture {
@@ -251,6 +251,10 @@ public class UserPicture {
         return picture;
     }
 
+    /*
+     * Takes in a bitmap and converts it to a base 64 string, so we
+     * can store it in firebase
+     */
     public static String BitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
@@ -260,6 +264,7 @@ public class UserPicture {
     }
 
     /**
+     * Takes a base 64 string and converts it to a bitmap
      * @param encodedString
      * @return bitmap (from given string)
      */

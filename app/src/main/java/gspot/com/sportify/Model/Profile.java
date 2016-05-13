@@ -1,5 +1,6 @@
 package gspot.com.sportify.Model;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -136,9 +137,8 @@ public class Profile {
      * Save To Database Method
      * Saves all data inputted in edit mode and sends this
      * information the database.
-     * TODO Validate that info was saved
      */
-    public boolean updateProfile() {
+    public void updateProfile(final Context context) {
 
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(this.mOwner);
 
@@ -146,8 +146,17 @@ public class Profile {
         profileRef.setValue(this, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
             }
         });
+    }
+
+    public static Firebase profileRef(String profileId) {
+        return new Firebase(Constants.FIREBASE_URL_PROFILES).child(profileId);
+    }
+
+    public boolean isATeammate(String userId) {
+        //TODO check whether a user is a teammate of the profile owner
         return true;
     }
 

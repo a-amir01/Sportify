@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.firebase.client.core.Context;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,8 +55,9 @@ import gspot.com.sportify.utils.UserPicture;
 
 /*
  * Class that handles viewing and editing a profile. We only have one profile activity, but it has
- * 3 states. 1. Viewing your own profile. 2. Editing your profile. 3. Viewing someone else's profile.
- * We move between the three states by hiding buttons, changing the name of buttons, and enabling
+ * 4 states. 1. Viewing your own profile. 2. Editing your profile. 3. Viewing a teammates profile.
+ * 4. Viewing a strangers profile.
+ * We move between the four states by hiding buttons, changing the name of buttons, and enabling
  * and disabling textfields.
  *
  * Made by Don Vo and Patrick Hayes.
@@ -63,39 +69,39 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     /* Member Variables */
     private String mCurrentUser;
-    private String mOwner;
     private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_OTHER);
     private Profile mProfile;
     private GspotCalendar mCalendar;
     private ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
-
-    //adapter for expandable list
-    private ExpandableListAdapter listAdapter;
-    private List<String> sportsParent;
-    private HashMap<String, MySport> sportsChildren;
-
-    // Decrypts the time in calendar
-
+    private ProfileExpandableListAdapter listAdapter;   //adapter for expandable list
+    private List<String> mSportsParent;
+    private HashMap<String, MySport> mSportsChildren;
 
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
     // @Bind(R.id.profile_picture) ImageView mProfilePicture;
     @Bind(R.id.user_name)
-        EditText mName;
+    EditText mName;
     @Bind(R.id.edit_save_button)
-        Button mEditSaveButton;
+    Button mEditSaveButton;
     @Bind(R.id.bio_content)
-        EditText mBio;
+    EditText mBio;
     @Bind(R.id.contact_content)
-        EditText mContactInfo;
+    EditText mContactInfo;
     @Bind(R.id.profile_picture)
-        ImageView mProfilePicture;
+    ImageView mProfilePicture;
     @Bind(R.id.add_sport)
-        Button mAddSport;
+    Button mAddSport;
     @Bind(R.id.sports_list)
-        ExpandableListView mSportsList;
+    ExpandableListView mSportsList;
     @Bind(R.id.no_sports)
-        TextView mNoSports;
+    TextView mNoSports;
+    @Bind(R.id.availability_matrix)
+    TableLayout mCalendarView;
+    @Bind(R.id.availability_title)
+    TextView mCalendarTitle;
+    @Bind(R.id.contact_title)
+    TextView mContactTitle;
 
     /* Bind each time cell in the calendar */
     @Bind({R.id.sun_morning, R.id.sun_afternoon,
@@ -120,7 +126,6 @@ public class ProfileActivity extends BaseNavBarActivity {
             R.id.sat_evening, R.id.sat_night})
     ImageView[] mSaturday;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,16 +138,11 @@ public class ProfileActivity extends BaseNavBarActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
 
+        final android.content.Context context = this.getApplicationContext();
+        Firebase profileRef = Profile.profileRef(mCurrentUser);
+
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
-
-        final android.content.Context context = this.getApplicationContext();
-
-        Log.e(TAG, "This is the current user  " + mCurrentUser);
-
-
-        //mAddSport.setVisibility(View.INVISIBLE);
-        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(mCurrentUser);
 
         /* Populate the page with the user's information */
         profileRef.addValueEventListener(new ValueEventListener() {
@@ -157,10 +157,10 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mProfilePicture.setImageBitmap(UserPicture.StringToBitMap(mProfile.getmProfilePic()));
                 mBio.setText(mProfile.getmBio());
                 mContactInfo.setText(mProfile.getmContactInfo());
-                mOwner = mProfile.getmOwner();
                 mCalendar = mProfile.getmCalendar();
 
-                if (mCurrentUser.equals(mOwner)) {
+                //set the state here, so the expandable list adapter knows what state where in
+                if (mCurrentUser.equals(mProfile.getmOwner())) {
                     mState.setState(StateWrapper.State.VIEW_MINE);
                 }
 
@@ -169,31 +169,24 @@ public class ProfileActivity extends BaseNavBarActivity {
                  /* adapter */
                 prepareListData();
 
-                listAdapter = new ExpandableListAdapter(context, sportsParent, sportsChildren, mState, mProfile);
+                listAdapter = new ProfileExpandableListAdapter(context, mSportsParent, mSportsChildren, mState, mProfile);
 
-                // setting list adapter
+
                 mSportsList.setAdapter(listAdapter);
                 mSportsList.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
 
                 //if the person doesn't have any sport profiles tell them
-                if (mProfile.getmMySports() == null) {
-                    mNoSports.setVisibility(View.VISIBLE);
-                    mNoSports.setText("" + mProfile.getmName().toString() + " doesn't have any "
-                                        + "sports profiles");
-                }
-                else {
-                    mNoSports.setVisibility(View.INVISIBLE);
-                }
+                displayNoSportsMessage();
 
 
                 /* Give editing power to the owner of the profile */
-                if (mCurrentUser.equals(mOwner)) {
+                if (mCurrentUser.equals(mProfile.getmOwner())) {
                     toggleToViewMine();
 
                 /* Ensure that an arbitrary user does not have access to edit profile */
+                } else if (mProfile.isATeammate(mCurrentUser)){
+                    toggleToViewMate();
                 } else {
-                    Log.e(TAG, "mCurrentUser " + mCurrentUser);
-                    Log.e(TAG, "mOwner " + mOwner);
                     toggleToViewOther();
                 }
             }
@@ -205,8 +198,34 @@ public class ProfileActivity extends BaseNavBarActivity {
 
             }
         });
+    }
 
+    /*inflates a custom drop down menu and hides certain members
+    * The implementation of each field in the main menu will be done
+    * by the super class (BaseNavBarActivity) implicitly*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        /*dont show this filed in this screen*/
+        menu.findItem(R.id.profile).setVisible(false);
+
+        return true;
+    } //end onCreateOptionsMenu
+
+    /*
+     * Displays a message to the viewer that their are currently no sports
+     * profiles for the user profile they are looking at
+     */
+    private void displayNoSportsMessage() {
+        if (mProfile.getmMySports() == null) {
+            mNoSports.setVisibility(View.VISIBLE);
+            mNoSports.setText("" + mProfile.getmName().toString() + " doesn't have any "
+                    + "sports profiles");
+        } else {
+            mNoSports.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -220,6 +239,7 @@ public class ProfileActivity extends BaseNavBarActivity {
         super.onDestroy();
         Log.e(TAG, "onDestroy()");
         ButterKnife.unbind(this);
+        //TODO delete listners
     }
 
     /**
@@ -243,7 +263,7 @@ public class ProfileActivity extends BaseNavBarActivity {
             mProfile.setmName(mName.getText().toString());
             mProfile.setmBio(mBio.getText().toString());
             mProfile.setmContactInfo(mContactInfo.getText().toString());
-            mProfile.updateProfile();
+            mProfile.updateProfile(this.getApplicationContext());
             toggleToViewMine();
         }
     }
@@ -294,9 +314,6 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-
-
-
     /**
      * Toggle To "View Mine" Method
      * This method should be called when the the user taps on the
@@ -325,8 +342,7 @@ public class ProfileActivity extends BaseNavBarActivity {
      * Toggle To "View Other" Method
      * This method should be called under the assumption that the
      * the user is viewing another user's profile.
-     * Similar to toggleToViewMine(), the user will be able to view
-     * all the contents of a user's profile except for the 'edit' button.
+     * The user will be able to view a players name, bio, and sports bios.
      */
     private void toggleToViewOther() {
         Log.e(TAG, "viewOther");
@@ -335,6 +351,34 @@ public class ProfileActivity extends BaseNavBarActivity {
         disableAllInputs();
 
         /* Ensure that the edit/save and add sport button are not visible */
+        mContactTitle.setVisibility(View.GONE);
+        mContactInfo.setVisibility(View.GONE);
+        mCalendarTitle.setVisibility(View.GONE);
+        mCalendarView.setVisibility(View.GONE);
+        mEditSaveButton.setVisibility(View.INVISIBLE);
+        mAddSport.setVisibility(View.GONE);
+        mState.setState(StateWrapper.State.VIEW_OTHER);
+        listAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Toggle To "View MAte" Method
+     * This method should be called under the assumption that the
+     * the user is viewing a teammates profile.
+     * The user will be able to view
+     * all the contents of a user's profile except for the 'edit' button and the schedule.
+     */
+    private void toggleToViewMate() {
+        Log.e(TAG, "viewOther");
+
+        /* Ensure that all inputs are disabled */
+        disableAllInputs();
+
+        /* Ensure that the edit/save and add sport button are not visible */
+        mContactTitle.setVisibility(View.VISIBLE);
+        mContactInfo.setVisibility(View.VISIBLE);
+        mCalendarTitle.setVisibility(View.GONE);
+        mCalendarView.setVisibility(View.GONE);
         mEditSaveButton.setVisibility(View.INVISIBLE);
         mAddSport.setVisibility(View.GONE);
         mState.setState(StateWrapper.State.VIEW_OTHER);
@@ -438,6 +482,12 @@ public class ProfileActivity extends BaseNavBarActivity {
      * Update Calendar View Method
      * For each column in the calendar, retrieve the row of
      * time cells into a storage location for simpler manipuation.
+     * For each cell in the calendar, label each box so we
+     * can always identify what column and hat row it is in.
+     * - getTag() / 10 (tag code) = column (corresponds to day of week)
+     * - getTag() % 10 (tag code) = row (corresponds to time of day)
+     * In other words, first digit represents the day of the week (0-6)
+     * second digit represents the time of the day (0-4)
      */
     void updateCalendarView() {
 
@@ -451,44 +501,28 @@ public class ProfileActivity extends BaseNavBarActivity {
         mDaysOfWeek[6] = mSaturday;
 
         /* Label each cell of the calendar with a row and column */
-        tagTheCalendar(mDaysOfWeek);
-    }
-
-
-    /**
-     * Tag The Calendar Method
-     * For each cell in the calendar, label each box so we
-     * can always identify what column and hat row it is in.
-     * - getTag() / 10 (tag code) = column (corresponds to day of week)
-     * - getTag() % 10 (tag code) = row (corresponds to time of day)
-     * In other words, first digit represents the day of the week (0-6)
-     * second digit represents the time of the day (0-4)
-     *
-     * @param calendar - the matrix whose time cells that we want to label
-     */
-    private void tagTheCalendar(ImageView[][] calendar) {
-
         /* For each time of the week and each time of the day, label each box */
         for (int i = 0; i < Constants.NUM_DAYS_OF_WEEK; ++i) {
             for (int j = 0; j < Constants.NUM_TIMES_OF_DAY; ++j) {
-                calendar[i][j].setTag(new Integer(i * Constants.TAG_CODE + j));
+                mDaysOfWeek[i][j].setTag(new Integer(i * Constants.TAG_CODE + j));
             }
         }
     }
+
 
     /*
      * Preparing the list data for the my sports
      */
     private void prepareListData() {
-        sportsParent = new ArrayList<String>();
-        sportsChildren = new HashMap<String, MySport>();
+        mSportsParent = new ArrayList<String>();
+        mSportsChildren = new HashMap<String, MySport>();
 
         List<MySport> mySports = mProfile.getmMySports();
 
         if (mySports != null) {
             for (int i = 0; i < mySports.size(); i++) {
-                sportsParent.add(mySports.get(i).getmSport());
-                sportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
+                mSportsParent.add(mySports.get(i).getmSport());
+                mSportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
             }
         }
     }
@@ -547,7 +581,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
 
-     /**
+    /**
      * helper to scale down image before display to prevent render errors:
      * "Bitmap too large to be uploaded into a texture"
      */
@@ -561,14 +595,11 @@ public class ProfileActivity extends BaseNavBarActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         int height = bitmap.getHeight(), width = bitmap.getWidth();
 
-        if (height > 250 && width > 250){
+        if (height > 250 && width > 250) {
             Bitmap imgbitmap = BitmapFactory.decodeFile(imagePath, options);
             imageView.setImageBitmap(imgbitmap);
         } else {
             imageView.setImageBitmap(bitmap);
         }
     }
-
-
-
 }

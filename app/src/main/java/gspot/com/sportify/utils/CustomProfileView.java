@@ -11,6 +11,13 @@ import android.widget.LinearLayout;
 
 import gspot.com.sportify.R;
 
+/*
+ *Author: Patrick Hayes
+ *
+ * This is a custom view class that we can drop directly into a view.
+ * It allows us to combine the rest of the profile with the expandable list view
+ * for the sport profiles.
+ */
 public class CustomProfileView extends LinearLayout {
     private View mHeaderView;
     private ExpandableListView mListView;
@@ -45,8 +52,6 @@ public class CustomProfileView extends LinearLayout {
         super.onFinishInflate();
 
         mListView = (ExpandableListView) (findViewById(R.id.sports_list));
-
-        Log.d("MyView", "Almost done...");
 
         mListView.addHeaderView(mHeaderView, null, false);
     }
