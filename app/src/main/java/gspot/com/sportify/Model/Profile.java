@@ -38,7 +38,7 @@ public class Profile {
         this.mCalendar = new GspotCalendar();
         this.mMySports = new ArrayList<MySport>();
         this.mMySports.add(new MySport());
-        this.mProfilePic = "@drawable/profile_default";
+        this.mProfilePic = Constants.DEFAULT_PROFILE_PIC;
     }
 
     /* Get the name of the owner */

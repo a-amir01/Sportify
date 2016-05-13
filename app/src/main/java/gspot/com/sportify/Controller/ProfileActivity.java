@@ -71,7 +71,6 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     //adapter for expandable list
     private ExpandableListAdapter listAdapter;
-    private ExpandableListView expListView;
     private List<String> sportsParent;
     private HashMap<String, MySport> sportsChildren;
 
@@ -155,6 +154,7 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 /* Retrieve text information from the database */
                 mName.setText(mProfile.getmName());
+                mProfilePicture.setImageBitmap(UserPicture.StringToBitMap(mProfile.getmProfilePic()));
                 mBio.setText(mProfile.getmBio());
                 mContactInfo.setText(mProfile.getmContactInfo());
                 mOwner = mProfile.getmOwner();
@@ -477,7 +477,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
     /*
-     * Preparing the list data
+     * Preparing the list data for the my sports
      */
     private void prepareListData() {
         sportsParent = new ArrayList<String>();
@@ -534,9 +534,10 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 // Display the image in the ImageView
                 mProfilePicture.setImageBitmap(wtf);
-                // original code
-//                String selectedImagePath = getPath(selectedImageUri);
-//                selectedImagePreview.setImageURI(selectedImageUri);
+
+                //store the bitmap as a string in the profile
+                mProfile.setmProfilePic(UserPicture.BitMapToString(wtf));
+
             }
         } else {
             // report failure
