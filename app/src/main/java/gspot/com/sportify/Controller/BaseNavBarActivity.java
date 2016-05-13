@@ -36,6 +36,9 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
             case R.id.home:
                 intent = new Intent(this, GatheringListActivity.class);
+                /*clear the activity stack and make the profile the new root*/
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
 
             case R.id.log_out:
@@ -56,14 +59,10 @@ public class BaseNavBarActivity extends AppCompatActivity {
                 Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.profile:
-                Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, ProfileActivity.class);
+                startActivity(intent);
                 break;
         }//end case
-
-        if(intent != null){
-            startActivity(intent);
-            finish();
-        }
 
         return super.onOptionsItemSelected(item);
     } //end onOptionsItemSelected
