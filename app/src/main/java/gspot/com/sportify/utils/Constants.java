@@ -30,9 +30,15 @@ public class Constants {
     public static final int NUM_TIMES_OF_DAY = 4;
     public static final int NUM_DAYS_OF_WEEK = 7;
     public static final int TAG_CODE = 10;
-    public static final int VIEW_MINE = 0;
-    public static final int EDIT = 1;
-    public static final int VIEW_OTHER = 2;
+
+    /*Constants for Profile Pictures */
+    // this is the action code we use in our intent,
+    // this way we know we're looking at the response from our own action
+    public static final int SELECT_SINGLE_PICTURE = 101;
+    // Need this to indicate what data type we are looking for when we pass
+    // the intent
+    public static final String IMAGE_TYPE = "image/*";
+
 
 
 

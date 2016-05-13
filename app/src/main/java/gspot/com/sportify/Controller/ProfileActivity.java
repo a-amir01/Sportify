@@ -1,6 +1,9 @@
 package gspot.com.sportify.Controller;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,6 +30,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.firebase.client.core.Context;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +44,7 @@ import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.StateWrapper;
+import gspot.com.sportify.utils.UserPicture;
 
 /*
  * Class that handles viewing and editing a profile. We only have one profile activity, but it has
@@ -470,6 +475,81 @@ public class ProfileActivity extends BaseNavBarActivity {
                 sportsParent.add(mySports.get(i).getmSport());
                 sportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
             }
+        }
+    }
+
+    @OnClick(R.id.profile_picture)
+    public void updateProfilePicture(ImageView profPic) {
+
+        // in onCreate or any event where your want the user to
+        // select a file
+        Intent intent = new Intent();
+        // Set the file type we are looking for
+        intent.setType(Constants.IMAGE_TYPE);
+        // Set the intent to give the user the ability to pick data
+        intent.setAction(Intent.ACTION_PICK);
+
+        // Start the intent using the chooser box
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Constants.SELECT_SINGLE_PICTURE);
+
+    }
+
+
+    /* onActivityResult()
+     * This basically gets the Uri, turns it into a bitmap and renders the
+     * picture
+     * */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constants.SELECT_SINGLE_PICTURE) {
+
+                // Get the uri data
+                Uri selectedImageUri = data.getData();
+                // Create a Bitmap variable
+                Bitmap wtf = null;
+
+                try {
+                    // Attempt to create a bitmap object from the uri using the
+                    // UserPicture helper class
+                    wtf = new UserPicture(selectedImageUri, getContentResolver()).getBitmap();
+                } catch (IOException e) {
+                    // If the bitmap creation failed, indicate that
+                    Log.e(ProfileActivity.class.getSimpleName(), "Failed to load image", e);
+                }
+
+                // Display the image in the ImageView
+                mProfilePicture.setImageBitmap(wtf);
+                // original code
+//                String selectedImagePath = getPath(selectedImageUri);
+//                selectedImagePreview.setImageURI(selectedImageUri);
+            }
+        } else {
+            // report failure
+            Toast.makeText(getApplicationContext(), R.string.msg_failed_to_get_intent_data, Toast.LENGTH_LONG).show();
+            Log.d(ProfileActivity.class.getSimpleName(), "Failed to get intent data, result code is " + resultCode);
+        }
+    }
+
+
+     /**
+     * helper to scale down image before display to prevent render errors:
+     * "Bitmap too large to be uploaded into a texture"
+     */
+    private void displayPicture(String imagePath, ImageView imageView) {
+
+        // from http://stackoverflow.com/questions/22633638/prevent-bitmap-too-large-to-be-uploaded-into-a-texture-android
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        int height = bitmap.getHeight(), width = bitmap.getWidth();
+
+        if (height > 250 && width > 250){
+            Bitmap imgbitmap = BitmapFactory.decodeFile(imagePath, options);
+            imageView.setImageBitmap(imgbitmap);
+        } else {
+            imageView.setImageBitmap(bitmap);
         }
     }
 

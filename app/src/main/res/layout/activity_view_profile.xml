@@ -19,7 +19,9 @@
                     android:src="@drawable/profile_default"
                     android:paddingTop="20dp"
                     android:padding="10dp"
-                    android:contentDescription="ProfilePicture" />
+                    android:contentDescription="ProfilePicture"
+                    android:maxHeight="250dp"
+                    android:maxWidth="250dp" />
 
                 <LinearLayout
                     android:orientation="vertical"
