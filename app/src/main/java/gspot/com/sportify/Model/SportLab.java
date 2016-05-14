@@ -28,7 +28,7 @@ public class SportLab {
         /*create a list of fake sports*/
         for (int i = 0; i < 50; i++){
             Gathering gathering = new Gathering();
-            gathering.setSportName("Gathering # " + i);
+            gathering.setSportTitle("Gathering # " + i);
             mGatherings.add(gathering);
         }//end for
     }//end SportLab()
@@ -44,13 +44,13 @@ public class SportLab {
 
     public List<Gathering> getSports() { return mGatherings; }
 
-    public Gathering getSport(UUID id){
+    public Gathering getSport(String ID){
         Log.i(TAG, "getSport()");
 
         for(Gathering gathering : mGatherings) {
             /*crime.getId() == id (only true if they are same object
              * must use equals for different but identical objects */
-            if (gathering.getId().equals(id))
+            if (gathering.getID() == (ID))
                 return gathering;
         }//end for
 

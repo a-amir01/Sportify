@@ -47,7 +47,7 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
      * Activity gets started
      * Forces the client of this class to pass in the id of the sport before
      * the object is instantiated*/
-    public static Intent newIntent(Context packageContext, UUID sportId){
+    public static Intent newIntent(Context packageContext, String sportId){
         Log.i(TAG, "newIntent()");
         Intent intent = new Intent(packageContext, GatheringPagerActivity.class);
         intent.putExtra(EXTRA_SPORT_ID, sportId);
@@ -61,9 +61,10 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         setContentView(R.layout.activity_gathering_pager);
 
         /*get the id of the GatheringFragment that was passed into newIntent*/
-        UUID sportId = (UUID) getIntent().getSerializableExtra(EXTRA_SPORT_ID);
+        String sportId = getIntent().getStringExtra(EXTRA_SPORT_ID);
 
-        Log.d(TAG, "onCreate()");
+
+        Log.d(TAG, "onCreate()" + sportId);
 
         mViewPager = (ViewPager) findViewById(R.id.activity_sport_pager_view_pager);
 
@@ -86,12 +87,12 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
                 Gathering gathering = mGatherings.get(position);
 
                 /*the position of the fragment that is being loaded*/
-                gathering.mPosition = position;
+               // gathering.mPosition = position;
 
                 /*position of the current gathering on screen*/
                 mCurrSportPos = mViewPager.getCurrentItem();
 
-                return GatheringFragment.newInstance(gathering.getId());
+                return GatheringFragment.newInstance(gathering.getID());
             }
 
             /*return the number of items in the array list*/
@@ -108,7 +109,7 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
          * id that will match the sportID
          */
         for(int i = 0; i < mGatherings.size(); i++){
-            if(mGatherings.get(i).getId().equals(sportId)){
+            if(mGatherings.get(i).getID() == sportId){
                 mViewPager.setCurrentItem(i);
                 break;
             }/*end if*/

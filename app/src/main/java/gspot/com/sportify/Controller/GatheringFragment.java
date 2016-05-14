@@ -49,8 +49,9 @@ public class GatheringFragment extends Fragment {
 
     @OnClick(R.id.sport_submit)
     void onClick(Button button){submitGathering();}
-    //@OnTextChanged(R.id.sport_title)
-    //void onTextChange(CharSequence text, int start, int before, int count) { mSport.setSportName(text.toString()); }
+
+    @OnTextChanged(R.id.sport_title)
+    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportTitle(text.toString()); }
 
 
     /* will be called when a new SportFragment needs to be created
@@ -58,10 +59,10 @@ public class GatheringFragment extends Fragment {
      * sets its arguments,
      * attaching arguments to a fragment must be done after the fragment is created
      * but before it is added to an activity.*/
-    public static GatheringFragment newInstance(UUID sportId) {
+    public static GatheringFragment newInstance(String sportId) {
         Log.d(TAG, "newInstance()");
         Bundle args = new Bundle();
-        args.putSerializable(ARG_SPORT_ID, sportId);    /*store the sportId for later retreival*/
+        args.putString(ARG_SPORT_ID, sportId);    /*store the sportId for later retreival*/
         GatheringFragment fragment = new GatheringFragment();   /*create a new instance of the fragment*/
         fragment.setArguments(args);                    /*bundle up the arguments*/
         return fragment;
@@ -72,8 +73,8 @@ public class GatheringFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
 
-        UUID sportId = (UUID) getArguments().getSerializable(ARG_SPORT_ID);
-        mGathering = SportLab.get(getActivity()).getSport(sportId);
+        String sportID = getArguments().getString(ARG_SPORT_ID);
+        mGathering = SportLab.get(getActivity()).getSport(sportID);
 
     }//end onCreate
 
@@ -87,7 +88,7 @@ public class GatheringFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gathering, parent, false);
         ButterKnife.bind(this, view);
         /**show the sport*/
-        //mTitleField.setText(mGathering.getSportName());
+        mTitleField.setText(mGathering.getSportTitle());
 
 
 

@@ -106,7 +106,12 @@ public class GatheringListFragment extends Fragment {
                 alertDialog.show(fm, "fragment_alert");
                 break;
             case R.id.action_add:
-                Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), GatheringActivity.class);
+                getActivity().startActivity(intent);
+               // getActivity().finish();
+
+                // maybe add finish
+                //Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
         }//end case
 
@@ -213,9 +218,9 @@ public class GatheringListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "onClick()");
+            Log.i(TAG, "onClick()" + mGathering.getID());
             /*Create the SportActivity*/
-            Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getId());
+            Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getID());
             startActivityForResult(intent, REQUEST_CODE);
         } //end onClick()
 
@@ -227,7 +232,7 @@ public class GatheringListFragment extends Fragment {
 
             Log.i(TAG, "bindSport()");
             mGathering = gathering;
-            mTitleTextView.setText(mGathering.getSportName());
+            mTitleTextView.setText(mGathering.getSportTitle());
         }/*end bindSport*/
     }/*end SportHolder*/
 
