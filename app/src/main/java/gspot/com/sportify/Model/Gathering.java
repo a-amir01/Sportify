@@ -11,79 +11,35 @@ import java.util.UUID;
  */
 public class Gathering {
 
-    private String mSportName;
+    private String mSportTitle;
+    private String mLocation;
+    private String mDescription;
+    private String mHostID;
+    private String mTime;
+    private String mSID;
+    public String mID;
 
-    /*sport's id: use to find the sport among the list*/
-    private UUID mGatheringID;
+    public Gathering() {
+    }
 
-    /*position of the crime in the list it is in*/
-    public int mPosition;               //TODO can it be done another way?
+    public void setSportTitle (String title) { this.mSportTitle = title; }
+    public String getSportTitle () { return mSportTitle; }
 
-    // Type of sport we are playing, Eg. boxing or soccer, commented until Andrew pushes
-    //private SportType type;
+    public void setLocation (String location) { this.mLocation = location; }
+    public String getLocation () { return mLocation; }
 
-    // ID of the host of this gathering
-    private int hostID;
+    public void setDescription (String description) { this.mDescription = description; }
+    public String getDescription () { return mDescription; }
 
-    // Exact Time of gathering
-    SimpleDateFormat exactTime;
+    public void setHostID (String hostID) { this.mHostID = hostID; }
+    public String getHostID () { return mHostID; }
 
-    // Enum that represents approximate time of gathering
-    // Morning is 4am - 12
-    // Noon 12-4
-    // Evening 4-8
-    // Night is 8 - 4am
-    // TODO Make class in utils that turns SimpleDateFormat into an enum of the 4 options above
+    public void setTime (String time) { this.mTime = time; }
+    public String getTime () { return mTime; }
 
-    // Location of gathering in longitude/latitude
-    private double longitude;
-    private double lattitude;
+    public void setSID (String SID) { this.mSID = SID; }
+    public String getSID () { return mSID; }
 
-    // Description of gathering
-    private String description;
-
-    // List of unique IDs of attendees to gathering
-    // TODO figure out type of universal unique IDs
-    private ArrayList<Integer> attendees;
-
-    // List of unique IDs of pending requests to join event
-    private ArrayList<Integer> pendingRequests;
-
-    public Gathering() { mGatheringID = UUID.randomUUID(); }
-
-    public String getSportName() { return mSportName; }
-
-    public void setSportName(String sportName) { mSportName = sportName; }
-
-    public UUID getId() { return mGatheringID; }
-
-    // Only Getters and setters below, don't bother reading
-    public int getHostID() { return hostID; }
-
-    public void setHostID(int hostID) { this.hostID = hostID; }
-
-    public SimpleDateFormat getExactTime() { return exactTime; }
-
-    public void setExactTime(SimpleDateFormat exactTime) { this.exactTime = exactTime;}
-
-    public double getLongitude() { return longitude; }
-
-    public void setLongitude(double longitude) { this.longitude = longitude; }
-
-    public double getLattitude() { return lattitude; }
-
-    public void setLattitude(double lattitude) { this.lattitude = lattitude; }
-
-    public String getDescription() { return description; }
-
-    public void setDescription(String description) { this.description = description; }
-
-    public ArrayList<Integer> getAttendees() { return attendees; }
-
-    public void setAttendees(ArrayList<Integer> attendees) { this.attendees = attendees; }
-
-    public ArrayList<Integer> getPendingRequests() { return pendingRequests; }
-
-    public void setPendingRequests(ArrayList<Integer> pendingRequests) { this.pendingRequests = pendingRequests; }
-
+    public void setID (String ID) { this.mSID = ID; }
+    public String getID () { return mID; }
 }
