@@ -38,7 +38,7 @@ public class Gathering {
     public String getTime () { return mTime; }
 
     public void setSID (String SID) { this.mSID = SID; }
-    public String getSID () { return mSID; }
+    public String getSID () { return mID; }
 
     public void setID (String ID) { this.mSID = ID; }
     public String getID () { return mID; }
