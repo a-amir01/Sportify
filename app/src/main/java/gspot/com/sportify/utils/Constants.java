@@ -18,9 +18,11 @@ public class Constants {
     public static final String FIREBASE_LOCATION_USERS = "users";
     public static final String FIREBASE_LOCATION_USER_LISTS = "userLists";
     public static final String FIREBASE_LOCATION_USER_FRIENDS = "userFriends";
+    public static final String FIREBASE_LOCATION_USER_GATHERINGS = "Events";
 
     public static final String FIREBASE_URL = BuildConfig.UNIQUE_FIREBASE_ROOT_URL;
     public static final String FIREBASE_URL_PROFILES = FIREBASE_URL + "/" + FIREBASE_LOCATION_PROFILES;
+    public static final String FIREBASE_URL_GATHERINGS = FIREBASE_URL + "/" + FIREBASE_LOCATION_USER_GATHERINGS;
 
     /*Constants for shared preferences */
     public static final String KEY_UID = "key_uid";

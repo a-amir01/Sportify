@@ -3,9 +3,16 @@ package gspot.com.sportify.Model;
 import android.content.Context;
 import android.util.Log;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Created by amir on 4/17/16.
@@ -26,11 +33,47 @@ public class SportLab {
         mGatherings = new ArrayList<>();
 
         /*create a list of fake sports*/
-        for (int i = 0; i < 50; i++){
+      /* for (int i = 0; i < 50; i++){
             Gathering gathering = new Gathering();
             gathering.setSportTitle("Gathering # " + i);
             mGatherings.add(gathering);
-        }//end for
+        }//end for */
+        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Events");
+
+
+        gatheringRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot gatheringSnapshot: dataSnapshot.getChildren()) {
+                    Gathering gathering = new Gathering();
+                    gathering = gatheringSnapshot.getValue (Gathering.class);
+                    mGatherings.add(gathering);
+                    //System.out.println(gathering.getSportTitle());
+                }
+
+                //  Gathering gathering = new Gathering();
+                // gathering = dataSnapshot.getValue(Gathering.class);
+//
+                // mGatherings.add(gathering);
+
+            }
+
+
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
+
+            }
+        });
+
+
+
+
+
+
+
     }//end SportLab()
 
     public static SportLab get(Context context) {
@@ -59,4 +102,4 @@ public class SportLab {
     }//end getSport
 
 
-}//end SportLab
+}
