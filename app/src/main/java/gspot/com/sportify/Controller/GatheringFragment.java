@@ -8,8 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
+import android.content.Intent;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.UUID;
 
@@ -20,6 +24,7 @@ import butterknife.OnTextChanged;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.utils.Constants;
 
 /**
@@ -36,22 +41,22 @@ public class GatheringFragment extends Fragment {
 
     /*the Gathering profile*/
     private Gathering mGathering;
+    private Profile mProfile;
 
-    private String title, description, location, time;
+    private String hostID, hostName, gatheringUID;
 
     private static final String ARG_SPORT_ID = "sport_id";
 
 
-    @Bind(R.id.sport_title) EditText mTitleField;
-    @Bind(R.id.sport_description) EditText mDescriptionField;
-    @Bind(R.id.sport_location) EditText mLocationField;
-    @Bind(R.id.sport_time) EditText mTimeField;
+    @Bind(R.id.gathering_title) EditText mTitleField;
+    @Bind(R.id.gathering_description) EditText mDescriptionField;
+    @Bind(R.id.gathering_location) EditText mLocationField;
+    @Bind(R.id.gathering_time) EditText mTimeField;
+    @Bind(R.id.gathering_host) EditText mHost;
+    @Bind(R.id.gathering_attendees) EditText mAttendees;
 
-    @OnClick(R.id.sport_submit)
-    void onClick(Button button){submitGathering();}
-
-    @OnTextChanged(R.id.sport_title)
-    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportTitle(text.toString()); }
+    //@OnTextChanged(R.id.sport_title)
+    //void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportTitle(text.toString()); }
 
 
     /* will be called when a new SportFragment needs to be created
@@ -73,8 +78,40 @@ public class GatheringFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
 
-        String sportID = getArguments().getString(ARG_SPORT_ID);
-        mGathering = SportLab.get(getActivity()).getSport(sportID);
+        Intent intent = getActivity().getIntent();
+        gatheringUID = intent.getStringExtra("gatheringUID");
+
+        //Log.d(TAG, "GatheringUID" + gatheringUID);
+        //Firebase gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child("-KHkppWM5zYMc_Zg-4Qv");
+        //Log.d(TAG, gatheringUID)
+        Firebase gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(gatheringUID);
+
+        /*Populate page with gathering*/
+        gathering.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                /*Create a gathering object from data in database*/
+                mGathering = dataSnapshot.getValue(Gathering.class);
+
+                /*Retrieve text information from the database*/
+                mTitleField.setText(mGathering.getSportTitle());
+                mDescriptionField.setText(mGathering.getDescription());
+                mTimeField.setText(mGathering.getTime());
+                mLocationField.setText(mGathering.getLocation());
+
+                hostID = mGathering.getHostID();
+
+                getHostname(hostID);
+                //mHost.setText(hostName);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
+            }
+        });
+        //String sportID = getArguments().getString(ARG_SPORT_ID);
+        //mGathering = SportLab.get(getActivity()).getSport(sportID);
 
     }//end onCreate
 
@@ -85,10 +122,10 @@ public class GatheringFragment extends Fragment {
         /**the 3rd param: whether the inflated layout should be attached to the 2nd param during inflation*/
         Log.d(TAG, "onCreateView()");
 
-        View view = inflater.inflate(R.layout.fragment_gathering, parent, false);
+        View view = inflater.inflate(R.layout.view_gathering, parent, false);
         ButterKnife.bind(this, view);
         /**show the sport*/
-        mTitleField.setText(mGathering.getSportTitle());
+        //mTitleField.setText(mGathering.getSportTitle());
 
 
 
@@ -98,32 +135,6 @@ public class GatheringFragment extends Fragment {
         return view;
     }//end onCreateView
 
-    private void submitGathering()
-    {
-        title = mTitleField.getText().toString();
-        description = mDescriptionField.getText().toString();
-        location = mLocationField.getText().toString();
-        time = mTimeField.getText().toString();
-
-        //Makes a new reference to the database (needed everytime you want to access the data base
-        Firebase postID = new Firebase(Constants.FIREBASE_URL).child("TEST");
-        //postID.push();
-        //String key = postID.getKey();
-
-        //postID.setValue(key);
-        Firebase sportRef = postID.push();
-        final String GatheringID = sportRef.getKey();
-
-        sportRef.child("Title").setValue(title);
-        sportRef.child("Description").setValue(description);
-        sportRef.child("Location").setValue(location);
-        sportRef.child("Time").setValue(time);
-
-        //Intent intent = new Intent(SportFragment.this, SportListActivity.class);
-        //startActivity(intent);
-        //finish();
-        getActivity().finish();
-    }
 
     @Override
     public void onDestroyView()
@@ -131,6 +142,27 @@ public class GatheringFragment extends Fragment {
         super.onDestroyView();
         Log.i(TAG, "onDestroyView()");
         ButterKnife.unbind(this);
+    }
+
+    void getHostname(String hostID)
+    {
+       Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID);
+
+        profileRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mProfile = dataSnapshot.getValue(Profile.class);
+
+                //hostName = mProfile.getmName();
+                mHost.setText(mProfile.getmName());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
     }
 
 }

@@ -30,12 +30,12 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gathering_location"
         android:layout_gravity="center_horizontal"
         android:hint="@string/hint_location"
         android:inputType="textMultiLine"
         android:text="location"
-        android:layout_weight="0.08" />
+        android:layout_weight="0.08"
+        android:id="@+id/gathering_location" />
 
     <EditText
         android:layout_width="match_parent"

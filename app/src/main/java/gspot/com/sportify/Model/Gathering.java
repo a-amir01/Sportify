@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class Gathering {
 
-    private String mSportTitle;
+    private String mGatheringTitle;
     private String mLocation;
     private String mDescription;
     private String mHostID;
@@ -22,8 +22,8 @@ public class Gathering {
     public Gathering() {
     }
 
-    public void setSportTitle (String title) { this.mSportTitle = title; }
-    public String getSportTitle () { return mSportTitle; }
+    public void setSportTitle (String title) { this.mGatheringTitle = title; }
+    public String getSportTitle () { return mGatheringTitle; }
 
     public void setLocation (String location) { this.mLocation = location; }
     public String getLocation () { return mLocation; }
@@ -38,8 +38,8 @@ public class Gathering {
     public String getTime () { return mTime; }
 
     public void setSID (String SID) { this.mSID = SID; }
-    public String getSID () { return mID; }
+    public String getSID () { return mSID; }
 
-    public void setID (String ID) { this.mSID = ID; }
+    public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
 }

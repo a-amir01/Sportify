@@ -81,6 +81,7 @@ public class GatheringActivity extends Activity {
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.setTime(mTimeField.getText().toString());
+        mgathering.setSID("Dummy");
         sportRef.setValue(mgathering);
 
         finish();

@@ -53,6 +53,8 @@ public class GatheringListFragment extends Fragment {
     /*position of the sport that will be Viewed*/
     public int mSportPosition;
 
+    private String gatheringUID;
+
     /*
     * 1st function to be called when the object gets instantiated
     * tell the host activity that your fragment
@@ -212,6 +214,7 @@ public class GatheringListFragment extends Fragment {
             /*link member with the widget*/
             mTitleTextView = (TextView)itemView.findViewById(R.id.list_item_sport_title_text_view);
 
+            //gatheringUID = mTitleTextView.toString();
             /*when the Gathering is clicked in the list*/
             itemView.setOnClickListener(this);
         }//end SportHolder()
@@ -221,6 +224,9 @@ public class GatheringListFragment extends Fragment {
             Log.i(TAG, "onClick()" + mGathering.getID());
             /*Create the SportActivity*/
             Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getID());
+            Log.d(TAG, "INTENT"+ mGathering.getID());
+            //Log.d(TAG, "INTENT" + gatheringUID);
+            intent.putExtra("gatheringUID", mGathering.getID());
             startActivityForResult(intent, REQUEST_CODE);
         } //end onClick()
 
@@ -232,6 +238,7 @@ public class GatheringListFragment extends Fragment {
 
             Log.i(TAG, "bindSport()");
             mGathering = gathering;
+            Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
             mTitleTextView.setText(mGathering.getSportTitle());
         }/*end bindSport*/
     }/*end SportHolder*/
