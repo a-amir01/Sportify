@@ -1,7 +1,7 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +19,7 @@ import gspot.com.sportify.utils.Constants;
 /**
  * Created by Anshul and Armin on 5/8/2016.
  */
-public class ForgotPasswordActivity extends Activity {
+public class ForgotPasswordActivity extends AppCompatActivity{
     private static final String TAG = ForgotPasswordActivity.class.getSimpleName();
 
     /* Code for when the User requests forgot password */
@@ -108,7 +108,7 @@ public class ForgotPasswordActivity extends Activity {
                     /* Check for errors */
                     switch(firebaseError.getCode()){
                         case FirebaseError.USER_DOES_NOT_EXIST:
-                            mEmailText.setError("The email you specified is not valid");
+                            mEmailText.setError("No user is associated with this address");
                             break;
                         case FirebaseError.NETWORK_ERROR:
                             Toast.makeText(getApplicationContext(),

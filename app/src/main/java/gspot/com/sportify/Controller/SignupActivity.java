@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -99,7 +98,7 @@ public class SignupActivity extends Activity{
         mSignupButton.setEnabled(false);  //disable the button
 
         /*Progress dialog*/
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this, R.style.AppTheme);
+        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this, R.style.Test);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
