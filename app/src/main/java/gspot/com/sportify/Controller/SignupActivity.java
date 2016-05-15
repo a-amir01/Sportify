@@ -134,20 +134,6 @@ public class SignupActivity extends Activity{
         mSignupButton.setEnabled(true);
 
 
-        /*Leave here for reference*/
-        //Root (user)
-        //Firebase ref = new Firebase(Constants.FIREBASE_URL);
-
-        //Firebase childName = new Firebase("https://gspot.firebaseio.com/users").child(name);
-
-        /*This tell it not to overwrite old data*/
-        //childName.push();
-
-        /*Set values*/
-        //childName.setValue(email);
-        //childName.child("email").setValue(email);
-        //childName.child("password").setValue(password);
-
         /*Create user in database*/
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         mFirebaseRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
@@ -157,6 +143,7 @@ public class SignupActivity extends Activity{
                 //store the information in firebase web
                 Profile profile = new Profile(name, (String) result.get("uid"));
                 mFirebaseRef.child("profiles").child((String)result.get("uid")).setValue(profile);
+                //mFirebaseRef.child("myEvents").child((String) result.get("uid"));
 
                 /*store the users uid in shared preferences so we know who they are */
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignupActivity.this);

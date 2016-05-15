@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
 /**
@@ -24,13 +25,13 @@ public class SportLab {
     private static final String TAG = SportLab.class.getSimpleName();
 
     private static SportLab sSportLab;
-    private List<Gathering> mGatherings;
+ //   private List<Gathering> mGatherings;
 
     private SportLab(Context context){
         Log.i(TAG, "SportLab()");
 
         /*hold an array of test sports*/
-        mGatherings = new ArrayList<>();
+        //App.mGatherings = new ArrayList<>();
 
         /*create a list of fake sports*/
       /* for (int i = 0; i < 50; i++){
@@ -44,11 +45,11 @@ public class SportLab {
         gatheringRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                App.mGatherings.removeAll(App.mGatherings);
                 for (DataSnapshot gatheringSnapshot: dataSnapshot.getChildren()) {
                     Gathering gathering = new Gathering();
                     gathering = gatheringSnapshot.getValue (Gathering.class);
-                    mGatherings.add(gathering);
+                    App.mGatherings.add(gathering);
                     //System.out.println(gathering.getSportTitle());
                 }
 
@@ -85,12 +86,12 @@ public class SportLab {
         return sSportLab;
     }//end get()
 
-    public List<Gathering> getSports() { return mGatherings; }
+    public List<Gathering> getSports() { return App.mGatherings; }
 
     public Gathering getSport(String ID){
         Log.i(TAG, "getSport()");
 
-        for(Gathering gathering : mGatherings) {
+        for(Gathering gathering : App.mGatherings) {
             /*crime.getId() == id (only true if they are same object
              * must use equals for different but identical objects */
             if (gathering.getID() == (ID))
