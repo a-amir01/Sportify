@@ -3,7 +3,11 @@
     <string name="app_name">Sportify</string>
     <string name="gathering_title_label">Title</string>
     <string name="gathering_title_hint">Enter a title for the event.</string>
+
     <string name="title_activity_view_profile">ViewProfileActivity</string>
+    <string name="title_activity_forgot_pwd">Forgot Password</string>
+    <string name="title_activity_change_pwd">Change Password</string>
+
     <string name="calendar">Calendar</string>
     <string name="description_hint">\"Enter a description</string>
     <string name="hint_location">Enter a location</string>
