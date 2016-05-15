@@ -23,6 +23,7 @@ import java.util.List;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.App;
 
 /**
  * Authors amir assad, on 4/17/16
@@ -227,6 +228,11 @@ public class GatheringListFragment extends Fragment {
             Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getID());
             Log.d(TAG, "INTENT"+ mGathering.getID());
             //Log.d(TAG, "INTENT" + gatheringUID);
+
+            // pass in mGathering object
+
+            App.mCurrentGathering = mGathering;
+
             intent.putExtra("gatheringUID", mGathering.getID());
             startActivityForResult(intent, REQUEST_CODE);
         } //end onClick()

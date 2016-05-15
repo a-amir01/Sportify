@@ -1,15 +1,20 @@
 package gspot.com.sportify.Model;
 
+import com.firebase.client.Firebase;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.UUID;
+
+import gspot.com.sportify.utils.App;
 
 /**
  * Authors Amir Assad, massoudmaher on 5/1/16.
  * Class that represents a single gathering
  * Purpose is to instantiate one of these for each created event and push to firebase
  */
-public class Gathering {
+public class Gathering{
 
     private String mGatheringTitle;
     private String mLocation;
@@ -42,4 +47,9 @@ public class Gathering {
 
     public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
+
+    public void delete()
+    {
+        App.dbref.child("Events").child(mID).removeValue();
+    }
 }
