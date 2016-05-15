@@ -30,7 +30,7 @@ import gspot.com.sportify.utils.App;
 /**
  * Created by DannyChan on 5/8/16.
  */
-public class GatheringActivity extends Activity {
+public class GatheringActivity extends BaseNavBarActivity {
 
     private Gathering mgathering;
    // private String m_description;
