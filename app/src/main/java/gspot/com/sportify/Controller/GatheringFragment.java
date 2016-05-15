@@ -29,7 +29,7 @@ import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
 /**
- * Authors amir assad, Aaron on 4/17/16
+ * Authors amir assad, Aaron, Yunfan Yang on 4/17/16
  * This class uses the fragment_gathering.xml
  * This class is the detailed view of a gathering
  * it will be editable if the user is a host else
