@@ -1,6 +1,7 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -83,8 +84,8 @@ public class GatheringActivity extends Activity {
         mgathering.setTime(mTimeField.getText().toString());
         mgathering.setSID("Dummy");
         sportRef.setValue(mgathering);
-
+        Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
-
+        startActivity(intent);
     }
 }

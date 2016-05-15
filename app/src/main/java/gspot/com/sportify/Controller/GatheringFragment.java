@@ -78,12 +78,15 @@ public class GatheringFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
 
+        /*Get the gathering ID from the previous fragment*/
         Intent intent = getActivity().getIntent();
         gatheringUID = intent.getStringExtra("gatheringUID");
 
         //Log.d(TAG, "GatheringUID" + gatheringUID);
         //Firebase gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child("-KHkppWM5zYMc_Zg-4Qv");
         //Log.d(TAG, gatheringUID)
+
+        /*Read the Gathering with the unique gatheringID*/
         Firebase gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(gatheringUID);
 
         /*Populate page with gathering*/

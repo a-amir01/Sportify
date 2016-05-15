@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -53,7 +54,6 @@ public class GatheringListFragment extends Fragment {
     /*position of the sport that will be Viewed*/
     public int mSportPosition;
 
-    private String gatheringUID;
 
     /*
     * 1st function to be called when the object gets instantiated
@@ -74,7 +74,7 @@ public class GatheringListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_gathering_list, container, false);
 
-       mSportRecyclerView = (RecyclerView)view.findViewById(R.id.sport_recycler_view);
+        mSportRecyclerView = (RecyclerView)view.findViewById(R.id.sport_recycler_view);
         /*recycler view delegates the positioning to the layout manager*/
         mSportRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -109,8 +109,9 @@ public class GatheringListFragment extends Fragment {
                 break;
             case R.id.action_add:
                 Intent intent = new Intent(getActivity(), GatheringActivity.class);
+                getActivity().finish();
                 getActivity().startActivity(intent);
-               // getActivity().finish();
+
 
                 // maybe add finish
                 //Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
