@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -205,6 +203,9 @@ public class GatheringListFragment extends Fragment {
 
         private Gathering mGathering;
         private TextView mTitleTextView;
+        private TextView mEventStatusView;
+        private TextView mEventTime;
+        private TextView mEventDate;
 
 
         public SportHolder(View itemView) {
@@ -213,7 +214,10 @@ public class GatheringListFragment extends Fragment {
             Log.i(TAG, "SportHolder()");
 
             /*link member with the widget*/
-            mTitleTextView = (TextView)itemView.findViewById(R.id.list_item_sport_title_text_view);
+            mTitleTextView = (TextView)itemView.findViewById(R.id.gathering_title);
+            mEventStatusView = (TextView)itemView.findViewById(R.id.gathering_status);
+            mEventTime = (TextView)itemView.findViewById(R.id.gathering_time);
+            mEventDate = (TextView)itemView.findViewById(R.id.gathering_date);
 
             //gatheringUID = mTitleTextView.toString();
             /*when the Gathering is clicked in the list*/
@@ -241,6 +245,9 @@ public class GatheringListFragment extends Fragment {
             mGathering = gathering;
             Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
             mTitleTextView.setText(mGathering.getSportTitle());
+            mEventStatusView.setText("Public");
+            mEventTime.setText(mGathering.getTime());
+            mEventDate.setText("5/10/16");
         }/*end bindSport*/
     }/*end SportHolder*/
 
