@@ -1,10 +1,10 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +31,7 @@ import gspot.com.sportify.utils.Constants;
  * creates a default profile for them and stores it in firebase.
  *
  */
-public class SignupActivity extends Activity{
+public class SignupActivity extends AppCompatActivity {
     private static final String TAG = SignupActivity.class.getSimpleName();
 
     /* A reference to the Firebase */
