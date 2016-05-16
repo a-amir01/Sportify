@@ -3,7 +3,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               tools:context="gspot.com.sportify.Controller.AddSportFragment"
-              android:orientation="vertical">
+              android:orientation="vertical"
+    android:background="@android:color/darker_gray">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -11,7 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Add a Sport"
-        android:id="@+id/add_sport_title"/>
+        android:text="Add a Sport to your profile by clicking on it"
+        android:id="@+id/add_sport_title"
+        android:paddingLeft="20dp" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sport_type_list"
+        android:paddingLeft="20dp" />
 
 </LinearLayout>

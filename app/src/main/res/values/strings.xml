@@ -22,5 +22,18 @@
         <item>Advanced</item>
     </string-array>
 
+    <string-array name="sport_types">
+        <item>Baseball</item>
+        <item>Basketball</item>
+        <item>Dodgeball</item>
+        <item>Frisbee</item>
+        <item>Football</item>
+        <item>Golf</item>
+        <item>Hiking</item>
+        <item>Soccer</item>
+        <item>Tennis</item>
+    </string-array>
+    <string name="no_sports">No Sports To Add</string>
+
 
 </resources>

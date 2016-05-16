@@ -2,6 +2,7 @@ package gspot.com.sportify.Controller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,8 +41,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -73,9 +78,10 @@ public class ProfileActivity extends BaseNavBarActivity {
     private Profile mProfile;
     private GspotCalendar mCalendar;
     private ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
-    private ProfileExpandableListAdapter listAdapter;   //adapter for expandable list
+    //private ProfileExpandableListAdapter listAdapter;   //adapter for expandable list
     private List<String> mSportsParent;
     private HashMap<String, MySport> mSportsChildren;
+    private FragmentManager mFragManager;
 
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
@@ -166,18 +172,8 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 /* Set up the calendar with times from the database */
                 populateCalendar();
-                 /* adapter */
-                prepareListData();
 
-                listAdapter = new ProfileExpandableListAdapter(context, mSportsParent, mSportsChildren, mState, mProfile);
-
-
-                mSportsList.setAdapter(listAdapter);
-                mSportsList.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-
-                //if the person doesn't have any sport profiles tell them
-                displayNoSportsMessage();
-
+                setMySportsAdapter(context);
 
                 /* Give editing power to the owner of the profile */
                 if (mCurrentUser.equals(mProfile.getmOwner())) {
@@ -198,6 +194,25 @@ public class ProfileActivity extends BaseNavBarActivity {
 
             }
         });
+    }
+
+    /**
+     * Calls all the neccessary methods to set up the expandable list adapter
+     * Should be called every time the data in the expandable list changes
+     * @param context
+     */
+    void setMySportsAdapter(android.content.Context context) {
+        /* adapter */
+        prepareListData();
+
+        ExpandableListAdapter listAdapter = new ProfileExpandableListAdapter(context, mSportsParent, mSportsChildren, mState, mProfile);
+
+
+        mSportsList.setAdapter(listAdapter);
+        mSportsList.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+
+        //if the person doesn't have any sport profiles tell them
+        displayNoSportsMessage();
     }
 
     /*inflates a custom drop down menu and hides certain members
@@ -260,9 +275,21 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Save and View if the button is pressed in Editm Mode */
         } else {
-            mProfile.setmName(mName.getText().toString());
-            mProfile.setmBio(mBio.getText().toString());
-            mProfile.setmContactInfo(mContactInfo.getText().toString());
+            if (mName.getText().length() != 0){
+                mProfile.setmName(mName.getText().toString());
+            } else {
+                mName.setText(mProfile.getmName());
+            }
+            if (mBio.getText().length() != 0){
+                mProfile.setmBio(mBio.getText().toString());
+            } else {
+                mBio.setText(mProfile.getmBio());
+            }
+            if (mContactInfo.getText().length() != 0){
+                mProfile.setmContactInfo(mContactInfo.getText().toString());
+            } else {
+                mContactInfo.setText(mProfile.getmContactInfo());
+            }
             mProfile.updateProfile(this.getApplicationContext());
             toggleToViewMine();
         }
@@ -270,12 +297,25 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     @OnClick(R.id.add_sport)
     public void openAddSportFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.profile_container);
+
+        Resources res = getResources();
+
+        if (getMySportList()== null) {
+            //don't go into the else
+        } else if (getMySportList().size() == (res.getStringArray(R.array.sport_types).length)) {
+            Log.w(TAG, "NO MORE SPORTS!!!!!!");
+            Toast.makeText(this, R.string.no_sports, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+        mFragManager = getSupportFragmentManager();
+        Fragment fragment = mFragManager.findFragmentById(R.id.profile_container);
+
 
         if (fragment == null) {
             fragment = new AddSportFragment();
-            fm.beginTransaction()
+            mFragManager.beginTransaction()
                 .add(R.id.profile_container, fragment)
                 .commit();
         }
@@ -334,7 +374,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* Remove the add sport button */
         mAddSport.setVisibility(View.GONE);
         mState.setState(StateWrapper.State.VIEW_MINE);
-        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -358,7 +397,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         mEditSaveButton.setVisibility(View.INVISIBLE);
         mAddSport.setVisibility(View.GONE);
         mState.setState(StateWrapper.State.VIEW_OTHER);
-        listAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -382,7 +420,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         mEditSaveButton.setVisibility(View.INVISIBLE);
         mAddSport.setVisibility(View.GONE);
         mState.setState(StateWrapper.State.VIEW_OTHER);
-        listAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -405,8 +442,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* Remove the add sport button */
         mAddSport.setVisibility(View.VISIBLE);
         mState.setState(StateWrapper.State.EDIT);
-        Log.e(TAG, "THis is the state" + mState);
-        listAdapter.notifyDataSetChanged();
     }
 
 
@@ -525,6 +560,8 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mSportsChildren.put(mySports.get(i).getmSport(), mySports.get(i));
             }
         }
+
+        Collections.sort(mSportsParent);
     }
 
     @OnClick(R.id.profile_picture)
@@ -602,4 +639,44 @@ public class ProfileActivity extends BaseNavBarActivity {
             imageView.setImageBitmap(bitmap);
         }
     }
+
+    /**
+     * Getter method so we can access the variables in this activity from the
+     * add sport fragment
+     * @return
+     */
+    public List<String> getMySportList () {
+
+        List<String> mySports = new ArrayList<String>();
+
+        if (mProfile == null || mProfile.getmMySports() == null) {
+            return null;
+        }
+
+        for (MySport sport : mProfile.getmMySports()) {
+            mySports.add(sport.getmSport());
+        }
+
+        return mySports;
+    }
+
+
+    /**
+     * Getter method so we can access the variables in this activity from the
+     * add sport fragment
+     * @return
+     */
+    public Profile getProfile () {
+        return mProfile;
+    }
+
+    /**
+     * Getter method so we can access the variables in this activity from the
+     * add sport fragment
+     * @return
+     */
+    public FragmentManager getFragManager() {
+        return mFragManager;
+    }
+
 }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
@@ -35,12 +36,12 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private List<String> mListDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, MySport> mListDataChild;
+    private Map<String, MySport> mListDataChild;
     private StateWrapper mState;
     private Profile mProfile;
 
     public ProfileExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, MySport> listChildData,
+                                 Map<String, MySport> listChildData,
                                  StateWrapper state, Profile profile) {
         this.mContext = context;
         this.mListDataHeader = listDataHeader;
@@ -103,9 +104,14 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                 public void onClick(View view) {
                     if(mProfile.getmMySports().size() > 0) {
                         mProfile.getmMySports().remove(groupPosition);
+
+                        mListDataChild.remove(mListDataHeader.get(groupPosition));
+                        mListDataHeader.remove(groupPosition);
+                        notifyDataSetChanged();
+
                         //TODO instead of save the profile it should ideally just remove it from the view
                         //TODO until they click the save button
-                        mProfile.updateProfile(mContext);
+                        //mProfile.updateProfile(mContext);
                     }
                 }
             });
