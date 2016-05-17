@@ -23,8 +23,16 @@ public class Gathering{
     private String mTime;
     private String mSID;
     public String mID;
+    private boolean mIsPrivate;
+    private ArrayList<String> mAttendees;
+    private ArrayList<String> mPendings;
+    private int mTimeOfDay;
+    private String mDate;
 
     public Gathering() {
+        mIsPrivate = false;
+        mAttendees = new ArrayList<String>();
+        mPendings = new ArrayList<String>();
     }
 
     public void setSportTitle (String title) { this.mGatheringTitle = title; }
@@ -48,8 +56,23 @@ public class Gathering{
     public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
 
+    public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
+    public boolean getIsPrivate () { return mIsPrivate; }
+
+    public void setAttendees(ArrayList<String> attendees) { this.mAttendees = attendees; }
+    public ArrayList<String> getAttendees () { return mAttendees; }
+
+    public void setPending(ArrayList<String> pendings) { this.mPendings = pendings; }
+    public ArrayList<String> getPendings () { return mPendings; }
+
+    public void setTimeOfDay (int timeofDay) { this.mTimeOfDay = timeofDay; }
+    public int getTimeOfDay () { return mTimeOfDay; }
+
+    public void setDate (String date) { this.mDate = date; }
+    public String getDate () { return mDate; }
+
     public void delete()
     {
-        App.dbref.child("Events").child(mID).removeValue();
+        App.dbref.child("EventsTesting").child(mID).removeValue();
     }
 }

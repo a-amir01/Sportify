@@ -71,10 +71,6 @@ public class GatheringFragment extends Fragment {
         startActivity(intent);
     }
 
-    //@OnTextChanged(R.id.sport_title)
-    //void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportTitle(text.toString()); }
-
-
     /* will be called when a new SportFragment needs to be created
      * This method Creates a fragment instance and bundles up &
      * sets its arguments,
@@ -99,21 +95,17 @@ public class GatheringFragment extends Fragment {
 
         gatheringUID = intent.getStringExtra("gatheringUID");
 
-        //Log.d(TAG, "GatheringUID" + gatheringUID);
-        //Firebase gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child("-KHkppWM5zYMc_Zg-4Qv");
-        //Log.d(TAG, gatheringUID)
-
         /*Read the Gathering with the unique gatheringID*/
-        gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(gatheringUID);
+        gathering = new Firebase("https://gspot.firebaseio.com/EventsTesting").child(gatheringUID);
         /*Populate page with gathering*/
         m_lis = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                /*Create a gathering object from data in database*/
+                    /*Create a gathering object from data in database*/
                     mGathering = dataSnapshot.getValue(Gathering.class);
 
-                /*Retrieve text information from the database*/
+                    /*Retrieve text information from the database*/
                     mTitleField.setText(mGathering.getSportTitle());
                     mDescriptionField.setText(mGathering.getDescription());
                     mTimeField.setText(mGathering.getTime());
@@ -122,24 +114,16 @@ public class GatheringFragment extends Fragment {
                     hostID = mGathering.getHostID();
 
                     getHostname(hostID);
-                }catch(Exception e)
-                {}
-
-                //mHost.setText(hostName);
+                }catch(Exception e) {}
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
+                Log.e(TAG, "Fire    BaseError " + firebaseError.getMessage());
             }
         };
 
         gathering.addValueEventListener(m_lis);
-
-        //String sportID = getArguments().getString(ARG_SPORT_ID);
-        //mGathering = SportLab.get(getActivity()).getSport(sportID);
-
-
     }//end onCreate
 
     /**inflate the layout for the fragments view and return the view to the host*/
@@ -151,12 +135,6 @@ public class GatheringFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.view_gathering, parent, false);
         ButterKnife.bind(this, view);
-        /**show the sport*/
-        //mTitleField.setText(mGathering.getSportTitle());
-
-
-
-        //Writes to the database a key of "Test" and a value of the title of the sport selected
 
         /**root of the fragments layout, return null if no layout.*/
         return view;

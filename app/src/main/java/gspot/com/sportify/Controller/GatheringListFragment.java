@@ -111,9 +111,6 @@ public class GatheringListFragment extends Fragment {
                 getActivity().finish();
                 getActivity().startActivity(intent);
 
-
-                // maybe add finish
-                //Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
         }//end case
 
@@ -220,7 +217,6 @@ public class GatheringListFragment extends Fragment {
             mEventTime = (TextView)itemView.findViewById(R.id.gathering_time);
             mEventDate = (TextView)itemView.findViewById(R.id.gathering_date);
 
-            //gatheringUID = mTitleTextView.toString();
             /*when the Gathering is clicked in the list*/
             itemView.setOnClickListener(this);
         }//end SportHolder()
@@ -233,10 +229,7 @@ public class GatheringListFragment extends Fragment {
             Log.d(TAG, "INTENT"+ mGathering.getID());
             //Log.d(TAG, "INTENT" + gatheringUID);
 
-            // pass in mGathering object
-
             App.mCurrentGathering = mGathering;
-
             intent.putExtra("gatheringUID", mGathering.getID());
             startActivityForResult(intent, REQUEST_CODE);
         } //end onClick()
@@ -251,9 +244,14 @@ public class GatheringListFragment extends Fragment {
             mGathering = gathering;
             Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
             mTitleTextView.setText(mGathering.getSportTitle());
-            mEventStatusView.setText("Public");
+            if (mGathering.getIsPrivate()) {
+                mEventStatusView.setText("Private");
+            }
+            else {
+                mEventStatusView.setText("Public");
+            }
             mEventTime.setText(mGathering.getTime());
-            mEventDate.setText("5/10/16");
+            mEventDate.setText(mGathering.getDate());
         }/*end bindSport*/
     }/*end SportHolder*/
 
