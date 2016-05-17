@@ -96,7 +96,7 @@ public class GatheringFragment extends Fragment {
         gatheringUID = intent.getStringExtra("gatheringUID");
 
         /*Read the Gathering with the unique gatheringID*/
-        gathering = new Firebase("https://gspot.firebaseio.com/EventsTesting").child(gatheringUID);
+        gathering = new Firebase("https://gspot.firebaseio.com/Gatherings").child(gatheringUID);
         /*Populate page with gathering*/
         m_lis = new ValueEventListener() {
             @Override

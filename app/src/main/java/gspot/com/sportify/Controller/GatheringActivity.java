@@ -15,6 +15,8 @@ import android.widget.EditText;
 
 import com.firebase.client.Firebase;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -35,7 +37,7 @@ import gspot.com.sportify.utils.App;
 public class GatheringActivity extends BaseNavBarActivity {
 
     private Gathering mgathering;
-    private String m_hostID;
+    private String m_hostID, mCurrentUser;
 
     @Bind(R.id.sport_title) EditText mTitleField;
     @Bind(R.id.sport_description) EditText mDescriptionField;
@@ -70,9 +72,18 @@ public class GatheringActivity extends BaseNavBarActivity {
         ButterKnife.unbind(this);
     }
 
+    //TODO: Will refractor into gathering model
     private void submitGathering() {
-        Firebase postID = new Firebase(Constants.FIREBASE_URL).child("EventsTesting");
+        Firebase postID = new Firebase(Constants.FIREBASE_URL).child("Gatherings");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         Firebase sportRef = postID.push();
+
+        Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mCurrentUser).child("myGatherings");
+        Map<String, Object> updates = new HashMap<String, Object>();
+        updates.put(sportRef.getKey(), sportRef.getKey());
+        myGatheringsID.updateChildren(updates);
         mgathering.setID(sportRef.getKey());
         mgathering.setDate(mDateField.getText().toString());
         mgathering.setSportTitle(mTitleField.getText().toString());
