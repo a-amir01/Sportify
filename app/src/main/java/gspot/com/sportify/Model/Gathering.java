@@ -16,6 +16,29 @@ import gspot.com.sportify.utils.App;
  */
 public class Gathering{
 
+
+    public static enum SkillLevel {
+        BEGINNER("Beginner"),
+        INTERMEDIATE("Intermediate"),
+        ADVANCED("Advanced");
+
+        private final String skillLevel;
+
+        SkillLevel(String skillLevel) {
+            this.skillLevel = skillLevel;
+        }
+
+        public String getSkillLevel() {
+            return skillLevel;
+        }
+
+        @Override
+        public String toString() {
+            return this.skillLevel;
+        }
+    }
+
+    private SkillLevel mSkillLevel;
     private String mGatheringTitle;
     private String mLocation;
     private String mDescription;
@@ -33,6 +56,7 @@ public class Gathering{
         mIsPrivate = false;
         mAttendees = new ArrayList<String>();
         mPendings = new ArrayList<String>();
+        mSkillLevel = SkillLevel.BEGINNER;
     }
 
     public void setSportTitle (String title) { this.mGatheringTitle = title; }
@@ -71,8 +95,11 @@ public class Gathering{
     public void setDate (String date) { this.mDate = date; }
     public String getDate () { return mDate; }
 
+    public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
+    public SkillLevel getSkillLevel () { return mSkillLevel;    }
+
     public void delete()
     {
-        App.dbref.child("EventsTesting").child(mID).removeValue();
+        App.dbref.child("Gatherings").child(mID).removeValue();
     }
 }

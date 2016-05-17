@@ -29,7 +29,7 @@ public class SportLab {
     private SportLab(Context context){
         Log.i(TAG, "SportLab()");
 
-        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/EventsTesting");
+        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Gatherings");
         gatheringRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
