@@ -191,8 +191,8 @@ public class SignupActivity extends Activity{
 
 
     /*
-    * validate()
-    * This utility function will check and make sure that the
+    * validate()x
+    * This utility function w   ill check and make sure that the
     * User has entered the correct email and password syntax
     * */
     private boolean validate() {

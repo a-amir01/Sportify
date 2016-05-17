@@ -30,7 +30,7 @@ import gspot.com.sportify.utils.Constants;
  * and log the user in to the system.
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity{
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
