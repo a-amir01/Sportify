@@ -17,7 +17,7 @@
             android:layout_height="110dp"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/sportify_text_silver" />
+            android:src="@drawable/sportify_logo" />
 
         <!-- Email Label -->
 
@@ -27,7 +27,7 @@
             android:inputType="textEmailAddress"
             android:hint="Email"
             android:textColorHint="@color/hintColor"
-            android:textColor="@color/hintColor"/>
+            android:textColor="@color/textColorLogin"/>
 
 
         <!-- Password Label -->
@@ -37,16 +37,22 @@
             android:inputType="textPassword"
             android:hint="Password"
             android:textColorHint="@color/hintColor"
-            android:textColor="@color/hintColor"/>
+            android:textColor="@color/textColorLogin"/>
 
         <Button
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:text="Login"/>
+            android:text="LOGIN"
+            android:background="@drawable/buttonshape"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"/>
+            <!--android:layout_weight="0.17"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="25dp"/>-->
 
         <TextView android:id="@+id/link_signup"
             android:layout_width="fill_parent"
@@ -55,7 +61,7 @@
             android:text="Sign up"
             android:gravity="center"
             android:textSize="20dp"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/textColorLogin" />
 
         <TextView
             android:id="@+id/link_forgot_pwd"
@@ -65,5 +71,5 @@
             android:text="@string/forgot_pwd"
             android:gravity="center"
             android:textSize="20dp"
-            android:textColor="#FFFFFF" />
+            android:textColor="@color/textColorLogin" />
 </LinearLayout>

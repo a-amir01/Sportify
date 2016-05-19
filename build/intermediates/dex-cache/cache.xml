@@ -19,7 +19,7 @@
         jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="8223f4493f6d2c2dcfd4610f1b952c5b3e8d9be9">
+        sha1="b05b29674e0a7322bcbd729ea101a056e9f65e3a">
         <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_15119e3eaad6ce0475b95de86f6fdc392bb7e3ff\classes.dex" />
     </item>
     <item
@@ -47,7 +47,7 @@
         jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="2fe5009c8d087e178edc4ce0078b83b17a656686">
+        sha1="188169da016dd5c94e31a726d755c095e1b00cce">
         <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_5e0e32c4ecc135d1ddd08771bbbb291c68df63f6\classes.dex" />
     </item>
     <item

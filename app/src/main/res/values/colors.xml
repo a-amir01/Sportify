@@ -8,6 +8,7 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="available">#33bd2c</color>
     <color name="busy">#d21d1d</color>
-    <color name="hintColor">#FFFFFF</color>
+    <color name="hintColor">#70FFFFFF</color>
+    <color name="textColorLogin">#FFFFFF</color>
 
 </resources>
