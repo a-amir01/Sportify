@@ -354,7 +354,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:layout_gravity="center">
 
                 <TextView
                     android:id="@+id/evening"
@@ -533,28 +534,42 @@
 
         </TableLayout>
 
-        <TextView
-            android:id="@+id/sports"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sports"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/sports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sports"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:gravity="center_vertical"
+                android:foregroundGravity="center"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/add_sport"
+                android:background="@drawable/ic_add_circle_black_24px"
+                android:foregroundGravity="right"
+                android:backgroundTint="#8B0000"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/sports"
+                android:layout_toEndOf="@+id/sports"
+                android:layout_marginLeft="10dp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/no_sports"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="This person has no sports profiles"/>
-
-        <Button
-            android:id="@+id/add_sport"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|left"
-            android:gravity="center_horizontal"
-            android:text="Add Sport!"/>
 
     </LinearLayout>
 </FrameLayout>
