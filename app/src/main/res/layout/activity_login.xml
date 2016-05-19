@@ -7,14 +7,17 @@
     android:layout_height="wrap_content"
     android:paddingTop="56dp"
     android:paddingLeft="24dp"
-    android:paddingRight="24dp">
+    android:paddingRight="24dp"
+    android:background="@drawable/minimal_grass"
+    android:weightSum="1">
 
         <!-- logo goes here -->
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
+            android:layout_width="match_parent"
+            android:layout_height="124dp"
             android:layout_marginBottom="24dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/sportify_text_gray_transparent" />
 
         <!-- Email Label -->
 
@@ -22,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="Email" />
+            android:hint="Email"
+            android:textColorHint="@color/hintColor"/>
 
 
         <!-- Password Label -->
@@ -30,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="Password"/>
+            android:hint="Password"
+            android:textColorHint="@color/hintColor"/>
 
         <Button
             android:id="@+id/btn_login"
@@ -47,7 +52,8 @@
             android:layout_marginBottom="24dp"
             android:text="Sign up"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textSize="20dp"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/link_forgot_pwd"
@@ -56,5 +62,6 @@
             android:layout_marginBottom="24dp"
             android:text="@string/forgot_pwd"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textSize="20dp"
+            android:textColor="#FFFFFF" />
 </LinearLayout>
