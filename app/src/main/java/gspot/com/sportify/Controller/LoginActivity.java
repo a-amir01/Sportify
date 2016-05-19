@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,12 +29,15 @@ import gspot.com.sportify.utils.Constants;
  * and log the user in to the system.
  */
 
-public class LoginActivity extends Activity{
+public class LoginActivity extends Activity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     /*Code for when the User requests sign up*/
     private static final int REQUEST_SIGNUP = 0;
+
+    /* Code for when the User requests forgot password */
+    private static final int REQUEST_PASSWORD = 1;
 
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
@@ -53,6 +55,9 @@ public class LoginActivity extends Activity{
     /*Dialog box */
     ProgressDialog progressDialog;
 
+    /* Will hold the email and password from the form */
+    String mEmail, mPassword;
+
 
     /*link to the widgets*/
     @Bind(R.id.input_email) EditText mEmailText;
@@ -62,6 +67,8 @@ public class LoginActivity extends Activity{
     Button mLoginButton;
     @Bind(R.id.link_signup)
     TextView mSignupText;
+    @Bind(R.id.link_forgot_pwd)
+    TextView mForgotPwdText;
 
     /* onClick()
      * Annotation listener for the login button
@@ -85,6 +92,20 @@ public class LoginActivity extends Activity{
         startActivityForResult(intent, REQUEST_SIGNUP);
     }//end onClick()
 
+    /* onClick()
+     * Annotation listener for the forgot password link
+     * Once the link is clicked the forgot password activity is started
+     * */
+    @OnClick(R.id.link_forgot_pwd)
+    void onClick (TextView view) {
+        Log.i(TAG, "onClick for forgot password");
+        /*create an intent to start the activity*/
+        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+
+        /*expecting data to be returned by SignupActivity*/
+        startActivityForResult(intent, REQUEST_PASSWORD);
+    }//end onClick()
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +113,7 @@ public class LoginActivity extends Activity{
 
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
+                R.style.Test);
         setContentView(R.layout.activity_login);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -154,18 +175,18 @@ public class LoginActivity extends Activity{
     private void login() {
         Log.d(TAG, "Login");
 
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        mEmail = mEmailText.getText().toString();
+        mPassword = mPasswordText.getText().toString();
 
         //Checks user input
-        if(email.equals(""))
+        if(mEmail.equals(""))
         {
             mEmailText.setError("Please enter a valid email");
             return;
         }
 
         //Checks user input
-        if(password.equals(""))
+        if(mPassword.equals(""))
         {
             mPasswordText.setError("Please enter a valid password");
             return;
@@ -177,7 +198,7 @@ public class LoginActivity extends Activity{
         progressDialog.show();
 
         //Authenticate user input through firebase
-        mFirebaseRef.authWithPassword(email, password,
+        mFirebaseRef.authWithPassword(mEmail, mPassword,
                 new MyAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
     } //end login()
@@ -201,12 +222,31 @@ public class LoginActivity extends Activity{
 
             if(authData != null)
             {
+                Log.v(TAG, "Data is not null");
                 setFirstTimePreference();
-                //add the user id to shared prefences so we can id the user on any page
+                //add the user id to shared preferences so we can id the user on any page
                 mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
+
                 //Goes to the SportsList page
                 Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
                 startActivity(intent);
+
+                /* Send the user to change their password if the password is temporary */
+                if((Boolean) authData.getProviderData().get("isTemporaryPassword")) {
+                    Log.v(TAG, "Password Is Temporary");
+                    // Create an intent to send the user to change the
+                    // password
+                    Intent cPIntent = new Intent(LoginActivity.this,
+                            ChangePasswordActivity.class);
+
+                    // Send the user's email and temporary password with the intent
+                    cPIntent.putExtra("Email", mEmail);
+                    cPIntent.putExtra("TempPwd", mPassword);
+
+                    // Start the intent
+                    startActivity(cPIntent);
+                } //end if
+
                 finish();
             }
 
