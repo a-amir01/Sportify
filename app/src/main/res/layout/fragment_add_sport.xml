@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="gspot.com.sportify.Controller.AddSportFragment"
+              android:orientation="vertical"
+    android:background="@android:color/darker_gray">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Add a Sport to your profile by clicking on it. If you don&apos;t see a sport you want, email us at cse110.gspot@gmail.com."
+        android:id="@+id/add_sport_title"
+        android:paddingLeft="20dp" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sport_type_list"
+        android:paddingLeft="20dp" />
+
+</LinearLayout>
