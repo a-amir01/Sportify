@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-basement-8.1.0_3dc867580e62ddf63771d90be8bb4c7cafba635d.jar" />
+    </item>
+    <item
+        jar="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-appindexing-8.1.0_088c252d144a781683df1af743dc7524068be130.jar" />
+    </item>
+    <item
+        jar="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f364be7392c05b265ca50d5edde9b28eb8a7be78">
+        <dex dex="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_5edd8f3ce3fa5409957697bd0218f0fedbd23ed4.jar" />
+    </item>
+
+</items>
