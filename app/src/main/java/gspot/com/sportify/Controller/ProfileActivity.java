@@ -82,6 +82,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     private List<String> mSportsParent;
     private HashMap<String, MySport> mSportsChildren;
     private FragmentManager mFragManager;
+    private Firebase mProfileRef;
+    private ValueEventListener mProfileRefListener;
 
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
@@ -145,13 +147,13 @@ public class ProfileActivity extends BaseNavBarActivity {
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
 
         final android.content.Context context = this.getApplicationContext();
-        Firebase profileRef = Profile.profileRef(mCurrentUser);
+        mProfileRef = Profile.profileRef(mCurrentUser);
 
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
 
         /* Populate the page with the user's information */
-        profileRef.addValueEventListener(new ValueEventListener() {
+        mProfileRefListener = mProfileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -252,9 +254,10 @@ public class ProfileActivity extends BaseNavBarActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(TAG, "onDestroy()");
+        Log.i(TAG, "onDestroy()");
         ButterKnife.unbind(this);
-        //TODO delete listners
+        mProfileRef.removeEventListener(mProfileRefListener);
+
     }
 
     /**
@@ -295,6 +298,10 @@ public class ProfileActivity extends BaseNavBarActivity {
         }
     }
 
+    /**
+     * Opens a fragment so a user add a new sport to their profile.
+     * Displays all the possible sports they can choose from.
+     */
     @OnClick(R.id.add_sport)
     public void openAddSportFragment() {
 
@@ -303,7 +310,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         if (getMySportList()== null) {
             //don't go into the else
         } else if (getMySportList().size() == (res.getStringArray(R.array.sport_types).length)) {
-            Log.w(TAG, "NO MORE SPORTS!!!!!!");
             Toast.makeText(this, R.string.no_sports, Toast.LENGTH_LONG).show();
             return;
         }
@@ -362,7 +368,7 @@ public class ProfileActivity extends BaseNavBarActivity {
      * access to his own profile.
      */
     private void toggleToViewMine() {
-        Log.e(TAG, "ViewMine");
+        Log.i(TAG, "ViewMine");
 
         /* Disable all text fields so that they are no longer editable */
         disableAllInputs();
@@ -384,7 +390,7 @@ public class ProfileActivity extends BaseNavBarActivity {
      * The user will be able to view a players name, bio, and sports bios.
      */
     private void toggleToViewOther() {
-        Log.e(TAG, "viewOther");
+        Log.i(TAG, "viewOther");
 
         /* Ensure that all inputs are disabled */
         disableAllInputs();
@@ -407,7 +413,7 @@ public class ProfileActivity extends BaseNavBarActivity {
      * all the contents of a user's profile except for the 'edit' button and the schedule.
      */
     private void toggleToViewMate() {
-        Log.e(TAG, "viewOther");
+        Log.i(TAG, "viewOther");
 
         /* Ensure that all inputs are disabled */
         disableAllInputs();
@@ -430,7 +436,7 @@ public class ProfileActivity extends BaseNavBarActivity {
      * profile.
      */
     private void toggleToEdit() {
-        Log.e(TAG, "edit");
+        Log.i(TAG, "edit");
 
         /* Allow all fields to be editable */
         enableAllInputs();
@@ -613,7 +619,7 @@ public class ProfileActivity extends BaseNavBarActivity {
         } else {
             // report failure
             Toast.makeText(getApplicationContext(), R.string.msg_failed_to_get_intent_data, Toast.LENGTH_LONG).show();
-            Log.d(ProfileActivity.class.getSimpleName(), "Failed to get intent data, result code is " + resultCode);
+            Log.e(ProfileActivity.class.getSimpleName(), "Failed to get intent data, result code is " + resultCode);
         }
     }
 

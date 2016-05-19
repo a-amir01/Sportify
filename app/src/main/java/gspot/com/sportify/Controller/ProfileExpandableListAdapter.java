@@ -108,10 +108,6 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                         mListDataChild.remove(mListDataHeader.get(groupPosition));
                         mListDataHeader.remove(groupPosition);
                         notifyDataSetChanged();
-
-                        //TODO instead of save the profile it should ideally just remove it from the view
-                        //TODO until they click the save button
-                        //mProfile.updateProfile(mContext);
                     }
                 }
             });

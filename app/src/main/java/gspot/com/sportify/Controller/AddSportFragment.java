@@ -62,7 +62,7 @@ public class AddSportFragment extends Fragment {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e(TAG, "onCreate()");
+        Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
 
@@ -74,11 +74,10 @@ public class AddSportFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e(TAG, "onCreateView()");
+        Log.i(TAG, "onCreateView()");
         View v = inflater.inflate(R.layout.fragment_add_sport, container, false);
         ButterKnife.bind(this, v);
 
-        //List<String> current_sports_list = ;
 
         Resources res = getResources();
         List<String> sport_types = new ArrayList<String> (Arrays.asList(res.getStringArray(R.array.sport_types)));
@@ -86,6 +85,8 @@ public class AddSportFragment extends Fragment {
         List<String> currentSports = activity.getMySportList();
         mProfile = activity.getProfile();
 
+        //I user shouldn't be able to ave two basketball profiles, so hide all the sports they
+        //already have a profile for
         if (currentSports != null) {
             sport_types.removeAll(currentSports);
         }
@@ -108,7 +109,7 @@ public class AddSportFragment extends Fragment {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.e(TAG, "onItemClick()");
+                Log.i(TAG, "onItemClick()");
 
                 if (mProfile.getmMySports() == null) {
                     mProfile.setmMySports(new ArrayList<MySport>());
