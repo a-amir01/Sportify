@@ -1,3 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.3.0_6c667a3855b97f8f8257988dc8df3b4a946d66ab\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-23.3.0_60844403edc68d5184fa81fc7e09c52d94619f40\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="8223f4493f6d2c2dcfd4610f1b952c5b3e8d9be9">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_15119e3eaad6ce0475b95de86f6fdc392bb7e3ff\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0-alpha1\jars\libs\internal_impl-24.0.0-alpha1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="e57fba0a2d57d3501d8f4ff44c23092978804845">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.0.0-alpha1_de7c9c6ae9179b0d6a9dee558985e6686c246d89\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0-alpha1\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="9aaaea3a89040f8176f810c85e288fc74d5d1f12">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.0.0-alpha1_3094578dc02753dae82c19439745629dd24c8464\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-23.3.0_a92d7e9846ce34780e4c898dc7eee3e67e9d9cda\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="2fe5009c8d087e178edc4ce0078b83b17a656686">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_5e0e32c4ecc135d1ddd08771bbbb291c68df63f6\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\jackson-databind-2.2.2_7d5ef491a6eeafe6bb382cb6e7c472090264b4df\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\jackson-annotations-2.2.2_17301f9e0f1e0679853f68e099993bd0004a0f18\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="debf30ce0a7560396b6235edef77e447006454c2">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-23.3.0_78f7c6653cbffd84da2714052a8cbc836b62fcd2\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-23.3.0_001ea7e392813fc57a57dd24aa83eefd9d27b4bb\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\jackson-core-2.2.2_aeb63870665e3ab34753679efdfd552cbccb3b4d\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.5.2\f19f10d6276aa0b380e2d05d2ab3272d693a5433\firebase-client-android-2.5.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f19f10d6276aa0b380e2d05d2ab3272d693a5433">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\firebase-client-android-2.5.2_36105176e780959a6082728e187760be5d32f1dd\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.5.2\91731b8f5868a3e8a8a773f29b8d06b5c358f5bb\firebase-client-jvm-2.5.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="91731b8f5868a3e8a8a773f29b8d06b5c358f5bb">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\firebase-client-jvm-2.5.2_f14387c2010ac00f8afedcb070d9ce8ad7ed9f88\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\butterknife-7.0.1_92166f41e1a1188cd5dfcd7b3e0501d0366f50e8\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.12\6ec0bbd3e161a73ed672284b587fd32309a86d7a\tubesock-0.0.12.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="6ec0bbd3e161a73ed672284b587fd32309a86d7a">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\tubesock-0.0.12_f38f44ce9318f9aed06c9609d3a2f0573c160e3a\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Anshul\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.0.0-alpha1\support-annotations-24.0.0-alpha1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="b8062546971a3d196343232a19a3c0016272ba47">
+        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.0.0-alpha1_c8d486f460ec328dae232e844174c31fd2d4cc82\classes.dex" />
+    </item>
+
+</items>
