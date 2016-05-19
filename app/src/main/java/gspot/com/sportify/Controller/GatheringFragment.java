@@ -96,7 +96,8 @@ public class GatheringFragment extends Fragment {
         gatheringUID = intent.getStringExtra("gatheringUID");
 
         /*Read the Gathering with the unique gatheringID*/
-        gathering = new Firebase("https://gspot.firebaseio.com/Gatherings").child(gatheringUID);
+
+        gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(gatheringUID);
         /*Populate page with gathering*/
         m_lis = new ValueEventListener() {
             @Override
@@ -147,6 +148,7 @@ public class GatheringFragment extends Fragment {
         super.onDestroyView();
         Log.i(TAG, "onDestroyView()");
         ButterKnife.unbind(this);
+        gathering.removeEventListener(m_lis);
     }
 
     void getHostname(String hostID)
