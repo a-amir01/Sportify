@@ -8,16 +8,16 @@
     android:paddingTop="56dp"
     android:paddingLeft="24dp"
     android:paddingRight="24dp"
-    android:background="@drawable/minimal_grass"
+    android:background="@drawable/minimal_grass_dark"
     android:weightSum="1">
 
         <!-- logo goes here -->
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="124dp"
+            android:layout_height="110dp"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/sportify_text_gray_transparent" />
+            android:src="@drawable/sportify_text_silver" />
 
         <!-- Email Label -->
 
@@ -26,7 +26,8 @@
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
             android:hint="Email"
-            android:textColorHint="@color/hintColor"/>
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/hintColor"/>
 
 
         <!-- Password Label -->
@@ -35,7 +36,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:hint="Password"
-            android:textColorHint="@color/hintColor"/>
+            android:textColorHint="@color/hintColor"
+            android:textColor="@color/hintColor"/>
 
         <Button
             android:id="@+id/btn_login"
