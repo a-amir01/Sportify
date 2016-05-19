@@ -114,7 +114,7 @@ public class LoginActivity extends Activity {
 
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.Test);
+                R.style.AppTheme);
         setContentView(R.layout.activity_login);
 
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
