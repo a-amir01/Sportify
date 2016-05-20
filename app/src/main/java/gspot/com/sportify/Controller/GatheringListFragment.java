@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,13 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.App;
 
 /**
  * Authors amir assad, on 4/17/16
@@ -112,9 +111,6 @@ public class GatheringListFragment extends Fragment {
                 getActivity().finish();
                 getActivity().startActivity(intent);
 
-
-                // maybe add finish
-                //Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
         }//end case
 
@@ -205,6 +201,9 @@ public class GatheringListFragment extends Fragment {
 
         private Gathering mGathering;
         private TextView mTitleTextView;
+        private TextView mEventStatusView;
+        private TextView mEventTime;
+        private TextView mEventDate;
 
 
         public SportHolder(View itemView) {
@@ -213,9 +212,11 @@ public class GatheringListFragment extends Fragment {
             Log.i(TAG, "SportHolder()");
 
             /*link member with the widget*/
-            mTitleTextView = (TextView)itemView.findViewById(R.id.list_item_sport_title_text_view);
+            mTitleTextView = (TextView)itemView.findViewById(R.id.gathering_title);
+            mEventStatusView = (TextView)itemView.findViewById(R.id.gathering_status);
+            mEventTime = (TextView)itemView.findViewById(R.id.gathering_time);
+            mEventDate = (TextView)itemView.findViewById(R.id.gathering_date);
 
-            //gatheringUID = mTitleTextView.toString();
             /*when the Gathering is clicked in the list*/
             itemView.setOnClickListener(this);
         }//end SportHolder()
@@ -227,6 +228,8 @@ public class GatheringListFragment extends Fragment {
             Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getID());
             Log.d(TAG, "INTENT"+ mGathering.getID());
             //Log.d(TAG, "INTENT" + gatheringUID);
+
+            App.mCurrentGathering = mGathering;
             intent.putExtra("gatheringUID", mGathering.getID());
             startActivityForResult(intent, REQUEST_CODE);
         } //end onClick()
@@ -241,6 +244,14 @@ public class GatheringListFragment extends Fragment {
             mGathering = gathering;
             Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
             mTitleTextView.setText(mGathering.getSportTitle());
+            if (mGathering.getIsPrivate()) {
+                mEventStatusView.setText("Private");
+            }
+            else {
+                mEventStatusView.setText("Public");
+            }
+            mEventTime.setText(mGathering.getTime());
+            mEventDate.setText(mGathering.getDate());
         }/*end bindSport*/
     }/*end SportHolder*/
 

@@ -25,23 +25,11 @@ public class SportLab {
     private static final String TAG = SportLab.class.getSimpleName();
 
     private static SportLab sSportLab;
- //   private List<Gathering> mGatherings;
 
     private SportLab(Context context){
         Log.i(TAG, "SportLab()");
 
-        /*hold an array of test sports*/
-        //App.mGatherings = new ArrayList<>();
-
-        /*create a list of fake sports*/
-      /* for (int i = 0; i < 50; i++){
-            Gathering gathering = new Gathering();
-            gathering.setSportTitle("Gathering # " + i);
-            mGatherings.add(gathering);
-        }//end for */
-        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Events");
-
-
+        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Gatherings");
         gatheringRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -50,17 +38,8 @@ public class SportLab {
                     Gathering gathering = new Gathering();
                     gathering = gatheringSnapshot.getValue (Gathering.class);
                     App.mGatherings.add(gathering);
-                    //System.out.println(gathering.getSportTitle());
                 }
-
-                //  Gathering gathering = new Gathering();
-                // gathering = dataSnapshot.getValue(Gathering.class);
-//
-                // mGatherings.add(gathering);
-
             }
-
-
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {

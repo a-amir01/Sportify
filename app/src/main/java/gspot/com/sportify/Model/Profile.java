@@ -1,7 +1,15 @@
 package gspot.com.sportify.Model;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import gspot.com.sportify.utils.Constants;
 
 /** Profile Class
  * Represents and holds all of a user's information.
@@ -10,13 +18,13 @@ import java.util.List;
 public class Profile {
 
     /* Set of information that each profile has */
-    String mOwner;
-    String mProfilePic;
-    String mName;
-    String mBio;
-    String mContactInfo;
-    GspotCalendar mCalendar;
-    List<MySport> mMySports;
+    private String mOwner;
+    private String mProfilePic;
+    private String mName;
+    private String mBio;
+    private String mContactInfo;
+    private GspotCalendar mCalendar;
+    private List<MySport> mMySports;
 
     /* Create a profile, but don't initialize the data */
     public Profile() {
@@ -31,7 +39,7 @@ public class Profile {
         this.mCalendar = new GspotCalendar();
         this.mMySports = new ArrayList<MySport>();
         this.mMySports.add(new MySport());
-        this.mProfilePic = "@drawable/profile_default";
+        this.mProfilePic = Constants.DEFAULT_PROFILE_PIC;
     }
 
     /* Get the name of the owner */
@@ -123,6 +131,33 @@ public class Profile {
      */
     public void setAvailability(boolean availability, int dayOfWeek, int timeOfDay) {
         mCalendar.setAvailability(availability, dayOfWeek, timeOfDay);
+    }
+
+    /**
+     * Save To Database Method
+     * Saves all data inputted in edit mode and sends this
+     * information the database.
+     */
+    public void updateProfile(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(this.mOwner);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+    public static Firebase profileRef(String profileId) {
+        return new Firebase(Constants.FIREBASE_URL_PROFILES).child(profileId);
+    }
+
+    public boolean isATeammate(String userId) {
+        //TODO check whether a user is a teammate of the profile owner
+        return true;
     }
 
 
