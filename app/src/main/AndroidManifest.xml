@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Controller.LoginActivity" android:theme="@style/AppTheme" />
+        <activity android:name=".Controller.LoginActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Controller.SignupActivity" android:label="Sign Up" android:theme="@style/AppTheme" />
         <activity android:name=".Controller.GatheringListActivity" android:theme="@style/AppTheme" />
         <activity
