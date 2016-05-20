@@ -10,7 +10,7 @@ public class MySport {
     //Enum class increases readability
     public static enum SkillLevel {
         BEGINNER("Beginner"),
-        INTERMIDIATE("Intermidiate"),
+        INTERMEDIATE("Intermediate"),
         ADVANCED("Advanced");
 
         private final String skillLevel;
@@ -29,18 +29,28 @@ public class MySport {
         }
     }
 
-    SkillLevel mSkillLevel;
-    String mBio;
-    String mSport;
+    private SkillLevel mSkillLevel;
+    private String mBio;
+    private String mSport;
 
     public MySport() {
-        this.mSkillLevel = SkillLevel.INTERMIDIATE;
+        this.mSkillLevel = SkillLevel.BEGINNER;
         this.mBio = "This is where you should put information about how you like to play this sport";
-        this.mSport = "Muay Thai";
+        this.mSport = "Basketball";
+    }
+
+    public MySport(String sport) {
+        this.mSport = sport;
+        this.mSkillLevel = SkillLevel.BEGINNER;
+        this.mBio = "This is where you should put information about how you like to play this sport";
     }
 
     public SkillLevel getmSkillLevel() {
         return mSkillLevel;
+    }
+
+    public String skillLevelToString() {
+        return mSkillLevel.toString();
     }
 
     public String getmBio() {
@@ -49,5 +59,13 @@ public class MySport {
 
     public String getmSport() {
         return mSport;
+    }
+
+    public void setmSkillLevel(SkillLevel mSkillLevel) {
+        this.mSkillLevel = mSkillLevel;
+    }
+
+    public void setmBio(String mBio) {
+        this.mBio = mBio;
     }
 }

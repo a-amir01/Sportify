@@ -62,14 +62,10 @@ public class LoginActivity extends AppCompatActivity{
 
     /*link to the widgets*/
     @Bind(R.id.input_email) EditText mEmailText;
-    @Bind(R.id.input_password)
-    EditText mPasswordText;
-    @Bind(R.id.btn_login)
-    Button mLoginButton;
-    @Bind(R.id.link_signup)
-    TextView mSignupText;
-    @Bind(R.id.link_forgot_pwd)
-    TextView mForgotPwdText;
+    @Bind(R.id.input_password) EditText mPasswordText;
+    @Bind(R.id.btn_login) Button mLoginButton;
+    @Bind(R.id.link_signup) TextView mSignupText;
+
 
     /* onClick()
      * Annotation listener for the login button

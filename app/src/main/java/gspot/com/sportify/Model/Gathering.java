@@ -1,89 +1,105 @@
 package gspot.com.sportify.Model;
 
+import com.firebase.client.Firebase;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.UUID;
+
+import gspot.com.sportify.utils.App;
 
 /**
  * Authors Amir Assad, massoudmaher on 5/1/16.
  * Class that represents a single gathering
  * Purpose is to instantiate one of these for each created event and push to firebase
  */
-public class Gathering {
+public class Gathering{
 
-    private String mSportName;
 
-    /*sport's id: use to find the sport among the list*/
-    private UUID mGatheringID;
+    public static enum SkillLevel {
+        BEGINNER("Beginner"),
+        INTERMEDIATE("Intermediate"),
+        ADVANCED("Advanced");
 
-    /*position of the crime in the list it is in*/
-    public int mPosition;               //TODO can it be done another way?
+        private final String skillLevel;
 
-    // Type of sport we are playing, Eg. boxing or soccer, commented until Andrew pushes
-    //private SportType type;
+        SkillLevel(String skillLevel) {
+            this.skillLevel = skillLevel;
+        }
 
-    // ID of the host of this gathering
-    private int hostID;
+        public String getSkillLevel() {
+            return skillLevel;
+        }
 
-    // Exact Time of gathering
-    SimpleDateFormat exactTime;
+        @Override
+        public String toString() {
+            return this.skillLevel;
+        }
+    }
 
-    // Enum that represents approximate time of gathering
-    // Morning is 4am - 12
-    // Noon 12-4
-    // Evening 4-8
-    // Night is 8 - 4am
-    // TODO Make class in utils that turns SimpleDateFormat into an enum of the 4 options above
+    private SkillLevel mSkillLevel;
+    private String mGatheringTitle;
+    private String mLocation;
+    private String mDescription;
+    private String mHostID;
+    private String mTime;
+    private String mSID;
+    public String mID;
+    private boolean mIsPrivate;
+    private ArrayList<String> mAttendees;
+    private ArrayList<String> mPendings;
+    private int mTimeOfDay;
+    private String mDate;
 
-    // Location of gathering in longitude/latitude
-    private double longitude;
-    private double lattitude;
+    public Gathering() {
+        mIsPrivate = false;
+        mAttendees = new ArrayList<String>();
+        mPendings = new ArrayList<String>();
+        mSkillLevel = SkillLevel.BEGINNER;
+    }
 
-    // Description of gathering
-    private String description;
+    public void setSportTitle (String title) { this.mGatheringTitle = title; }
+    public String getSportTitle () { return mGatheringTitle; }
 
-    // List of unique IDs of attendees to gathering
-    // TODO figure out type of universal unique IDs
-    private ArrayList<Integer> attendees;
+    public void setLocation (String location) { this.mLocation = location; }
+    public String getLocation () { return mLocation; }
 
-    // List of unique IDs of pending requests to join event
-    private ArrayList<Integer> pendingRequests;
+    public void setDescription (String description) { this.mDescription = description; }
+    public String getDescription () { return mDescription; }
 
-    public Gathering() { mGatheringID = UUID.randomUUID(); }
+    public void setHostID (String hostID) { this.mHostID = hostID; }
+    public String getHostID () { return mHostID; }
 
-    public String getSportName() { return mSportName; }
+    public void setTime (String time) { this.mTime = time; }
+    public String getTime () { return mTime; }
 
-    public void setSportName(String sportName) { mSportName = sportName; }
+    public void setSID (String SID) { this.mSID = SID; }
+    public String getSID () { return mSID; }
 
-    public UUID getId() { return mGatheringID; }
+    public void setID (String ID) { this.mID = ID; }
+    public String getID () { return mID; }
 
-    // Only Getters and setters below, don't bother reading
-    public int getHostID() { return hostID; }
+    public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
+    public boolean getIsPrivate () { return mIsPrivate; }
 
-    public void setHostID(int hostID) { this.hostID = hostID; }
+    public void setAttendees(ArrayList<String> attendees) { this.mAttendees = attendees; }
+    public ArrayList<String> getAttendees () { return mAttendees; }
 
-    public SimpleDateFormat getExactTime() { return exactTime; }
+    public void setPending(ArrayList<String> pendings) { this.mPendings = pendings; }
+    public ArrayList<String> getPendings () { return mPendings; }
 
-    public void setExactTime(SimpleDateFormat exactTime) { this.exactTime = exactTime;}
+    public void setTimeOfDay (int timeofDay) { this.mTimeOfDay = timeofDay; }
+    public int getTimeOfDay () { return mTimeOfDay; }
 
-    public double getLongitude() { return longitude; }
+    public void setDate (String date) { this.mDate = date; }
+    public String getDate () { return mDate; }
 
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
+    public SkillLevel getSkillLevel () { return mSkillLevel;    }
 
-    public double getLattitude() { return lattitude; }
-
-    public void setLattitude(double lattitude) { this.lattitude = lattitude; }
-
-    public String getDescription() { return description; }
-
-    public void setDescription(String description) { this.description = description; }
-
-    public ArrayList<Integer> getAttendees() { return attendees; }
-
-    public void setAttendees(ArrayList<Integer> attendees) { this.attendees = attendees; }
-
-    public ArrayList<Integer> getPendingRequests() { return pendingRequests; }
-
-    public void setPendingRequests(ArrayList<Integer> pendingRequests) { this.pendingRequests = pendingRequests; }
-
+    public void delete()
+    {
+        App.dbref.child("Gatherings").child(mID).removeValue();
+    }
 }
