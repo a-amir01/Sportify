@@ -1,10 +1,13 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +28,16 @@ import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.DatePickerFragment;
 
 
 /**
  * Created by DannyChan on 5/8/16.
  */
 public class GatheringActivity extends Activity {
+
+    /*use for logging*/
+    private static final String TAG = DatePickerFragment.class.getSimpleName();
 
     private Gathering mgathering;
    // private String m_description;
@@ -46,6 +53,22 @@ public class GatheringActivity extends Activity {
     @OnClick(R.id.sport_submit)
     void onClick(Button button){submitGathering();}
 
+    /**
+     * Prompts user to select a date and modifies the mTime field of mgathering
+     * which will be pushed to firebase once submit is clicked
+     *
+     * @param dateButton "Date" button in fragment_gathering.xml / create gathering page
+     */
+    @OnClick(R.id.datepicker)
+    void inputDate(Button dateButton) {
+        DatePickerFragment newFragment = new DatePickerFragment();
+        StringBuilder dateString = newFragment.getmDateString();
+
+        newFragment.show(getFragmentManager(), "datepickerFragment");
+
+        Log.d(TAG, "inputDate() : " + dateString);
+        mgathering.setmDate( dateString.toString() );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,6 +16,7 @@ public class Gathering {
     private String mDescription;
     private String mHostID;
     private String mTime;
+    private String mDate;
     private String mSID;
     public String mID;
 
@@ -42,4 +43,12 @@ public class Gathering {
 
     public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
+
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
 }
