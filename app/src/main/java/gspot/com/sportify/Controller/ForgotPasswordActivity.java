@@ -18,6 +18,7 @@ import gspot.com.sportify.utils.Constants;
 
 /**
  * Created by Anshul and Armin on 5/8/2016.
+ * TODO: class header
  */
 public class ForgotPasswordActivity extends AppCompatActivity{
     private static final String TAG = ForgotPasswordActivity.class.getSimpleName();
