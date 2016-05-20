@@ -1,10 +1,10 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -33,7 +32,7 @@ import gspot.com.sportify.utils.Constants;
  * creates a default profile for them and stores it in firebase.
  *
  */
-public class SignupActivity extends Activity{
+public class SignupActivity extends AppCompatActivity {
     private static final String TAG = SignupActivity.class.getSimpleName();
 
     /* A reference to the Firebase */
@@ -181,8 +180,8 @@ public class SignupActivity extends Activity{
 
 
     /*
-    * validate()
-    * This utility function will check and make sure that the
+    * validate()x
+    * This utility function w   ill check and make sure that the
     * User has entered the correct email and password syntax
     * */
     private boolean validate() {
