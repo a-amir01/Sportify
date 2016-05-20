@@ -18,7 +18,13 @@ import gspot.com.sportify.utils.Constants;
 
 /**
  * Created by Anshul and Armin on 5/8/2016.
- * TODO: class header
+ *
+ * This class defines the implementation and functionality of the forgot
+ * password page. The class uses a Firebase instance to use Firebase's built-in
+ * forgot password functionality in which it takes the entered email and, after
+ * ensuring the email is in the database, emails the user with a temporary
+ * login password.
+ * This is normally called using an Intent.
  */
 public class ForgotPasswordActivity extends AppCompatActivity{
     private static final String TAG = ForgotPasswordActivity.class.getSimpleName();
@@ -89,16 +95,6 @@ public class ForgotPasswordActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(),
                             "Password reset email sent",
                             Toast.LENGTH_LONG).show();
-
-//                    // Create an intent to send the user to change the
-//                    // password
-//                    Intent intent = new Intent(getApplicationContext(),
-//                            ChangePasswordActivity.class);
-//                    // Send the user's email with the intent
-//                    intent.putExtra("Email", mEmail);
-//                    // Start the intent
-//                    startActivityForResult(intent, REQUEST_CHANGE);
-
                     finish();
                 }
 
@@ -108,6 +104,10 @@ public class ForgotPasswordActivity extends AppCompatActivity{
 
                     /* Check for errors */
                     switch(firebaseError.getCode()){
+                        /*
+                         * Add more errors here as the become evident through
+                         * testing
+                         */
                         case FirebaseError.USER_DOES_NOT_EXIST:
                             mEmailText.setError("No user is associated with this address");
                             break;

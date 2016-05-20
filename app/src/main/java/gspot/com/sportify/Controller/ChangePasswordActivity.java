@@ -17,8 +17,14 @@ import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 
 /**
- * Created by Anshul on 5/8/2016.
- * TODO: Class Header
+ * Created by Anshul and Armin on 5/8/2016.
+ *
+ * This class defines the implementation and functionality of the change
+ * password page. The class uses a Firebase instance to use Firebase's built-in
+ * change password functionality in which it takes the user's entered password
+ * and saves it as the new password. There is a check to ensure the password is
+ * a certain length and that the user correctly typed their new password twice.
+ * This is normally called using an Intent.
  */
 public class ChangePasswordActivity extends Activity {
     private static final String TAG = ChangePasswordActivity.class.getSimpleName();
@@ -26,9 +32,6 @@ public class ChangePasswordActivity extends Activity {
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
 
-    /*link to the widgets*/
-//    @Bind(R.id.input_email_cpwd)
-//    EditText mEmailText;
     @Bind(R.id.newPassword)
     EditText mNewPwdText;
     @Bind(R.id.rePassword)
@@ -118,12 +121,10 @@ public class ChangePasswordActivity extends Activity {
                 public void onError(FirebaseError firebaseError) {
                     /* Check for errors */
                     switch(firebaseError.getCode()){
-//                        case FirebaseError.INVALID_EMAIL:
-//                            mEmailText.setError("Enter a valid email address");
-//                            break;
-//                        case FirebaseError.INVALID_PASSWORD:
-//                            mTempPwdText.setError("The password you specified is incorrect");
-//                            break;
+                        /*
+                         * Add any more errors here as they become evident in
+                         * testing
+                         */
                         case FirebaseError.NETWORK_ERROR:
                             Toast.makeText(getApplicationContext(),
                                     "Cannot connect to internet",
