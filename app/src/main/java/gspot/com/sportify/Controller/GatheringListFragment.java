@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
 import java.util.List;
 
 import gspot.com.sportify.Model.Gathering;
@@ -43,6 +44,7 @@ public class GatheringListFragment extends Fragment {
 
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE = 0;
+    private static final int REUEST_CODE_FILTER = 1;
 
     /*the View to hold our list of Sports*/
     private RecyclerView mSportRecyclerView;
@@ -101,14 +103,15 @@ public class GatheringListFragment extends Fragment {
         Log.i(TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case R.id.action_filter:
-                FragmentManager fm = getFragmentManager();
-                FilterFragment alertDialog = FilterFragment.newInstance("Filter");
-                alertDialog.show(fm, "fragment_alert");
+                Intent intent = new Intent(getActivity(), FilterActivity.class);
+                startActivityForResult(intent, REUEST_CODE_FILTER);
                 break;
             case R.id.action_add:
                 Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
         }//end case
+
+
 
         /*the baseActivity will handle the other options*/
         return super.onOptionsItemSelected(item);
@@ -148,6 +151,13 @@ public class GatheringListFragment extends Fragment {
                 return;
             }/*end if*/
         }/*end if*/
+
+        /*update the UI based on the filter settings*/
+        if(requestCode == REUEST_CODE_FILTER){
+            if(data == null) return;
+
+            //get the data
+        }
 
         updateUI();
     }//end onActivityResult

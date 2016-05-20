@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:text="Private Events"
             android:paddingRight="20dp"
-            android:id="@+id/Event_access_specifier"
+            android:id="@+id/event_access_specifier"
             android:checked="false"
             android:paddingLeft="10dp"
             android:layout_gravity="center_horizontal" />
@@ -54,7 +54,7 @@
 
     <ExpandableListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="385dp"
         android:id="@+id/expandableList"
         android:childDivider="#ffff"
         android:divider="#add8e6"
@@ -63,17 +63,27 @@
         android:paddingTop="10dp" />
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1">
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
-            android:id="@+id/Save_filter_button"
-            android:layout_gravity="center_horizontal|bottom" />
+            android:id="@+id/saveButton"
+            android:layout_weight="0.5"/>
+            <!--android:background="#ffff"/>-->
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/cancelButton"
+            android:layout_weight="0.5"/>
+            <!--android:background="#ffff"/>-->
     </LinearLayout>
-
 
 </LinearLayout>

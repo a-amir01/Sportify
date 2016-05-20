@@ -1,6 +1,7 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.CompoundButton;
@@ -17,6 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 
+import butterknife.OnClick;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.GatheringTypeProvider;
 
@@ -30,11 +32,12 @@ public class FilterActivity extends Activity
     private List<String> mGatheringList;
     private ExpandableListView mExpandableListView;
     private CustomExpandableListAdapter mExpandableListAdapter;
+    private boolean mIsPrivate;
 
     @Bind(R.id.expand_all) Switch mExpandAllSwitch;
 
     @OnCheckedChanged(R.id.expand_all)
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    public void onExpandAllCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
         if(isChecked)
             mExpandableListAdapter.expandAllChildren(mExpandableListView);
@@ -43,7 +46,7 @@ public class FilterActivity extends Activity
     }
 
     @OnCheckedChanged(R.id.select_all)
-    public void onCheckChanged(CompoundButton buttonView, boolean isChecked){
+    public void onSelectAllCheckChanged(CompoundButton buttonView, boolean isChecked){
 
         /*If isChecked and the expandAllSwitch is not on
         * then turn the switch on and expand all the children*/
@@ -51,8 +54,25 @@ public class FilterActivity extends Activity
             mExpandAllSwitch.setChecked(true);
             mExpandableListAdapter.expandAllChildren(mExpandableListView);
         }
-        mExpandableListAdapter.mIsAllSelected = true;
+        //mExpandableListAdapter.mIsAllSelected = true;
         mExpandableListAdapter.setAllChildStates(isChecked);
+    }
+
+    @OnCheckedChanged(R.id.event_access_specifier)
+    public void onAccessCheckChanged(CompoundButton buttonView, boolean isChecked){
+        mIsPrivate = isChecked;
+    }
+    
+    @OnClick(R.id.saveButton)
+    public void onClickSave(){
+
+        //setResult();
+    }
+
+    /*Close the activity and don't save any results*/
+    @OnClick(R.id.cancelButton)
+    public void onClickCancel(){
+        finish();
     }
 
     @Override
@@ -86,13 +106,17 @@ public class FilterActivity extends Activity
         /*have the list expanded at first*/
         mExpandableListAdapter.expandAllChildren(mExpandableListView);
         mExpandAllSwitch.setChecked(true);
-
     }
 
     @Override
     public void onGroupCollapse(int groupPosition) {
         Log.i("onCollapse", "");
         Toast.makeText(FilterActivity.this, mGatheringList.get(groupPosition) + " collapsed", Toast.LENGTH_SHORT).show();
+    }
+
+    /*don't let the user press the back button*/
+    @Override
+    public void onBackPressed() {
     }
 }
 

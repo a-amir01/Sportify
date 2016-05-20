@@ -42,7 +42,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private GroupViewHolder groupViewHolder;
 
     /*if all the children are selected or not*/
-    public boolean mIsAllSelected;
+    private boolean mIsAllSelected;
 
     public CustomExpandableListAdapter(Context context,
                            HashMap<String, List<String>> hashMap,
