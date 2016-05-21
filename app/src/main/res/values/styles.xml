@@ -23,12 +23,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-<<<<<<< HEAD
         <item name="colorAccent">@color/colorPrimaryText</item>
-=======
-        <item name="colorAccent">@color/colorAccent</item>
-        
->>>>>>> Changed the add sport from a fragment to a dialog
     </style>
 
 

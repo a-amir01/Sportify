@@ -32,11 +32,9 @@
         <activity
             android:name=".Controller.ProfileActivity"
             android:label="Profile"
-            android:theme="@style/Theme.AppCompat"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity android:name=".Controller.ForgotPasswordActivity" android:label="@string/title_activity_forgot_pwd" android:theme="@style/AppTheme" />
-        <activity android:name=".Controller.ChangePasswordActivity" android:label="@string/title_activity_change_pwd" android:theme="@style/AppTheme" />
-
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
