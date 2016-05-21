@@ -8,12 +8,8 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="available">#33bd2c</color>
     <color name="busy">#d21d1d</color>
-<<<<<<< HEAD
     <color name="hintColor">#70FFFFFF</color>
     <color name="textColorLogin">#FFFFFF</color>
-
-=======
     <color name="Ugly">#1dc7b6</color>
     <color name="SalmonPeak">#b3a1a1</color>
->>>>>>> master
 </resources>
