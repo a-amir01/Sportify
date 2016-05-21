@@ -54,18 +54,15 @@ public class Gathering{
     private String mSID;
     public String mID;
     private boolean mIsPrivate;
-    //private ArrayList<String> mAttendees;
-    //private String mAttendees;
-    private HashMap  mAttendees;
-    private ArrayList<String> mPendings;
+    private HashMap mPendings;
+    private HashMap mAttendees;
     private int mTimeOfDay;
     private String mDate;
 
     public Gathering() {
         mIsPrivate = false;
-        //mAttendees = new ArrayList<String>();
         mAttendees = new HashMap();
-        mPendings = new ArrayList<String>();
+        mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
     }
 
@@ -96,9 +93,8 @@ public class Gathering{
     public void setAttendees(HashMap attendees) { this.mAttendees = attendees; }
     public HashMap getAttendees () { return mAttendees; }
 
-
-    public void setPending(ArrayList<String> pendings) { this.mPendings = pendings; }
-    public ArrayList<String> getPendings () { return mPendings; }
+    public void setPendings(HashMap pendings) {this.mPendings = pendings;}
+    public HashMap getPendings() {return mPendings;}
 
     public void setTimeOfDay (int timeofDay) { this.mTimeOfDay = timeofDay; }
     public int getTimeOfDay () { return mTimeOfDay; }
@@ -116,10 +112,45 @@ public class Gathering{
 
     public void addAttendee(String userUID) {mAttendees.put(userUID, userUID);}
 
+    public void addPending(String userUID) {mPendings.put(userUID, userUID);}
+
     public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
-        //App.dbref.child("Gatherings").child(mID).child("attendees").child(userUID).removeValue();}
+
+    public void removePending(String userUID) {mPendings.remove(userUID);}
+
+    public int getStatus(String userUID){
+        boolean attending = false;
+        boolean pending = false;
+        boolean fresh = false;
+
+        if(userUID.equals(mHostID)) return 1; //host
+
+        if (mAttendees.get(userUID) != null) {
+            attending = true;
+        }
+
+        if(mPendings.get(userUID) != null) {
+            pending = true;
+        }
+        if(attending && !pending) return 2;
+        if(pending && !attending) return 3;
+
+        return 0; // for new
+    }
 
     public void updateAttendees(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
+    }
+    public void updatePending(final Context context) {
 
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
 

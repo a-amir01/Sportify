@@ -96,6 +96,7 @@ public class GatheringActivity extends BaseNavBarActivity {
         mgathering.setTime(mTimeField.getText().toString());
         mgathering.setSID("Dummy");
         mgathering.addAttendee(mCurrentUser);
+        mgathering.addPending(mCurrentUser);
         sportRef.setValue(mgathering);
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();

@@ -63,46 +63,34 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_host) EditText mHost;
     @Bind(R.id.gathering_attendees) EditText mAttendees;
     @Bind(R.id.gathering_delete) Button mDelete;
-    @Bind(R.id.gathering_join) Button mJoin;
-    @Bind(R.id.gathering_leave) Button mLeave;
 
     @OnClick(R.id.gathering_delete)
     void onClick(Button button){
-        if(gathering != null && m_lis != null)
-            gathering.removeEventListener(m_lis);
-        App.mCurrentGathering.delete();
-        App.mGatherings.remove(App.mCurrentGathering);
-        App.mCurrentGathering = null;
-
-        Intent intent = new Intent(getActivity(), GatheringListActivity.class);
-        getActivity().finish();
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.gathering_join)
-    void onClickJoin(Button button){
-        Log.i(TAG, "JOIN");
-      /*Gets user's UID*/
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
-        mGathering.addAttendee(mCurrentUser);
-        mGathering.updateAttendees(getActivity().getApplicationContext());
+        int status = mGathering.getStatus(mCurrentUser);
+
+        if(status == 1){
+            deleteGathering();
+        } //host
+        else if (status == 2) {
+            leaveAttending();
+        } //attendee
+        else if (status == 3) {
+            leavePending();
+        } // leave gatherig
+        else {
+            if (mGathering.getIsPrivate()) {
+                requestGathering();
+            }
+            else {
+                joinGathering(); }
+        }
+
     }
 
-    @OnClick(R.id.gathering_leave)
-    void onClickLeave(Button button)
-    {
-        Log.i(TAG, "LEAVE");
-        /*Gets user's UID*/
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        /*Writes to myGathering list */
-        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
-        mGathering.removeAttendee(mCurrentUser);
-        mGathering.updateAttendees(getActivity().getApplicationContext());
-    }
 
 
     /* will be called when a new SportFragment needs to be created
@@ -120,8 +108,8 @@ public class GatheringFragment extends Fragment {
     } //end newInstance
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+        public void onCreate(Bundle savedInstanceState)
+        {
         super.onCreate(savedInstanceState);
 
         /*Get the gathering ID from the previous fragment*/
@@ -150,6 +138,8 @@ public class GatheringFragment extends Fragment {
 
                     getHostname(hostID);
                 }catch(Exception e) {}
+
+                setButton();
             }
 
             @Override
@@ -205,5 +195,74 @@ public class GatheringFragment extends Fragment {
         });
 
     }
+    void deleteGathering() {
+        if(gathering != null && m_lis != null)
+            gathering.removeEventListener(m_lis);
+        App.mCurrentGathering.delete();
+        App.mGatherings.remove(App.mCurrentGathering);
+        App.mCurrentGathering = null;
 
+        Intent intent = new Intent(getActivity(), GatheringListActivity.class);
+        getActivity().finish();
+        startActivity(intent);
+    }
+
+    void leaveAttending () {
+        Log.i(TAG, "LEAVE ATTENDING");
+        /*Gets user's UID*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        mGathering.removeAttendee(mCurrentUser);
+        mGathering.updateAttendees(getActivity().getApplicationContext());
+    }
+    void leavePending () {
+        Log.i(TAG, "LEAVE PENDING");
+        /*Gets user's UID*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        mGathering.removePending(mCurrentUser);
+        mGathering.updatePending(getActivity().getApplicationContext());
+    }
+    void joinGathering () {
+        Log.i(TAG, "JOIN");
+      /*Gets user's UID*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        mGathering.addAttendee(mCurrentUser);
+        mGathering.updateAttendees(getActivity().getApplicationContext());
+    }
+
+    void requestGathering() {
+        Log.i(TAG, "Reqeust");
+      /*Gets user's UID*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        mGathering.addPending(mCurrentUser);
+        mGathering.updateAttendees(getActivity().getApplicationContext());
+    }
+
+    void setButton() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        int status = mGathering.getStatus(mCurrentUser);
+
+        Log.d(TAG, "STATUS" + status);
+        if(status == 1){ mDelete.setText("Delete");} //host
+        else if (status == 2) {mDelete.setText("Leave");} //attendee
+        else if (status == 3) {mDelete.setText("Remove Request");} // leave gatherig
+        else {
+            if (mGathering.getIsPrivate()) { mDelete.setText("Request"); }
+            else { mDelete.setText("Join"); }
+        }
+    }
 }
