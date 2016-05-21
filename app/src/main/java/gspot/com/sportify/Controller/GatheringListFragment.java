@@ -23,6 +23,7 @@ import java.util.List;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Authors amir assad, on 4/17/16
@@ -41,10 +42,11 @@ public class GatheringListFragment extends Fragment {
     private static final String TAG = GatheringListFragment.class.getSimpleName();
 
     private static final String POSITION_ID = "position_id";
+    private final static String SPORT_TYPE_ID= "sport_type_id";
 
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE = 0;
-    private static final int REUEST_CODE_FILTER = 1;
+    private static final int REQUEST_CODE_FILTER = 1;
 
     /*the View to hold our list of Sports*/
     private RecyclerView mSportRecyclerView;
@@ -54,6 +56,8 @@ public class GatheringListFragment extends Fragment {
 
     /*position of the sport that will be Viewed*/
     public int mSportPosition;
+
+    private List<String> mChosenSports;
 
     /*
     * 1st function to be called when the object gets instantiated
@@ -83,7 +87,7 @@ public class GatheringListFragment extends Fragment {
         return view;
     }/*end onCreateView*/
 
-    /*Load the toobar onto the screen*/
+    /*Load the toolbar onto the screen*/
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.i(TAG, "onCreateOptionsMenu()");
@@ -104,7 +108,7 @@ public class GatheringListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_filter:
                 Intent intent = new Intent(getActivity(), FilterActivity.class);
-                startActivityForResult(intent, REUEST_CODE_FILTER);
+                startActivityForResult(intent, REQUEST_CODE_FILTER);
                 break;
             case R.id.action_add:
                 Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
@@ -153,10 +157,16 @@ public class GatheringListFragment extends Fragment {
         }/*end if*/
 
         /*update the UI based on the filter settings*/
-        if(requestCode == REUEST_CODE_FILTER){
+        if(requestCode == REQUEST_CODE_FILTER){
             if(data == null) return;
 
-            //get the data
+            /*Get the sports that were chosen by the filter*/
+            mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
+
+            if(mChosenSports != null){
+                Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
+            }
+
         }
 
         updateUI();
@@ -285,7 +295,6 @@ public class GatheringListFragment extends Fragment {
         @Override
         public int getItemCount() { return mGatherings.size(); }
     }//end SportAdapter
-
 
 }//end SportListFragment
 

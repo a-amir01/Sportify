@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.util.List;
@@ -22,10 +23,12 @@ import gspot.com.sportify.R;
 /**
  * Created by amir on 5/1/16.
  */
-public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
+public class CustomExpandableFilterListAdapter extends BaseExpandableListAdapter {
 
-    // Define activity context
+    /*Define activity context*/
     private Context mContext;
+
+    /*A-Z, list of sports within alphabet letters*/
     private HashMap<String, List<String>> mGatheringType;
 
     /*ArrayList that is what each key in
@@ -33,7 +36,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> mGatheringList;
 
     /*Hashmap for keeping track of our checkbox check states*/
-    private HashMap<Integer, boolean[]> mChildCheckStates;
+    private HashMap<Integer, boolean[]> mChildCheckSports;
 
     /* Our getChildView & getGroupView use the viewholder patter
 	 * Here are the viewholders defined, the inner classes are
@@ -44,16 +47,16 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     /*if all the children are selected or not*/
     private boolean mIsAllSelected;
 
-    public CustomExpandableListAdapter(Context context,
-                           HashMap<String, List<String>> hashMap,
-                           List<String> list) {
+    public CustomExpandableFilterListAdapter(Context context,
+                                             HashMap<String, List<String>> hashMap,
+                                             List<String> list) {
         mGatheringType = hashMap;
         mContext = context;
         mGatheringList = list;
 
 
         /*Initialize our hashmap containing our check states here*/
-        mChildCheckStates = new HashMap<>();
+        mChildCheckSports = new HashMap<>();
 
         /*Allocate appropriate memory beforehand so when the user
         * wants everything selected we will have a position for every
@@ -63,15 +66,41 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         for(int i = 0; i < mGatheringList.size(); i++)
         {
             for(int j = 0; j < mGatheringList.get(i).length(); j++){
-                mChildCheckStates.put(i, new boolean[getChildrenCount(i)]);
+                mChildCheckSports.put(i, new boolean[getChildrenCount(i)]);
             }
         }
     } //end constructor
 
+    public CustomExpandableFilterListAdapter(Context context,
+                                             HashMap<String, List<String>> hashMap,
+                                             List<String> list, HashMap<Integer,
+                                       boolean[]> previouslyCheckedSports) {
+        mGatheringType = hashMap;
+        mContext = context;
+        mGatheringList = list;
+        mChildCheckSports = previouslyCheckedSports;
+    } //end constructor
+
+    public HashMap<Integer, boolean[]> getSelectedBooleanHashMap() { return mChildCheckSports; }
+
     /*
     * getter method for all the clients to use to determine which children were
-    * selected within the expandable list view*/
-    public HashMap<Integer, boolean[]> getChildCheckedStates(){ return mChildCheckStates; }
+    * selected within the expandable list view
+    * */
+    public List<String> getSelectedSports(){
+
+        List<String> selectedSports = new ArrayList<>();
+
+        for(int parent = 0; parent < mChildCheckSports.size(); parent++){
+            for(int  child = 0; child < mChildCheckSports.get(parent).length; child++){
+                if(mChildCheckSports.get(parent)[child]){
+                    String sport = mGatheringType.get(mGatheringList.get(parent)).get(child);
+                    selectedSports.add(sport);
+                } //end if
+            } //end inner for
+        }//end outer for
+        return selectedSports;
+    }
 
     @Override
     public int getGroupCount() { return mGatheringType.size(); }
@@ -105,6 +134,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
         String groupTitle = (String)getGroup(groupPosition);
 
+        /*Initialize for the first time*/
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.gathering_type_selection_parent, parent, false);
@@ -114,6 +144,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
             groupViewHolder.mGroupText = (TextView) convertView.findViewById(R.id.gathering_type_parent);
 
+            /*Set the tag for the next time this function is called*/
             convertView.setTag(groupViewHolder);
         }//end if
 
@@ -144,10 +175,12 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
                     (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.gathering_type_selection, parent, false);
 
+            /*Initialize the GroupViewHolder defined at the bottom of this document*/
             childViewHolder = new ChildViewHolder();
 
             childViewHolder.mChildCheckBox = (CheckBox) convertView.findViewById(R.id.gathering_type);
 
+            /*Set the tag for the next time this function is called*/
             convertView.setTag(R.layout.gathering_type_selection, childViewHolder);
         }
         /*get the tag to the view*/
@@ -166,41 +199,17 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 		 */
         childViewHolder.mChildCheckBox.setOnCheckedChangeListener(null);
 
-        /*update the values of the checkbox with the current values of current child states
-        * if they exists within the hashmap*/
-        if(mChildCheckStates.containsKey(groupPosition))
-        {
-            /*
-			 * if the hashmap mChildCheckStates<Integer, Boolean[]> contains
-			 * the value of the parent view (group) of this child (aka, the key),
-			 * then retrive the boolean array getChecked[]
-			*/
-            boolean getChecked [] = mChildCheckStates.get(groupPosition);
+        /*
+        * if the hashmap mChildCheckStates<Integer, Boolean[]> contains
+        * the value of the parent view (group) of this child (aka, the key),
+        * then retrive the boolean array getChecked[]
+        */
+        boolean getChecked [] = mChildCheckSports.get(groupPosition);
 
-            /*Set the check state of this position's checkbox based on the
-            * boolean value of getChecked[]*/
-            childViewHolder.mChildCheckBox.setChecked(getChecked[childPosition]);
-        }
+         /* Set the check state of this position's checkbox based on the
+          * boolean value of getChecked[]*/
+        childViewHolder.mChildCheckBox.setChecked(getChecked[childPosition]);
 
-        /*We have no state for this group set them all to false*/
-        else{
-
-            /*
-			 * if the hashmap mChildCheckStates<Integer, Boolean[]> does not
-			 * contain the value of the parent view (group) of this child (aka, the key),
-			 * (aka, the key), then initialize getChecked[] as a new boolean array
-			 *  and set it's size to the total number of children associated with
-			 *  the parent group
-			*/
-//            boolean getChecked[] = new boolean[getChildrenCount(groupPosition)];
-
-            // add getChecked[] to the mChildCheckStates hashmap using mGroupPosition as the key
-//            mChildCheckStates.put(groupPosition, getChecked);
-
-            // set the check state of this position's checkbox based on the
-            // boolean value of getChecked[position]
-            childViewHolder.mChildCheckBox.setChecked(false);
-        }
 
         /*listener for when a child is clicked on*/
         childViewHolder.mChildCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -209,15 +218,15 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
                 if (isChecked) {
 
-                    boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
+                    boolean getChecked[] = mChildCheckSports.get(mGroupPosition);
                     getChecked[mChildPosition] = isChecked;
-                    mChildCheckStates.put(mGroupPosition, getChecked);
+                    mChildCheckSports.put(mGroupPosition, getChecked);
 
                 } else {
 
-                    boolean getChecked[] = mChildCheckStates.get(mGroupPosition);
+                    boolean getChecked[] = mChildCheckSports.get(mGroupPosition);
                     getChecked[mChildPosition] = isChecked;
-                    mChildCheckStates.put(mGroupPosition, getChecked);
+                    mChildCheckSports.put(mGroupPosition, getChecked);
                 }
             }
         });
@@ -238,9 +247,9 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         * which items are selected*/
         mIsAllSelected = selectAll;
 
-        for (int i = 0; i < mChildCheckStates.size(); i++) {
-            for (int j = 0; j < mChildCheckStates.get(i).length; j++)
-                mChildCheckStates.get(i)[j] = selectAll;
+        for (int i = 0; i < mChildCheckSports.size(); i++) {
+            for (int j = 0; j < mChildCheckSports.get(i).length; j++)
+                mChildCheckSports.get(i)[j] = selectAll;
         }
 
         /*update the screen*/

@@ -27,6 +27,11 @@ public class StarterActivity extends Activity {
 
         Log.i(TAG, "onCreate()");
 
+        /*start fresh and delete the file that is stored on user device*/
+        Log.i(TAG, "Deleteting file " + Constants.FILE_NAME + " from device");
+        deleteFile(Constants.FILE_NAME);
+
+
         /*the value stored here will remain on device until the app is deleted*/
         SharedPreferences settings = getSharedPreferences(Constants.STARTER_ID, Context.MODE_PRIVATE);
 
@@ -49,7 +54,7 @@ public class StarterActivity extends Activity {
             Log.i(TAG, "Not logged in yet");
 
             /*start the login activity*/
-            intent = new Intent(StarterActivity.this, LoginActivity.class);
+            intent = new Intent(StarterActivity.this, GatheringListActivity.class);
 
         } //end else
 
@@ -59,5 +64,6 @@ public class StarterActivity extends Activity {
         finish();
 
     }//end onCreate
+
 } //end StarterActivity
 

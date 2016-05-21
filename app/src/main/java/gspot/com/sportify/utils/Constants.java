@@ -26,6 +26,12 @@ public class Constants {
     public static final String KEY_UID = "key_uid";
     public static final String STARTER_ID = "started";
 
+    public final static String SPORT_TYPE_ID= "sport_type_id";
+
+    public final static String SPORT_ACCESS_ID = "sport_access_id";
+
+    public final static String FILE_NAME = "checkedSportsFilter.txt";
+
 
 
 }
