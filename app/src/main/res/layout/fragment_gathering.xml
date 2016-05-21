@@ -60,6 +60,18 @@
             android:id="@+id/timepicker" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Skill Level:"
+        android:id="@+id/skill_lv" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/skill_lv_spinner" />
+
     <CheckBox
         android:layout_width="94dp"
         android:layout_height="wrap_content"

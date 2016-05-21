@@ -9,13 +9,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.firebase.client.Firebase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,11 +38,10 @@ import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
 
-
 /**
  * Created by DannyChan on 5/8/16.
  */
-public class GatheringActivity extends BaseNavBarActivity {
+public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener{
 
     private Gathering mgathering;
     private String m_hostID, mCurrentUser;
@@ -63,6 +70,31 @@ public class GatheringActivity extends BaseNavBarActivity {
         m_hostID = prefs.getString(Constants.KEY_UID, "");
         mgathering = new Gathering();
         mgathering.setHostID(m_hostID);
+
+        ArrayList<String> skillLevels = new ArrayList<String>();
+        skillLevels.add("Beginner");
+        skillLevels.add("Intermediate");
+        skillLevels.add("Advanced");
+
+
+
+        Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
+        skillLevelSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, skillLevels);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        skillLevelSpinner.setAdapter(dataAdapter);
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+
+        mgathering.setSkillLevel(mgathering.toSkillLevel(item));
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -95,8 +127,10 @@ public class GatheringActivity extends BaseNavBarActivity {
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.setTime(mTimeField.getText().toString());
         mgathering.setSID("Dummy");
+        //mGathering.seta
         mgathering.addAttendee(mCurrentUser);
         mgathering.addPending(mCurrentUser);
+
         sportRef.setValue(mgathering);
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();

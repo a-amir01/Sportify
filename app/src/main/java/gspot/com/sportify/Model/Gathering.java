@@ -58,12 +58,14 @@ public class Gathering{
     private HashMap mAttendees;
     private int mTimeOfDay;
     private String mDate;
+    private int attendeeSize;
 
     public Gathering() {
         mIsPrivate = false;
         mAttendees = new HashMap();
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
+        attendeeSize = 1;
     }
 
     public void setSportTitle (String title) { this.mGatheringTitle = title; }
@@ -103,6 +105,17 @@ public class Gathering{
     public String getDate () { return mDate; }
 
     public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
+    public SkillLevel toSkillLevel (String skillLevel) {
+        if (skillLevel.equals("Intermediate")) {
+            return SkillLevel.INTERMEDIATE;
+        }
+        else if (skillLevel.equals("Advanced")) {
+            return SkillLevel.ADVANCED;
+        }
+        else {
+            return SkillLevel.BEGINNER;
+        }
+    }
     public SkillLevel getSkillLevel () { return mSkillLevel;    }
 
     public void delete()
@@ -117,6 +130,9 @@ public class Gathering{
     public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
 
     public void removePending(String userUID) {mPendings.remove(userUID);}
+
+    //public void setAttendeeSize() {attendeeSize = mAttendees.size();}
+    public int getAttendeeSize(){ return mAttendees.size();}
 
     public int getStatus(String userUID){
         boolean attending = false;

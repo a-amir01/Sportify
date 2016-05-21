@@ -49,6 +49,7 @@ public class GatheringFragment extends Fragment {
     private Profile mProfile;
 
     private String hostID, hostName, gatheringUID, mCurrentUser;
+    private int sizeofAttendees;
 
 
 
@@ -61,8 +62,9 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_location) EditText mLocationField;
     @Bind(R.id.gathering_time) EditText mTimeField;
     @Bind(R.id.gathering_host) EditText mHost;
-    @Bind(R.id.gathering_attendees) EditText mAttendees;
     @Bind(R.id.gathering_delete) Button mDelete;
+    @Bind(R.id.host_display) EditText mHostDisplay;
+    @Bind(R.id.attendees_display) EditText mAttendeesDisplay;
 
     @OnClick(R.id.gathering_delete)
     void onClick(Button button){
@@ -133,8 +135,11 @@ public class GatheringFragment extends Fragment {
                     mDescriptionField.setText(mGathering.getDescription());
                     mTimeField.setText(mGathering.getTime());
                     mLocationField.setText(mGathering.getLocation());
-
                     hostID = mGathering.getHostID();
+
+                    //sizeofAttendees = mGathering.getAttendeeSize();
+                    //Log.d(TAG, mGathering.getAttendees();)
+                    mAttendeesDisplay.setText(" and " + (mGathering.getAttendeeSize() -1) + " others are going ");
 
                     getHostname(hostID);
                 }catch(Exception e) {}
@@ -186,6 +191,7 @@ public class GatheringFragment extends Fragment {
 
                 //hostName = mProfile.getmName();
                 mHost.setText(mProfile.getmName());
+                mHostDisplay.setText(mProfile.getmName());
             }
 
             @Override
