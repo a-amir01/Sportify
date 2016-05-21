@@ -59,18 +59,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/gathering_attendees"
-        android:layout_gravity="center_horizontal"
         android:text="Attendees"
         android:layout_weight="0.15" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:text="Delete"
         android:id="@+id/gathering_delete"
-        android:layout_gravity="center_horizontal"
         android:background="@drawable/delete_button"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Join"
+        android:id="@+id/gathering_join"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.19" />
+
+    <Button
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:text="Leave"
+        android:id="@+id/gathering_leave"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.19" />
 
 </LinearLayout>

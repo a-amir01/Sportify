@@ -76,14 +76,18 @@ public class GatheringActivity extends BaseNavBarActivity {
     private void submitGathering() {
         Firebase postID = new Firebase(Constants.FIREBASE_URL).child("Gatherings");
 
+        /*Gets user's UID*/
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         Firebase sportRef = postID.push();
-
         Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mCurrentUser).child("myGatherings");
         Map<String, Object> updates = new HashMap<String, Object>();
         updates.put(sportRef.getKey(), sportRef.getKey());
         myGatheringsID.updateChildren(updates);
+
+        /*Writes the gathering to databse*/
         mgathering.setID(sportRef.getKey());
         mgathering.setDate(mDateField.getText().toString());
         mgathering.setSportTitle(mTitleField.getText().toString());
@@ -91,6 +95,7 @@ public class GatheringActivity extends BaseNavBarActivity {
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.setTime(mTimeField.getText().toString());
         mgathering.setSID("Dummy");
+        mgathering.addAttendee(mCurrentUser);
         sportRef.setValue(mgathering);
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();

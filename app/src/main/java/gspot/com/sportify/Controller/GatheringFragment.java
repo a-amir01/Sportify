@@ -1,6 +1,8 @@
 package gspot.com.sportify.Controller;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -44,7 +48,9 @@ public class GatheringFragment extends Fragment {
     private Gathering mGathering;
     private Profile mProfile;
 
-    private String hostID, hostName, gatheringUID;
+    private String hostID, hostName, gatheringUID, mCurrentUser;
+
+
 
     private static final String ARG_SPORT_ID = "sport_id";
     ValueEventListener m_lis;
@@ -57,6 +63,8 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_host) EditText mHost;
     @Bind(R.id.gathering_attendees) EditText mAttendees;
     @Bind(R.id.gathering_delete) Button mDelete;
+    @Bind(R.id.gathering_join) Button mJoin;
+    @Bind(R.id.gathering_leave) Button mLeave;
 
     @OnClick(R.id.gathering_delete)
     void onClick(Button button){
@@ -70,6 +78,32 @@ public class GatheringFragment extends Fragment {
         getActivity().finish();
         startActivity(intent);
     }
+
+    @OnClick(R.id.gathering_join)
+    void onClickJoin(Button button){
+        Log.i(TAG, "JOIN");
+      /*Gets user's UID*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        mGathering.addAttendee(mCurrentUser);
+        mGathering.updateAttendees(getActivity().getApplicationContext());
+    }
+
+    @OnClick(R.id.gathering_leave)
+    void onClickLeave(Button button)
+    {
+        Log.i(TAG, "LEAVE");
+        /*Gets user's UID*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        /*Writes to myGathering list */
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        mGathering.removeAttendee(mCurrentUser);
+        mGathering.updateAttendees(getActivity().getApplicationContext());
+    }
+
 
     /* will be called when a new SportFragment needs to be created
      * This method Creates a fragment instance and bundles up &

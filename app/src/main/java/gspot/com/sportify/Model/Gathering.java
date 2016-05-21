@@ -1,13 +1,20 @@
 package gspot.com.sportify.Model;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.UUID;
+import gspot.com.sportify.Model.Attendee;
 
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Authors Amir Assad, massoudmaher on 5/1/16.
@@ -47,14 +54,17 @@ public class Gathering{
     private String mSID;
     public String mID;
     private boolean mIsPrivate;
-    private ArrayList<String> mAttendees;
+    //private ArrayList<String> mAttendees;
+    //private String mAttendees;
+    private HashMap  mAttendees;
     private ArrayList<String> mPendings;
     private int mTimeOfDay;
     private String mDate;
 
     public Gathering() {
         mIsPrivate = false;
-        mAttendees = new ArrayList<String>();
+        //mAttendees = new ArrayList<String>();
+        mAttendees = new HashMap();
         mPendings = new ArrayList<String>();
         mSkillLevel = SkillLevel.BEGINNER;
     }
@@ -83,8 +93,9 @@ public class Gathering{
     public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
     public boolean getIsPrivate () { return mIsPrivate; }
 
-    public void setAttendees(ArrayList<String> attendees) { this.mAttendees = attendees; }
-    public ArrayList<String> getAttendees () { return mAttendees; }
+    public void setAttendees(HashMap attendees) { this.mAttendees = attendees; }
+    public HashMap getAttendees () { return mAttendees; }
+
 
     public void setPending(ArrayList<String> pendings) { this.mPendings = pendings; }
     public ArrayList<String> getPendings () { return mPendings; }
@@ -101,5 +112,23 @@ public class Gathering{
     public void delete()
     {
         App.dbref.child("Gatherings").child(mID).removeValue();
+    }
+
+    public void addAttendee(String userUID) {mAttendees.put(userUID, userUID);}
+
+    public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
+        //App.dbref.child("Gatherings").child(mID).child("attendees").child(userUID).removeValue();}
+
+    public void updateAttendees(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
     }
 }
