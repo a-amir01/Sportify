@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 
@@ -53,10 +54,10 @@ public class BaseNavBarActivity extends AppCompatActivity {
                 break;
 
             case R.id.active:
-                Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Active: not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.history:
-                Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "History: not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.profile:
                 intent = new Intent(this, ProfileActivity.class);

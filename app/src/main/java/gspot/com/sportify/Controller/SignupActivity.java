@@ -1,10 +1,10 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -22,6 +21,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import gspot.com.sportify.Model.MyGatherings;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
@@ -32,7 +32,7 @@ import gspot.com.sportify.utils.Constants;
  * creates a default profile for them and stores it in firebase.
  *
  */
-public class SignupActivity extends Activity{
+public class SignupActivity extends AppCompatActivity {
     private static final String TAG = SignupActivity.class.getSimpleName();
 
     /* A reference to the Firebase */
@@ -134,20 +134,6 @@ public class SignupActivity extends Activity{
         mSignupButton.setEnabled(true);
 
 
-        /*Leave here for reference*/
-        //Root (user)
-        //Firebase ref = new Firebase(Constants.FIREBASE_URL);
-
-        //Firebase childName = new Firebase("https://gspot.firebaseio.com/users").child(name);
-
-        /*This tell it not to overwrite old data*/
-        //childName.push();
-
-        /*Set values*/
-        //childName.setValue(email);
-        //childName.child("email").setValue(email);
-        //childName.child("password").setValue(password);
-
         /*Create user in database*/
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         mFirebaseRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
@@ -156,7 +142,10 @@ public class SignupActivity extends Activity{
 
                 //store the information in firebase web
                 Profile profile = new Profile(name, (String) result.get("uid"));
+                MyGatherings gatheringList = new MyGatherings((String)result.get("uid"));
                 mFirebaseRef.child("profiles").child((String)result.get("uid")).setValue(profile);
+                mFirebaseRef.child("MyGatherings").child((String)result.get("uid")).setValue(gatheringList);
+                //mFirebaseRef.child("myEvents").child((String) result.get("uid"));
 
                 /*store the users uid in shared preferences so we know who they are */
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignupActivity.this);
@@ -191,8 +180,8 @@ public class SignupActivity extends Activity{
 
 
     /*
-    * validate()
-    * This utility function will check and make sure that the
+    * validate()x
+    * This utility function w   ill check and make sure that the
     * User has entered the correct email and password syntax
     * */
     private boolean validate() {

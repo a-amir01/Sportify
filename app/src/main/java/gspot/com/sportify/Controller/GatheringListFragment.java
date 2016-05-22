@@ -27,6 +27,8 @@ import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
+import gspot.com.sportify.utils.App;
+
 
 /**
  * Authors amir assad, on 4/17/16
@@ -63,6 +65,7 @@ public class GatheringListFragment extends Fragment {
 
     private String mSkillLevel;
 
+
     /*
     * 1st function to be called when the object gets instantiated
     * tell the host activity that your fragment
@@ -82,7 +85,7 @@ public class GatheringListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_gathering_list, container, false);
 
-       mSportRecyclerView = (RecyclerView)view.findViewById(R.id.sport_recycler_view);
+        mSportRecyclerView = (RecyclerView)view.findViewById(R.id.sport_recycler_view);
         /*recycler view delegates the positioning to the layout manager*/
         mSportRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -115,7 +118,10 @@ public class GatheringListFragment extends Fragment {
                 startActivityForResult(intent, REQUEST_CODE_FILTER);
                 break;
             case R.id.action_add:
-                Toast.makeText(this.getContext(), "not yet implemented", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), GatheringActivity.class);
+                getActivity().finish();
+                getActivity().startActivity(intent);
+
                 break;
         }//end case
 
@@ -214,6 +220,9 @@ public class GatheringListFragment extends Fragment {
 
         private Gathering mGathering;
         private TextView mTitleTextView;
+        private TextView mEventStatusView;
+        private TextView mEventTime;
+        private TextView mEventDate;
 
 
         public SportHolder(View itemView) {
@@ -222,7 +231,10 @@ public class GatheringListFragment extends Fragment {
             Log.i(TAG, "SportHolder()");
 
             /*link member with the widget*/
-            mTitleTextView = (TextView)itemView.findViewById(R.id.list_item_sport_title_text_view);
+            mTitleTextView = (TextView)itemView.findViewById(R.id.gathering_title);
+            mEventStatusView = (TextView)itemView.findViewById(R.id.gathering_status);
+            mEventTime = (TextView)itemView.findViewById(R.id.gathering_time);
+            mEventDate = (TextView)itemView.findViewById(R.id.gathering_date);
 
             /*when the Gathering is clicked in the list*/
             itemView.setOnClickListener(this);
@@ -230,9 +242,14 @@ public class GatheringListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Log.i(TAG, "onClick()");
+            Log.i(TAG, "onClick()" + mGathering.getID());
             /*Create the SportActivity*/
-            Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getId());
+            Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getID());
+            Log.d(TAG, "INTENT"+ mGathering.getID());
+            //Log.d(TAG, "INTENT" + gatheringUID);
+
+            App.mCurrentGathering = mGathering;
+            intent.putExtra("gatheringUID", mGathering.getID());
             startActivityForResult(intent, REQUEST_CODE);
         } //end onClick()
 
@@ -244,7 +261,16 @@ public class GatheringListFragment extends Fragment {
 
             Log.i(TAG, "bindSport()");
             mGathering = gathering;
-            mTitleTextView.setText(mGathering.getSportName());
+            Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
+            mTitleTextView.setText(mGathering.getSportTitle());
+            if (mGathering.getIsPrivate()) {
+                mEventStatusView.setText("Private");
+            }
+            else {
+                mEventStatusView.setText("Public");
+            }
+            mEventTime.setText(mGathering.getTime());
+            mEventDate.setText(mGathering.getDate());
         }/*end bindSport*/
     }/*end SportHolder*/
 

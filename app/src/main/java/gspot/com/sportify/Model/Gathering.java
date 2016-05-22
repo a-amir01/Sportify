@@ -1,89 +1,188 @@
 package gspot.com.sportify.Model;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Observable;
 import java.util.UUID;
+
+import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Authors Amir Assad, massoudmaher on 5/1/16.
  * Class that represents a single gathering
  * Purpose is to instantiate one of these for each created event and push to firebase
  */
-public class Gathering {
+public class Gathering{
 
-    private String mSportName;
 
-    /*sport's id: use to find the sport among the list*/
-    private UUID mGatheringID;
+    public static enum SkillLevel {
+        BEGINNER("Beginner"),
+        INTERMEDIATE("Intermediate"),
+        ADVANCED("Advanced");
 
-    /*position of the crime in the list it is in*/
-    public int mPosition;               //TODO can it be done another way?
+        private final String skillLevel;
 
-    // Type of sport we are playing, Eg. boxing or soccer, commented until Andrew pushes
-    //private SportType type;
+        SkillLevel(String skillLevel) {
+            this.skillLevel = skillLevel;
+        }
 
-    // ID of the host of this gathering
-    private int hostID;
+        public String getSkillLevel() {
+            return skillLevel;
+        }
 
-    // Exact Time of gathering
-    SimpleDateFormat exactTime;
+        @Override
+        public String toString() {
+            return this.skillLevel;
+        }
+    }
 
-    // Enum that represents approximate time of gathering
-    // Morning is 4am - 12
-    // Noon 12-4
-    // Evening 4-8
-    // Night is 8 - 4am
-    // TODO Make class in utils that turns SimpleDateFormat into an enum of the 4 options above
+    private SkillLevel mSkillLevel;
+    private String mGatheringTitle;
+    private String mLocation;
+    private String mDescription;
+    private String mHostID;
+    private String mTime;
+    private String mSID;
+    public String mID;
+    private boolean mIsPrivate;
+    private HashMap mPendings;
+    private HashMap mAttendees;
+    private int mTimeOfDay;
+    private String mDate;
+    private int attendeeSize;
 
-    // Location of gathering in longitude/latitude
-    private double longitude;
-    private double lattitude;
+    public Gathering() {
+        mIsPrivate = false;
+        mAttendees = new HashMap();
+        mPendings = new HashMap();
+        mSkillLevel = SkillLevel.BEGINNER;
+        attendeeSize = 1;
+    }
 
-    // Description of gathering
-    private String description;
+    public void setSportTitle (String title) { this.mGatheringTitle = title; }
+    public String getSportTitle () { return mGatheringTitle; }
 
-    // List of unique IDs of attendees to gathering
-    // TODO figure out type of universal unique IDs
-    private ArrayList<Integer> attendees;
+    public void setLocation (String location) { this.mLocation = location; }
+    public String getLocation () { return mLocation; }
 
-    // List of unique IDs of pending requests to join event
-    private ArrayList<Integer> pendingRequests;
+    public void setDescription (String description) { this.mDescription = description; }
+    public String getDescription () { return mDescription; }
 
-    public Gathering() { mGatheringID = UUID.randomUUID(); }
+    public void setHostID (String hostID) { this.mHostID = hostID; }
+    public String getHostID () { return mHostID; }
 
-    public String getSportName() { return mSportName; }
+    public void setTime (String time) { this.mTime = time; }
+    public String getTime () { return mTime; }
 
-    public void setSportName(String sportName) { mSportName = sportName; }
+    public void setSID (String SID) { this.mSID = SID; }
+    public String getSID () { return mSID; }
 
-    public UUID getId() { return mGatheringID; }
+    public void setID (String ID) { this.mID = ID; }
+    public String getID () { return mID; }
 
-    // Only Getters and setters below, don't bother reading
-    public int getHostID() { return hostID; }
+    public String getmDate() {
+        return mDate;
+    }
 
-    public void setHostID(int hostID) { this.hostID = hostID; }
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
 
-    public SimpleDateFormat getExactTime() { return exactTime; }
+    public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
+    public boolean getIsPrivate () { return mIsPrivate; }
 
-    public void setExactTime(SimpleDateFormat exactTime) { this.exactTime = exactTime;}
+    public void setAttendees(HashMap attendees) { this.mAttendees = attendees; }
+    public HashMap getAttendees () { return mAttendees; }
 
-    public double getLongitude() { return longitude; }
+    public void setPendings(HashMap pendings) {this.mPendings = pendings;}
+    public HashMap getPendings() {return mPendings;}
 
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public void setTimeOfDay (int timeofDay) { this.mTimeOfDay = timeofDay; }
+    public int getTimeOfDay () { return mTimeOfDay; }
 
-    public double getLattitude() { return lattitude; }
+    public void setDate (String date) { this.mDate = date; }
+    public String getDate () { return mDate; }
 
-    public void setLattitude(double lattitude) { this.lattitude = lattitude; }
+    public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
+    public SkillLevel toSkillLevel (String skillLevel) {
+        if (skillLevel.equals("Intermediate")) {
+            return SkillLevel.INTERMEDIATE;
+        }
+        else if (skillLevel.equals("Advanced")) {
+            return SkillLevel.ADVANCED;
+        }
+        else {
+            return SkillLevel.BEGINNER;
+        }
+    }
+    public SkillLevel getSkillLevel () { return mSkillLevel;    }
 
-    public String getDescription() { return description; }
+    public void delete()
+    {
+        App.dbref.child("Gatherings").child(mID).removeValue();
+    }
 
-    public void setDescription(String description) { this.description = description; }
+    public void addAttendee(String userUID) {mAttendees.put(userUID, userUID);}
 
-    public ArrayList<Integer> getAttendees() { return attendees; }
+    public void addPending(String userUID) {mPendings.put(userUID, userUID);}
 
-    public void setAttendees(ArrayList<Integer> attendees) { this.attendees = attendees; }
+    public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
 
-    public ArrayList<Integer> getPendingRequests() { return pendingRequests; }
+    public void removePending(String userUID) {mPendings.remove(userUID);}
 
-    public void setPendingRequests(ArrayList<Integer> pendingRequests) { this.pendingRequests = pendingRequests; }
+    //public void setAttendeeSize() {attendeeSize = mAttendees.size();}
+    public int getAttendeeSize(){ return mAttendees.size();}
 
+    public int getStatus(String userUID){
+        boolean attending = false;
+        boolean pending = false;
+        boolean fresh = false;
+
+        if(userUID.equals(mHostID)) return 1; //host
+
+        if (mAttendees.get(userUID) != null) {
+            attending = true;
+        }
+
+        if(mPendings.get(userUID) != null) {
+            pending = true;
+        }
+        if(attending && !pending) return 2;
+        if(pending && !attending) return 3;
+
+        return 0; // for new
+    }
+
+    public void updateAttendees(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
+    }
+    public void updatePending(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
+    }
 }
