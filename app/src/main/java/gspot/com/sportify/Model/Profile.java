@@ -34,7 +34,7 @@ public class Profile {
     public Profile(String mName, String mOwner) {
         this.mName = mName;
         this.mOwner = mOwner;
-        this.mBio = "Write a short description of yourself";
+        this.mBio = "Write a short description of yourself.";
         this.mContactInfo = "How would you like people to contact you? Write it here.";
         this.mCalendar = new GspotCalendar();
         this.mMySports = new ArrayList<MySport>();

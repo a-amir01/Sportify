@@ -1,7 +1,9 @@
 package gspot.com.sportify.Controller;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
@@ -85,8 +89,8 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
 
         //If we are in the editable state, enable everything
         if (mState.getState() == StateWrapper.State.EDIT) {
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.skill_lv_array, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.skill_lv_array, R.layout.spinner_style);
+            adapter.setDropDownViewResource(R.layout.spinner_style);
             skillLevelSpinner.setAdapter(adapter);
             skillLevelSpinner.setVisibility(View.VISIBLE);
             String defaultSelection = mProfile.getmMySports().get(groupPosition).getmSkillLevel().getSkillLevel();
@@ -175,6 +179,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.profile_expandable_list_group, null);
         }
+
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);

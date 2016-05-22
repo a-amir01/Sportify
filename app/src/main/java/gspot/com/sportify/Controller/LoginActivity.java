@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity{
             // By default we just finish the Activity and log them in automatically
 
             //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
             startActivity(intent);
             finish();
         } //end if
@@ -225,7 +225,7 @@ public class LoginActivity extends AppCompatActivity{
                 mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
 
                 //Goes to the SportsList page
-                Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                 startActivity(intent);
 
                 /* Send the user to change their password if the password is temporary */

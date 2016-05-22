@@ -3,9 +3,11 @@ package gspot.com.sportify.Controller;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -82,7 +85,7 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     /* Member Variables */
     private String mCurrentUser;
-    private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_OTHER);
+    private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_TEAMMATE);
     private Profile mProfile;
     private GspotCalendar mCalendar;
     private ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
@@ -108,7 +111,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     @Bind(R.id.profile_picture)
     ImageView mProfilePicture;
     @Bind(R.id.add_sport)
-    Button mAddSport;
+    ImageButton mAddSport;
     @Bind(R.id.sports_list)
     ExpandableListView mSportsList;
     @Bind(R.id.no_sports)
@@ -160,6 +163,7 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
+        //mProfile = new Profile("Patrick Hayes", mCurrentUser);
 
         /* Populate the page with the user's information */
         mProfileRefListener = mProfileRef.addValueEventListener(new ValueEventListener() {
@@ -168,8 +172,7 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 /* Create a user profile object from data in the database */
                 mProfile = dataSnapshot.getValue(Profile.class);
-
-                /* Retrieve text information from the database */
+                /* Retrieve text information from the database*/
                 mName.setText(mProfile.getmName());
                 mProfilePicture.setImageBitmap(UserPicture.StringToBitMap(mProfile.getmProfilePic()));
                 mBio.setText(mProfile.getmBio());
@@ -190,7 +193,7 @@ public class ProfileActivity extends BaseNavBarActivity {
                 if (mCurrentUser.equals(mProfile.getmOwner())) {
                     toggleToViewMine();
 
-                /* Ensure that an arbitrary user does not have access to edit profile */
+                /* Ensure that an arbitrary user does not have access to edit profile*/
                 } else if (mProfile.isATeammate(mCurrentUser)){
                     toggleToViewMate();
                 } else {
@@ -306,7 +309,11 @@ public class ProfileActivity extends BaseNavBarActivity {
             return;
         }
 
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ProfileActivity.this);
+        mFragManager = getSupportFragmentManager();
+        DialogFragment fragment = new AddSportFragment();
+        fragment.show(mFragManager,"Add Sport");
+
+        /*AlertDialog.Builder builderSingle = new AlertDialog.Builder(ProfileActivity.this);
         LayoutInflater inflater = getLayoutInflater();
         View convertView = (View) inflater.inflate(R.layout.sport_type, null);
 
@@ -347,6 +354,7 @@ public class ProfileActivity extends BaseNavBarActivity {
                 });
 
         builderSingle.show();
+        */
     }
 
     /**
@@ -373,11 +381,13 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* If the user is available at this time, set button to green */
         if (mCalendar.getAvailability(day, time)) {
-            mDaysOfWeek[day][time].setImageResource(R.color.available);
+            mDaysOfWeek[day][time].setImageResource(R.drawable.ic_check_box_filled);
+            mDaysOfWeek[day][time].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
         /* If the user is busy at this time, set button to red */
         } else {
-            mDaysOfWeek[day][time].setImageResource(R.color.busy);
+            mDaysOfWeek[day][time].setImageResource(R.drawable.ic_check_box_outline);
+            mDaysOfWeek[day][time].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -527,13 +537,15 @@ public class ProfileActivity extends BaseNavBarActivity {
         for (int i = 0; i < Constants.NUM_DAYS_OF_WEEK; ++i) {
             for (int j = 0; j < Constants.NUM_TIMES_OF_DAY; ++j) {
 
-                /* Set the color to green if available */
+                /* Set the checkout box to filled if available */
                 if (mCalendar.getAvailability(i, j)) {
-                    mDaysOfWeek[i][j].setImageResource(R.color.available);
+                    mDaysOfWeek[i][j].setImageResource(R.drawable.ic_check_box_filled);
+                    mDaysOfWeek[i][j].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
-                /* Set the color to red if busy */
+                /* Set the checkbox to empty if unavailable*/
                 } else {
-                    mDaysOfWeek[i][j].setImageResource(R.color.busy);
+                    mDaysOfWeek[i][j].setImageResource(R.drawable.ic_check_box_outline);
+                    mDaysOfWeek[i][j].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 }
 
             }

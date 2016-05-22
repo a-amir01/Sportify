@@ -5,12 +5,13 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+
     <TextView
         android:id="@+id/lblListHeader"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:paddingLeft="35dp"
         android:textSize="17sp"
-        android:textColor="#f9f93d" />
+        android:textColor="@color/colorPrimary" />
 
 </LinearLayout>
