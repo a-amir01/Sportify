@@ -175,17 +175,13 @@ public class GatheringFragment extends Fragment {
         gathering.removeEventListener(m_lis);
     }
 
-    void getHostname(String hostID)
-    {
-       Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID);
+    void getHostname(String hostID) {
+       Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
 
         profileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mProfile = dataSnapshot.getValue(Profile.class);
-
-                //hostName = mProfile.getmName();
-                mHost.setText(mProfile.getmName());
+                mHost.setText( dataSnapshot.getValue(String.class));
             }
 
             @Override

@@ -16,6 +16,7 @@
     <string name="action_filter">Filter</string>
     <string name="action_add">Add</string>
     <string name="msg_failed_to_get_intent_data">No image selected</string>
+
     <string-array name="skill_lv_array">
         <item>Beginner</item>
         <item>Intermediate</item>

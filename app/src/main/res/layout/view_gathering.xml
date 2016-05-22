@@ -13,7 +13,9 @@
         android:id="@+id/gathering_title"
         android:hint="@string/gathering_title_hint"
         android:padding="8dp"
-        android:inputType="textMultiLine"
+        android:inputType="none"
+        android:editable="false"
+
         android:text="title"
         android:layout_weight="0.19" />
 
@@ -23,7 +25,8 @@
         android:id="@+id/gathering_description"
         android:layout_gravity="center_horizontal"
         android:hint="Enter a description"
-        android:inputType="textMultiLine"
+        android:inputType="none"
+        android:editable="false"
         android:text="description"
         android:layout_weight="0.17" />
 
@@ -32,7 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:hint="@string/hint_location"
-        android:inputType="textMultiLine"
+        android:inputType="none"
+        android:editable="false"
         android:text="location"
         android:layout_weight="0.08"
         android:id="@+id/gathering_location" />
@@ -43,7 +47,8 @@
         android:id="@+id/gathering_time"
         android:layout_gravity="center_horizontal"
         android:hint="@string/hint_time"
-        android:inputType="textMultiLine"
+        android:inputType="none"
+        android:editable="false"
         android:text="time"
         android:layout_weight="0.11" />
 
@@ -52,6 +57,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/gathering_host"
         android:layout_gravity="center_horizontal"
+        android:inputType="none"
+        android:editable="false"
         android:text="host"
         android:layout_weight="0.08" />
 
@@ -60,6 +67,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/gathering_attendees"
         android:text="Attendees"
+        android:inputType="none"
+        android:editable="false"
         android:layout_weight="0.15" />
 
     <Button

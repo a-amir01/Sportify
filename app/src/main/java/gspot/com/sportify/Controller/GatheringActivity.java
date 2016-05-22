@@ -9,13 +9,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.firebase.client.Firebase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,7 +42,7 @@ import gspot.com.sportify.utils.App;
 /**
  * Created by DannyChan on 5/8/16.
  */
-public class GatheringActivity extends BaseNavBarActivity {
+public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener {
 
     private Gathering mgathering;
     private String m_hostID, mCurrentUser;
@@ -63,6 +71,40 @@ public class GatheringActivity extends BaseNavBarActivity {
         m_hostID = prefs.getString(Constants.KEY_UID, "");
         mgathering = new Gathering();
         mgathering.setHostID(m_hostID);
+
+        Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
+        sportTypeSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> Adapter1 = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.sport_types, android.R.layout.simple_spinner_item);
+        Adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sportTypeSpinner.setAdapter(Adapter1);
+
+        Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
+        skillLevelSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, android.R.layout.simple_spinner_item);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        skillLevelSpinner.setAdapter(dataAdapter);
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        switch (parent.getId()) {
+            case R.id.sport_type_spinner:
+                String sport = parent.getItemAtPosition(position).toString();
+                mgathering.setSID(sport);
+                break;
+
+            case R.id.skill_lv_spinner:
+                // On selecting a spinner item
+                String item = parent.getItemAtPosition(position).toString();
+
+                mgathering.setSkillLevel(mgathering.toSkillLevel(item));
+                // Showing selected spinner item
+                Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -94,7 +136,7 @@ public class GatheringActivity extends BaseNavBarActivity {
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.setTime(mTimeField.getText().toString());
-        mgathering.setSID("Dummy");
+       // mgathering.setSID("Dummy");
         mgathering.addAttendee(mCurrentUser);
         mgathering.addPending(mCurrentUser);
         sportRef.setValue(mgathering);

@@ -103,6 +103,17 @@ public class Gathering{
     public String getDate () { return mDate; }
 
     public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
+    public SkillLevel toSkillLevel (String skillLevel) {
+        if (skillLevel.equals("Intermediate")) {
+            return SkillLevel.INTERMEDIATE;
+        }
+        else if (skillLevel.equals("Advanced")) {
+            return SkillLevel.ADVANCED;
+        }
+        else {
+            return SkillLevel.BEGINNER;
+        }
+    }
     public SkillLevel getSkillLevel () { return mSkillLevel;    }
 
     public void delete()
