@@ -61,6 +61,8 @@ public class GatheringListFragment extends Fragment {
 
     private boolean mIsPrivateEvent;
 
+    private String mSkillLevel;
+
     /*
     * 1st function to be called when the object gets instantiated
     * tell the host activity that your fragment
@@ -150,6 +152,7 @@ public class GatheringListFragment extends Fragment {
             /*Get the sports that were chosen by the filter*/
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
             mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
+            mSkillLevel = data.getStringExtra(Constants.SKILL_LEVEL);
 
             if(mChosenSports != null){
                 Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
@@ -176,7 +179,7 @@ public class GatheringListFragment extends Fragment {
         if(mChosenSports != null && mChosenSports.size() > 0){
             for(int i = 0; i < gatherings.size(); i++){
                 Gathering event = gatherings.get(i);
-                if(!mChosenSports.contains(event.getSportName())/*&& event.isPrivate() != mIsPrivateEvent*/)
+                if(!mChosenSports.contains(event.getSportName())/*&& event.isPrivate() != mIsPrivateEvent && event.getSkillLEvel.equals(mSkillLevel)*/)
                     gatherings.remove(i);
             }//end for
         }//end if

@@ -6,5 +6,5 @@ import com.firebase.client.Firebase;
  * Created by yunfanyang on 5/2/16.
  */
 public class App {
-    public static Firebase dbref = new Firebase("https://sporttesttt.firebaseio.com");
+    public static Firebase dbref = new Firebase(Constants.FIREBASE_URL);
 }

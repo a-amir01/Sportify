@@ -30,6 +30,8 @@ public class Constants {
 
     public final static String SPORT_ACCESS_ID = "sport_access_id";
 
+    public final static String SKILL_LEVEL = "skill_level";
+
     public final static String FILE_NAME = "checkedSportsFilter.txt";
 
 

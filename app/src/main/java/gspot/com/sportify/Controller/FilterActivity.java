@@ -63,6 +63,8 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
     /*Are all options selected?*/
     private static boolean sIsAllSelected;
 
+    private String mSkillLevel;
+
     @Bind(R.id.expand_all) Switch mExpandAllSwitch;
     @Bind(R.id.select_all) Switch mSelectAllSwitch;
     @Bind(R.id.event_access_specifier) Switch mEventAccessSpecifier;
@@ -91,6 +93,7 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
 
         data.putStringArrayListExtra(Constants.SPORT_TYPE_ID, selectedSports);
         data.putExtra(Constants.SPORT_ACCESS_ID, sIsPrivateEvent);
+        data.putExtra(Constants.SKILL_LEVEL, mSkillLevel);
 
         /*set the boolean hashmap data on device*/
         saveDataOnDevice();
