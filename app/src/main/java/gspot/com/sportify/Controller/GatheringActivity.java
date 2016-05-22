@@ -1,10 +1,15 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,14 +42,23 @@ import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.DatePickerFragment;
+import gspot.com.sportify.utils.TimePickerFragment;
 
 /**
  * Created by DannyChan on 5/8/16.
  */
 public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener{
 
+    /*use for logging*/
+    private static final String TAG = DatePickerFragment.class.getSimpleName();
+
+    private static final int REQUEST_DATE = 0;
+
     private Gathering mgathering;
     private String m_hostID, mCurrentUser;
+    private String mDateString;
+    private String mTimeString;
 
     @Bind(R.id.sport_title) EditText mTitleField;
     @Bind(R.id.sport_description) EditText mDescriptionField;
@@ -58,6 +72,32 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     @OnClick(R.id.sport_submit)
     void onClick(Button button){submitGathering();}
 
+    /**
+     * Prompts user to select a date and modifies the mDate field of mgathering
+     * which will be pushed to firebase once submit is clicked
+     *
+     */
+    @OnClick(R.id.datepicker)
+    void inputDate() {
+        DatePickerFragment newFragment = new DatePickerFragment();
+
+
+        //startActivityForRes
+        newFragment.show(getFragmentManager(), "datepickerFragment");
+
+
+    }
+
+    /**
+     * Prompts user to select a time and modifies the mTime field of mgathering
+     * which will be pushed to firebase once submit is clicked
+     */
+    @OnClick(R.id.timepicker)
+    void inputTime() {
+        // Create timepicker dialog and show it
+        TimePickerFragment timeFragment = new TimePickerFragment();
+        timeFragment.show(getFragmentManager(), "timepickerFragment");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,13 +167,33 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.setTime(mTimeField.getText().toString());
         mgathering.setSID("Dummy");
-        //mGathering.seta
         mgathering.addAttendee(mCurrentUser);
         mgathering.addPending(mCurrentUser);
+        mgathering.setDate(mDateString);
+        mgathering.setTime(mTimeString);
+
+        Log.d(TAG, "Time set to: " + mTimeString + " and date: " + mDateString);
 
         sportRef.setValue(mgathering);
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
         startActivity(intent);
+    }
+
+    /**
+     * Set date, to be called from DatePickerDialog
+     * @param newDate
+     */
+    public void setDateString(String newDate) {
+        mDateString = newDate;
+        Log.d(TAG, "date set to: " + mDateString);
+    }
+
+    /**
+     * Set date, to be called from TimePickerDialog
+     * @param mTimeString
+     */
+    public void setmTimeString(String mTimeString) {
+        this.mTimeString = mTimeString;
     }
 }

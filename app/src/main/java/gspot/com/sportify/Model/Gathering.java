@@ -89,6 +89,14 @@ public class Gathering{
     public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
 
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
+
     public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
     public boolean getIsPrivate () { return mIsPrivate; }
 
