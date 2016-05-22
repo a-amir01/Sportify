@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Harsh\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jar="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="25c0d24593c6a6ea49114eef357293c81ff48cd6">
-        <dex dex="C:\Users\Harsh\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_fc04d45a8c8d3869aa66c9bb8fc0934ab9a52ba5\classes.dex" />
+        sha1="7c0c0b918df124a9b0ddcbbd477fc2eca2365c51">
+        <dex dex="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_5edd8f3ce3fa5409957697bd0218f0fedbd23ed4.jar" />
     </item>
 
 </items>
