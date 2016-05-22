@@ -17,11 +17,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
+import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 

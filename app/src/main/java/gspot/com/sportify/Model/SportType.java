@@ -1,5 +1,4 @@
 package gspot.com.sportify.Model;
-
 import com.fasterxml.jackson.annotation.*;
 import com.firebase.client.Firebase;
 
