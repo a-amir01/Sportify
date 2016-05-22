@@ -1,9 +1,7 @@
 package gspot.com.sportify.Controller;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,9 +26,10 @@ import gspot.com.sportify.utils.Constants;
 
 /**
  * The controller for the sign up page. Handles creating a new user and validating
- * whether the email and password are valid. If the user successfully makes an account, it
- * creates a default profile for them and stores it in firebase.
- *
+ * the email. There will be a temporary password for the user to change the first
+ * time they log in. If the user uses a valid email, it creates a default profile
+ * for them and stores it in firebase. The activity returns the activity that
+ * called it.
  */
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = SignupActivity.class.getSimpleName();
@@ -46,7 +45,7 @@ public class SignupActivity extends AppCompatActivity {
 
     /*link to the widgets*/
     @Bind(R.id.input_email) EditText mEmailText;
-    @Bind(R.id.input_password) EditText mPasswordText;
+    //@Bind(R.id.input_password) EditText mPasswordText;
     @Bind(R.id.btn_signup) Button mSignupButton;
     @Bind(R.id.link_login) TextView mSigninText;
     @Bind(R.id.input_name) EditText mNameText;
@@ -104,10 +103,8 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
 
-        /*Store user's info into variables*/
-        name = mNameText.getText().toString();
-        email = mEmailText.getText().toString();
-        password = mPasswordText.getText().toString();
+        /* Store temporary password as password, will prompt user later */
+        password = "T3mpP@ssword";
 
         // TODO: Implement your signup logic here.
 
@@ -125,8 +122,9 @@ public class SignupActivity extends AppCompatActivity {
 
 
     /* onSignupSuccess
-     * IF signup is successful then we will return back to the caller activity
-     * and proceed the user to the home page
+     * If account creation is successful then we will return back to the caller activity.
+     * If there was some issue creating the account, do not return back, let the
+     * Handler dismiss the progress dialog.
      * */
     public void onSignupSuccess() {
 
@@ -137,6 +135,7 @@ public class SignupActivity extends AppCompatActivity {
         /*Create user in database*/
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
         mFirebaseRef.createUser(email, password, new Firebase.ValueResultHandler<Map<String, Object>>() {
+            // Success for Create User
             @Override
             public void onSuccess(Map<String, Object> result) {
 
@@ -148,23 +147,62 @@ public class SignupActivity extends AppCompatActivity {
                 //mFirebaseRef.child("myEvents").child((String) result.get("uid"));
 
                 /*store the users uid in shared preferences so we know who they are */
-                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignupActivity.this);
-                SharedPreferences.Editor spe = sp.edit();
-                spe.putString(Constants.KEY_UID, (String) result.get("uid")).apply();
+//                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(SignupActivity.this);
+//                SharedPreferences.Editor spe = sp.edit();
+//
+
+                /*
+                 * Send email with temporary password, repurposing Firebase's
+                 * resetPassword
+                 */
+                mFirebaseRef.resetPassword(email, new Firebase.ResultHandler() {
+                    //Success for Reset Password
+                    @Override
+                    public void onSuccess() {
+                        // Let the user know that the email was sent
+                        Toast.makeText(getApplicationContext(),
+                                "Sent Email with Password",
+                                Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                    // Error for Reset Password
+                    @Override
+                    public void onError(FirebaseError firebaseError) {
+                        Log.v(TAG, String.valueOf(FirebaseError.NETWORK_ERROR));
+                    }
+                });
+
+                //this is how we pass data back to the function onActivityForResult
+                //setResult(RESULT_OK, null);
+                //terminate activity
+
+                finish();
             }
 
+            //Error for Create User
             @Override
             public void onError(FirebaseError firebaseError) {
 
                 Log.e(TAG,"ERROR THROWN WHEN CREATING USER");
+                /* Check for errors */
+                switch(firebaseError.getCode()){
+                    /*
+                     * Add more errors here as the become evident through
+                     * testing
+                     */
+                    case FirebaseError.EMAIL_TAKEN:
+                        Toast.makeText(getApplicationContext(),
+                                "That email is taken by another user",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    case FirebaseError.NETWORK_ERROR:
+                        Toast.makeText(getApplicationContext(),
+                                "Cannot connect to internet",
+                                Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         });
-
-        //this is how we pass data back to the function onActivityForResult
-        setResult(RESULT_OK, null);
-        //terminate activity
-
-        finish();
     }//end onSignupSuccess
 
     /*
@@ -173,7 +211,7 @@ public class SignupActivity extends AppCompatActivity {
      * */
     public void onSignupFailed() {
         Log.i(TAG, "onSignupFailed");
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Sign Up failed", Toast.LENGTH_LONG).show();
 
         mSignupButton.setEnabled(true); //enable the button for input
     } //end onSignupFailed
@@ -188,10 +226,9 @@ public class SignupActivity extends AppCompatActivity {
         Log.i(TAG, "validate");
         boolean valid = true;
 
-        /*get the User input*/
-        String name = mNameText.getText().toString();
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        /* get the User input, and store into variables */
+        name = mNameText.getText().toString();
+        email = mEmailText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
             mNameText.setError("at least 3 characters");
@@ -208,14 +245,6 @@ public class SignupActivity extends AppCompatActivity {
         else {
             mEmailText.setError(null);
         } //end else
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mPasswordText.setError("between 4 and 10 alphanumeric characters");
-            valid = false;
-        }//end if
-        else {
-            mPasswordText.setError(null);
-        }//end else
 
         return valid;
     }//end validate()

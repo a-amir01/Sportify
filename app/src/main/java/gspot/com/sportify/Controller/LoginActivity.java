@@ -86,7 +86,10 @@ public class LoginActivity extends AppCompatActivity{
         Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
 
         /*expecting data to be returned by SignupActivity*/
-        startActivityForResult(intent, REQUEST_SIGNUP);
+//        startActivityForResult(intent, REQUEST_SIGNUP);
+
+        /* Start SignupActivity */
+        startActivity(intent);
     }//end onClick()
 
     /* onClick()
@@ -138,21 +141,21 @@ public class LoginActivity extends AppCompatActivity{
             return;
         } //end if
 
-        if (requestCode == REQUEST_SIGNUP) {
-            /*successful sign up do not show the log in page anymore*/
-            setFirstTimePreference();
-            /*empty intent passed in*/
-            //TODO this needs to be verified later
-            //if(data == null) return;
-
-            // TODO: Implement successful signup logic here
-            // By default we just finish the Activity and log them in automatically
-
-            //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
-            startActivity(intent);
-            finish();
-        } //end if
+//        if (requestCode == REQUEST_SIGNUP) {
+//            /*successful sign up do not show the log in page anymore*/
+//            setFirstTimePreference();
+//            /*empty intent passed in*/
+//            //TODO this needs to be verified later
+//            //if(data == null) return;
+//
+//            // TODO: Implement successful signup logic here
+//            // By default we just finish the Activity and log them in automatically
+//
+//            //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+//            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
+//            startActivity(intent);
+//            finish();
+//        } //end if
 
     } //end onActivityResult
 

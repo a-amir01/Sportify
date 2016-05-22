@@ -27,15 +27,15 @@
     </EditText>
 
     <!-- Password Label -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:id="@+id/input_password"
-        android:inputType="textPassword"
-        android:hint="Password">
-    </EditText>
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:id="@+id/input_password"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:hint="Password">-->
+    <!--</EditText>-->
 
     <!-- Signup Button -->
     <Button
