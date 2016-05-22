@@ -54,10 +54,9 @@ public class GatheringListFragment extends Fragment {
     /*Use to maintain the data for list and produce the view*/
     private SportAdapter mAdapter;
 
-    /*position of the sport that will be Viewed*/
-    public int mSportPosition;
-
     private List<String> mChosenSports;
+
+    private boolean mIsPrivateEvent;
 
     /*
     * 1st function to be called when the object gets instantiated
@@ -141,34 +140,19 @@ public class GatheringListFragment extends Fragment {
             return;
         }/*end if*/
 
-        /*correct fragment being called*/
-        if(requestCode == REQUEST_CODE)
-        {
-            if(data == null) return;
-
-            /*store the position of the list item that was changed*/
-            mSportPosition = data.getIntExtra(POSITION_ID, -1);
-
-            /*No Value found for the Id*/
-            if(mSportPosition == -1) {
-                Log.i(TAG, "No value found for the id " + POSITION_ID );
-                return;
-            }/*end if*/
-        }/*end if*/
-
         /*update the UI based on the filter settings*/
         if(requestCode == REQUEST_CODE_FILTER){
             if(data == null) return;
 
             /*Get the sports that were chosen by the filter*/
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
+            mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
 
             if(mChosenSports != null){
                 Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
             }
 
         }
-
         updateUI();
     }//end onActivityResult
 
@@ -177,13 +161,22 @@ public class GatheringListFragment extends Fragment {
      * sports that were changed in the GatheringFragment
      */
     private void updateUI() {
-        Log.i(TAG, "updateUI() " + mSportPosition);
+        Log.i(TAG, "updateUI() ");
 
         /*get the Sports from the hosting activity*/
         SportLab sportLab = SportLab.get(getActivity());
 
         /*get all the Sports*/
         List<Gathering> gatherings = sportLab.getSports();
+
+        /*go through the list and set the filters*/
+        if(mChosenSports != null && mChosenSports.size() > 0){
+            for(int i = 0; i < gatherings.size(); i++){
+                Gathering event = gatherings.get(i);
+                if(!mChosenSports.contains(event.getSportName())/*&& event.isPrivate() != mIsPrivateEvent*/)
+                    gatherings.remove(i);
+            }//end for
+        }//end if
 
         /*there are currently no gatherings listed*/
         if(mAdapter == null) {
@@ -196,9 +189,7 @@ public class GatheringListFragment extends Fragment {
 
         /*only one sport will change at a time*/
         else {
-            /*notify on gatherings's update*/
-            mAdapter.notifyItemChanged(mSportPosition);
-
+            mAdapter.notifyDataSetChanged();
         }/*end else*/
 
     }/*end updateUI*/

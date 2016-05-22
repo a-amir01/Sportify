@@ -49,8 +49,8 @@ public class GatheringFragment extends Fragment {
 
     @OnClick(R.id.sport_submit)
     void onClick(Button button){submitGathering();}
-    //@OnTextChanged(R.id.sport_title)
-    //void onTextChange(CharSequence text, int start, int before, int count) { mSport.setSportName(text.toString()); }
+    @OnTextChanged(R.id.sport_title)
+    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportName(text.toString()); }
 
 
     /* will be called when a new SportFragment needs to be created
@@ -87,7 +87,7 @@ public class GatheringFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gathering, parent, false);
         ButterKnife.bind(this, view);
         /**show the sport*/
-        //mTitleField.setText(mGathering.getSportName());
+        mTitleField.setText(mGathering.getSportName());
 
 
 

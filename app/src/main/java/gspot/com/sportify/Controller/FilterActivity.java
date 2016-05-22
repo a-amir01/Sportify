@@ -18,12 +18,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 
 import butterknife.OnClick;
+import gspot.com.sportify.Model.SportType;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.GatheringTypeProvider;
@@ -37,7 +41,7 @@ import gspot.com.sportify.utils.GatheringTypeProvider;
  * with the key Constants.SPORT_TYPE_ID which can be used to
  * filter out the array list that the recycler view uses
  */
-public class FilterActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class FilterActivity extends Activity implements CompoundButton.OnCheckedChangeListener, Observer {
 
     private static final String TAG = FilterActivity.class.getSimpleName();
 
@@ -49,6 +53,9 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
 
     private ExpandableListView mExpandableListView;
     private CustomExpandableFilterListAdapter mExpandableListAdapter;
+
+    /*contains the list of sports from the databse*/
+    private SportTypes mDataBaseSports = new SportTypes();
 
     /*Is the private filed selected?*/
     private static boolean sIsPrivateEvent;
@@ -68,23 +75,6 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
         else
             mExpandableListAdapter.collapseAllChildren(mExpandableListView);
     }
-
-//    @OnCheckedChanged(R.id.select_all)
-//    public void onSelectAllCheckedChanged(CompoundButton buttonView, boolean isChecked){
-//
-//        /*If isChecked and the expandAllSwitch is not on
-//        * then turn the switch on and expand all the children*/
-//        if(isChecked && !mExpandAllSwitch.isChecked()){
-//            mExpandAllSwitch.setChecked(true);
-//            mExpandableListAdapter.expandAllChildren(mExpandableListView);
-//        }//end if
-//
-//        /*set all checkboxes to isChecked*/
-//        mExpandableListAdapter.setAllChildStates(isChecked);
-//
-//        /*for passing data back to calling activity*/
-//        sIsAllSelected = isChecked;
-//    }
 
     @OnCheckedChanged(R.id.event_access_specifier)
     public void onAccessCheckChanged(CompoundButton buttonView, boolean isChecked){
@@ -126,49 +116,13 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
 
         ButterKnife.bind(this);
 
-        /*Filters chosen by the user*/
-        HashMap<Integer, boolean[]> filters;
-
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
 
-        /*get all the gathering types*/
-        mGatheringType = GatheringTypeProvider.getDataHashMap();
+        /*create an observer*/
+        mDataBaseSports.addObserver(this);
 
-        /*set the keys of the hashmap to this list*/
-        mGatheringList = new ArrayList<>(mGatheringType.keySet());
-
-        /*sort the parents*/
-        Collections.sort(mGatheringList);
-
-        filters = getFilterSettings();
-
-        /*has not created a filter yet or filters is empty*/
-        if(filters == null ) {
-            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList);
-        }
-        else {
-            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList, filters);
-        }
-
-        /*set adapter to our custom adapter*/
-        mExpandableListView.setAdapter(mExpandableListAdapter);
-
-        /*have the list expanded at first
-        * every call to setChecked is accompanied by
-        * the setOnCheckChangedListener*/
-        mExpandAllSwitch.setChecked(true);
-
-        /*Turn on the listener so we can set the button to the static field*/
-        mSelectAllSwitch.setOnCheckedChangeListener(null);
-
-        /*Set the button is the static selected value*/
-        mSelectAllSwitch.setChecked(sIsAllSelected);
-
-        /*turn the listener back on*/
-        mSelectAllSwitch.setOnCheckedChangeListener(this);
-
-        /*set the event specifier*/
-        mEventAccessSpecifier.setChecked(sIsPrivateEvent);
+        /*Asynchronous tasks*/
+        mDataBaseSports.readSportTypes();
 
     }//end onCreate
 
@@ -242,5 +196,61 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
         /*for passing data back to calling activity*/
         sIsAllSelected = isChecked;
     }
-}
+
+    @Override
+    public void update(Observable observable, Object data) {
+
+        /*Filters chosen by the user that was saved on the device*/
+        HashMap<Integer, boolean[]> filters;
+
+        ArrayList<String> sps = new ArrayList<String>();
+        for (SportType sp : mDataBaseSports.sportTypes) {
+            sps.add(sp.getName());
+        }
+
+        /*pass the array from the database to get back a hashmap for adaper*/
+        mGatheringType = GatheringTypeProvider.getDataHashMap(sps.toArray(new String[sps.size()]));
+
+        /*set the keys of the hashmap to this list*/
+        mGatheringList = new ArrayList<>(mGatheringType.keySet());
+
+        /*sort the parents*/
+        Collections.sort(mGatheringList);
+
+        Log.i(TAG, "update " + mGatheringType.size());
+
+        /*get the saved data that was stored on the device*/
+        filters = getFilterSettings();
+
+        /*has not created a filter yet or filters is empty*/
+        if (filters == null) {
+            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList);
+        } else {
+            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList, filters);
+        }
+
+        /*set adapter to our custom adapter*/
+        mExpandableListView.setAdapter(mExpandableListAdapter);
+
+         /*have the list expanded at first
+        * every call to setChecked is accompanied by
+        * the setOnCheckChangedListener*/
+        mExpandAllSwitch.setChecked(true);
+
+        mExpandableListAdapter.expandAllChildren(mExpandableListView);
+
+        /*Turn on the listener so we can set the button to the static field*/
+        mSelectAllSwitch.setOnCheckedChangeListener(null);
+
+        /*Set the button is the static selected value*/
+        mSelectAllSwitch.setChecked(sIsAllSelected);
+
+        /*turn the listener back on*/
+        mSelectAllSwitch.setOnCheckedChangeListener(this);
+
+        /*set the event specifier*/
+        mEventAccessSpecifier.setChecked(sIsPrivateEvent);
+
+    } //end update
+}//end FilterActivity
 

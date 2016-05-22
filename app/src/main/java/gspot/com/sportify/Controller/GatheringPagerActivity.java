@@ -38,10 +38,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
     /*list of all mGatherings*/
     private List<Gathering> mGatherings;
 
-    /*Used when the back button is pressed
-     *position of the sport we are at in the list*/
-    private int mCurrSportPos;
-
     /*
      * Function to Create a new intent and save the sport Id for when the
      * Activity gets started
@@ -85,12 +81,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
                 /*get the gathering that is being loaded*/
                 Gathering gathering = mGatherings.get(position);
 
-                /*the position of the fragment that is being loaded*/
-                gathering.mPosition = position;
-
-                /*position of the current gathering on screen*/
-                mCurrSportPos = mViewPager.getCurrentItem();
-
                 return GatheringFragment.newInstance(gathering.getId());
             }
 
@@ -131,32 +121,4 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         return true;
     } //end onCreateOptionsMenu
 
-    /*
-     * this function will be called when the
-     * user presses the back button*/
-    @Override
-    public void onBackPressed() {
-
-        Log.d(TAG, "onBackPressed()");
-
-        /*you must first set the result before calling the
-         * super class family */
-        returnResult(mCurrSportPos);
-        super.onBackPressed();
-    }/*end onBackPressed*/
-
-    /*
-    * Function to store the value we want to return back to the caller
-    * this function calls setResult because this activity was called by
-    * startActivityForResult and this is how we get the data back to the caller
-    * @param position: the position of the sport in the list*/
-    public void returnResult(int position) {
-        Log.d(TAG, "returnResult " + position);
-        /*start a new intent to store data in*/
-        Intent data = new Intent();
-        /*store the position*/
-        data.putExtra(POSITION_ID, position);
-        /*return the position back to the caller*/
-        setResult(RESULT_OK, data);
-    }/*end returnResult*/
 }
