@@ -5,11 +5,13 @@ import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
 
 import gspot.com.sportify.Controller.GatheringActivity;
+import gspot.com.sportify.R;
 
 /**
  * Class to pick a time when creating a gathering
@@ -47,9 +49,14 @@ public class TimePickerFragment extends DialogFragment
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-        // Return string representation of time to calling Activity, GatheringActivity.java
         String timeString = hourOfDay + ":" + minute;
+
+        // Return string representation of time to calling Activity, GatheringActivity.java
         ((GatheringActivity)getActivity()).setmTimeString(timeString);
+
+        // Set button text to reflect selected date
+        Button timeButton = (Button)getActivity().findViewById(R.id.timepicker);
+        timeButton.setText(timeString);
 
         Log.d(TAG, "Date picked: " + timeString);
 

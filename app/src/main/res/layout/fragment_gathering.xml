@@ -28,20 +28,6 @@
         android:layout_gravity="center_horizontal"
         android:hint="@string/hint_location" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sport_date"
-        android:hint="Enter date"
-        android:padding="8dp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/sport_time"
-        android:layout_gravity="center_horizontal"
-        android:hint="@string/hint_time" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

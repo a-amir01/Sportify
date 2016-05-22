@@ -63,8 +63,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     @Bind(R.id.sport_title) EditText mTitleField;
     @Bind(R.id.sport_description) EditText mDescriptionField;
     @Bind(R.id.sport_location) EditText mLocationField;
-    @Bind(R.id.sport_date) EditText mDateField;
-    @Bind(R.id.sport_time) EditText mTimeField;
 
     @OnCheckedChanged(R.id.sport_status)
     void onCheckChanged (boolean isChecked) { mgathering.setIsPrivate(isChecked); }
@@ -78,14 +76,11 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
      *
      */
     @OnClick(R.id.datepicker)
-    void inputDate() {
+    void inputDate(Button dateButton) {
         DatePickerFragment newFragment = new DatePickerFragment();
 
-
-        //startActivityForRes
+        // display calendar dialog for picking date
         newFragment.show(getFragmentManager(), "datepickerFragment");
-
-
     }
 
     /**
@@ -153,19 +148,23 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        Log.d(TAG, "mCurrentUser set to: " + mCurrentUser);
+
+
         Firebase sportRef = postID.push();
         Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mCurrentUser).child("myGatherings");
         Map<String, Object> updates = new HashMap<String, Object>();
         updates.put(sportRef.getKey(), sportRef.getKey());
         myGatheringsID.updateChildren(updates);
 
+        Log.d(TAG, "mCurrentUser set to: " + mCurrentUser);
+
         /*Writes the gathering to databse*/
         mgathering.setID(sportRef.getKey());
-        mgathering.setDate(mDateField.getText().toString());
         mgathering.setSportTitle(mTitleField.getText().toString());
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
-        mgathering.setTime(mTimeField.getText().toString());
+        //mgathering.setTime(mTimeField.getText().toString());
         mgathering.setSID("Dummy");
         mgathering.addAttendee(mCurrentUser);
         mgathering.addPending(mCurrentUser);
