@@ -2,6 +2,7 @@ package gspot.com.sportify.Controller;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -80,6 +81,10 @@ public class SignupActivity extends AppCompatActivity {
 
         /*link the widgets to the members*/
         ButterKnife.bind(this);
+
+        mNameText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
+        mEmailText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
+        mPasswordText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
 
     } //end onCreate
 
