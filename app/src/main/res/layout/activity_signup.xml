@@ -6,7 +6,7 @@
     android:background="@color/colorPrimaryDark"
     android:weightSum="1">
 
-    <!--  Name Label -->
+    <!-- Logo -->
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -26,9 +26,8 @@
         android:hint="Name"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textColor="#ffffff"
-        android:textColorHint="#ffffff">
-    </EditText>
+        android:textColor="@color/textColorLogin"
+        android:textColorHint="@color/hintColor"/>
 
     <!-- Email Label -->
     <EditText
@@ -41,8 +40,8 @@
         android:hint="Email"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textColorHint="#ffffff">
-    </EditText>
+        android:textColor="@color/textColorLogin"
+        android:textColorHint="@color/hintColor"/>
 
     <!-- Password Label -->
     <EditText
@@ -55,8 +54,8 @@
         android:hint="Password"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:textColorHint="#ffffff">
-    </EditText>
+        android:textColor="@color/textColorLogin"
+        android:textColorHint="@color/hintColor"/>
 
     <!-- Signup Button -->
     <Button
@@ -70,7 +69,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@color/colorPrimary"
-        android:textColor="#ffffff" />
+        android:textColor="@color/textColorLogin" />
 
     <TextView
         android:id="@+id/link_login"
@@ -78,8 +77,8 @@
         android:layout_height="wrap_content"
         android:text="Already a member? Login"
         android:textSize="16dip"
-        android:textColor="#ffffff"
-        android:layout_marginTop="100dp"
+        android:textColor="@color/textColorLogin"
+        android:layout_marginTop="80dp"
         android:gravity="center" />
 
 

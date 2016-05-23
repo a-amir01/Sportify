@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
@@ -49,7 +48,7 @@ public class SignupActivity extends AppCompatActivity {
     @Bind(R.id.input_email) EditText mEmailText;
     @Bind(R.id.input_password) EditText mPasswordText;
     @Bind(R.id.btn_signup) Button mSignupButton;
-    @Bind(R.id.link_login) TextView mSigninText;
+    //@Bind(R.id.link_login) TextView mSigninText;
     @Bind(R.id.input_name) EditText mNameText;
 
     /*Holds user info*/

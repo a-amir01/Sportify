@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -40,6 +41,8 @@ public class ForgotPasswordActivity extends AppCompatActivity{
     EditText mEmailText;
     @Bind(R.id.btn_forgot_password_email)
     Button mForgotPwdButton;
+    @Bind(R.id.link_remembered_password)
+    TextView mSigninText;
 
     /* Will hold the email from the form */
     String mEmail;
@@ -51,6 +54,14 @@ public class ForgotPasswordActivity extends AppCompatActivity{
      * */
     @OnClick(R.id.btn_forgot_password_email)
     void onClick(Button button) { sendEmail(); }
+
+    /* onClick()
+    * Annotation listener for the return to login link
+    * closes the activity and goes back to the
+    * signin page
+    * */
+    @OnClick(R.id.link_remembered_password)
+    void onClick() { finish(); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
