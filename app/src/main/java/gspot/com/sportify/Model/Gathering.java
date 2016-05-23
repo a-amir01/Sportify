@@ -1,3 +1,4 @@
+
 package gspot.com.sportify.Model;
 
 import android.content.Context;
@@ -58,12 +59,15 @@ public class Gathering{
     private HashMap mAttendees;
     private int mTimeOfDay;
     private String mDate;
+    private int attendeeSize;
+
 
     public Gathering() {
         mIsPrivate = false;
         mAttendees = new HashMap();
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
+        attendeeSize = 1;
     }
 
     public void setSportTitle (String title) { this.mGatheringTitle = title; }
@@ -86,6 +90,14 @@ public class Gathering{
 
     public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
+
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
 
     public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
     public boolean getIsPrivate () { return mIsPrivate; }
@@ -128,6 +140,8 @@ public class Gathering{
     public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
 
     public void removePending(String userUID) {mPendings.remove(userUID);}
+
+    public int getAttendeeSize(){ return mAttendees.size();}
 
     public int getStatus(String userUID){
         boolean attending = false;
@@ -183,3 +197,4 @@ public class Gathering{
         });
     }
 }
+

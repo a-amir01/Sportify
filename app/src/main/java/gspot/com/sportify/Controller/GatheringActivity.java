@@ -20,6 +20,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,8 @@ import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.DatePickerFragment;
+import gspot.com.sportify.utils.TimePickerFragment;
 
 
 /**
@@ -44,9 +47,19 @@ import gspot.com.sportify.utils.App;
  */
 public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener {
 
+    private static final String TAG =
+
+
+            DatePickerFragment.class.getSimpleName();
+    private static final int REQUEST_DATE = 0;
+
     private Gathering mgathering;
     private String m_hostID, mCurrentUser;
     private boolean toEdit;
+    private String mDateString;
+    private String mTimeString;
+    private Button dateButton;
+    private Button timeButton;
 
     @Bind(R.id.sport_title)
     EditText mTitleField;
@@ -54,10 +67,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     EditText mDescriptionField;
     @Bind(R.id.sport_location)
     EditText mLocationField;
-    @Bind(R.id.sport_date)
-    EditText mDateField;
-    @Bind(R.id.sport_time)
-    EditText mTimeField;
 
     @OnCheckedChanged(R.id.sport_status)
     void onCheckChanged(boolean isChecked) {
@@ -78,12 +87,36 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         }
     }
 
+    /**
+     * Prompts user to select a date and modifies the mDate field of mgathering
+     * which will be pushed to firebase once submit is clicked
+     *
+     */
+    @OnClick(R.id.datepicker)
+    void inputDate(Button dateButton) {
+        DatePickerFragment newFragment = new DatePickerFragment();
+
+        // display calendar dialog for picking date
+        newFragment.show(getFragmentManager(), "datepickerFragment");
+    }
+
+    /**
+     * Prompts user to select a time and modifies the mTime field of mgathering
+     * which will be pushed to firebase once submit is clicked
+     */
+    @OnClick(R.id.timepicker)
+    void inputTime() {
+        // Create timepicker dialog and show it
+        TimePickerFragment timeFragment = new TimePickerFragment();
+        timeFragment.show(getFragmentManager(), "timepickerFragment");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_gathering);
         ButterKnife.bind(this);
+
         Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
         sportTypeSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<CharSequence> Adapter1 = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.sport_types, android.R.layout.simple_spinner_item);
@@ -102,8 +135,16 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
             mTitleField.setText(App.mCurrentGathering.getSportTitle());
             mDescriptionField.setText(App.mCurrentGathering.getDescription());
             mLocationField.setText(App.mCurrentGathering.getLocation());
-            mDateField.setText(App.mCurrentGathering.getDate());
-            mTitleField.setText(App.mCurrentGathering.getTime());
+            //Set date and time box
+
+            dateButton = (Button) findViewById(R.id.datepicker);
+            dateButton.setText(App.mCurrentGathering.getmDate());
+
+            timeButton = (Button) findViewById(R.id.timepicker);
+            timeButton.setText((App.mCurrentGathering.getTime()));
+
+
+
             int sportspinnerPosition = Adapter1.getPosition(App.mCurrentGathering.getSID());
             sportTypeSpinner.setSelection(sportspinnerPosition);
 
@@ -157,11 +198,11 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     }
 
     private void updateGathering() {
-        App.mCurrentGathering.setDate(mDateField.getText().toString());
+       // App.mCurrentGathering.setDate(mDateField.getText().toString());
         App.mCurrentGathering.setSportTitle(mTitleField.getText().toString());
         App.mCurrentGathering.setDescription(mDescriptionField.getText().toString());
         App.mCurrentGathering.setLocation(mLocationField.getText().toString());
-        App.mCurrentGathering.setTime(mTimeField.getText().toString());
+      //  App.mCurrentGathering.setTime(mTimeField.getText().toString());
         App.mCurrentGathering.updateGathering();
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
@@ -185,16 +226,33 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
         /*Writes the gathering to databse*/
         mgathering.setID(sportRef.getKey());
-        mgathering.setDate(mDateField.getText().toString());
         mgathering.setSportTitle(mTitleField.getText().toString());
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
-        mgathering.setTime(mTimeField.getText().toString());
         mgathering.addAttendee(mCurrentUser);
         mgathering.addPending(mCurrentUser);
+        mgathering.setDate(mDateString);
+        mgathering.setTime(mTimeString);
         sportRef.setValue(mgathering);
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
         startActivity(intent);
+    }
+
+    /**
+     * Set date, to be called from DatePickerDialog
+     * @param newDate
+     */
+    public void setDateString(String newDate) {
+        mDateString = newDate;
+        Log.d(TAG, "date set to: " + mDateString);
+    }
+
+    /**
+     * Set date, to be called from TimePickerDialog
+     * @param mTimeString
+     */
+    public void setmTimeString(String mTimeString) {
+        this.mTimeString = mTimeString;
     }
 }

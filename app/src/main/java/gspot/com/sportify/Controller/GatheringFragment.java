@@ -50,6 +50,7 @@ public class GatheringFragment extends Fragment {
     private Profile mProfile;
 
     private String hostID, hostName, gatheringUID, mCurrentUser;
+    private int sizeofAttendees;
 
 
 
