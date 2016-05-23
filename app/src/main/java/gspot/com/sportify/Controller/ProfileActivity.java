@@ -73,7 +73,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     /* Member Variables */
-    private String mCurrentUser, currentUser, viewingUser;
+    private String mCurrentUser, currentUser, viewingUser, cameFrom;
     private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_OTHER);
     private Profile mProfile;
     private GspotCalendar mCalendar;
@@ -148,6 +148,7 @@ public class ProfileActivity extends BaseNavBarActivity {
         Intent intent = getIntent();
 
         viewingUser = intent.getStringExtra("viewingUser");
+        cameFrom = intent.getStringExtra("cameFrom");
         final android.content.Context context = this.getApplicationContext();
         Log.i(TAG,"UID" + viewingUser);
         mProfileRef = Profile.profileRef(viewingUser);
@@ -171,7 +172,7 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mCalendar = mProfile.getmCalendar();
 
                 //set the state here, so the expandable list adapter knows what state where in
-                if (mCurrentUser.equals(viewingUser)) {
+                if (mCurrentUser.equals(viewingUser) && cameFrom.equals("profile")) {
                     mState.setState(StateWrapper.State.VIEW_MINE);
                 }
 
@@ -183,7 +184,7 @@ public class ProfileActivity extends BaseNavBarActivity {
                 Log.i(TAG,"UID is "+ currentUser);
                 Log.i(TAG, "owner is" + viewingUser);
                 /* Give editing power to the owner of the profile */
-                if (mCurrentUser.equals(viewingUser)) {
+                if (mCurrentUser.equals(viewingUser) && cameFrom.equals("profile")) {
                     toggleToViewMine();
 
                 /* Ensure that an arbitrary user does not have access to edit profile */

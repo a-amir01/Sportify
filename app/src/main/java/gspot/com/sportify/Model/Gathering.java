@@ -59,7 +59,7 @@ public class Gathering{
     private HashMap mAttendees;
     private int mTimeOfDay;
     private String mDate;
-    private int attendeeSize;
+    private int attendeeSize, pendingSize;
 
 
     public Gathering() {
@@ -68,6 +68,7 @@ public class Gathering{
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
         attendeeSize = 1;
+        pendingSize = 0;
     }
 
     public void setSportTitle (String title) { this.mGatheringTitle = title; }
@@ -137,11 +138,19 @@ public class Gathering{
 
     public void addPending(String userUID) {mPendings.put(userUID, userUID);}
 
+    public void addPendingToAttending(String userUID)
+    {
+        mPendings.remove(userUID);
+        addAttendee(userUID);
+    }
+
     public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
 
     public void removePending(String userUID) {mPendings.remove(userUID);}
 
     public int getAttendeeSize(){ return mAttendees.size();}
+
+    public int getPendingSize(){ return mPendings.size();}
 
     public int getStatus(String userUID){
         boolean attending = false;
@@ -162,6 +171,7 @@ public class Gathering{
 
         return 0; // for new
     }
+
 
     public void updateAttendees(final Context context) {
 

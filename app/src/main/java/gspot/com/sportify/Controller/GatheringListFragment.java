@@ -177,7 +177,7 @@ public class GatheringListFragment extends Fragment {
             mAdapter = new SportAdapter(gatherings);
             /*set the data behind the list view*/
             mSportRecyclerView.setAdapter(mAdapter);
-        }/*end if*/
+        }
 
         /*only one sport will change at a time*/
         else {
