@@ -1,3 +1,4 @@
+
 package gspot.com.sportify.Model;
 
 import android.content.Context;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.UUID;
+import gspot.com.sportify.Model.Attendee;
 
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
@@ -57,7 +59,7 @@ public class Gathering{
     private HashMap mAttendees;
     private int mTimeOfDay;
     private String mDate;
-    private int attendeeSize;
+    private int attendeeSize, pendingSize;
 
     public Gathering() {
         mIsPrivate = false;
@@ -65,10 +67,11 @@ public class Gathering{
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
         attendeeSize = 1;
+        pendingSize = 0;
     }
 
-    public void setSportTitle (String title) { this.mGatheringTitle = title; }
-    public String getSportTitle () { return mGatheringTitle; }
+    public void setGatheringTitle (String title) { this.mGatheringTitle = title; }
+    public String getGatheringTitle () { return mGatheringTitle; }
 
     public void setLocation (String location) { this.mLocation = location; }
     public String getLocation () { return mLocation; }
@@ -134,12 +137,20 @@ public class Gathering{
 
     public void addPending(String userUID) {mPendings.put(userUID, userUID);}
 
+    public void addPendingToAttending(String userUID)
+    {
+        mPendings.remove(userUID);
+        addAttendee(userUID);
+    }
+
     public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
 
     public void removePending(String userUID) {mPendings.remove(userUID);}
 
     //public void setAttendeeSize() {attendeeSize = mAttendees.size();}
     public int getAttendeeSize(){ return mAttendees.size();}
+
+    public int getPendingSize(){ return mPendings.size();}
 
     public int getStatus(String userUID){
         boolean attending = false;
@@ -160,6 +171,7 @@ public class Gathering{
 
         return 0; // for new
     }
+
 
     public void updateAttendees(final Context context) {
 
@@ -185,4 +197,15 @@ public class Gathering{
             }
         });
     }
+
+    public void updateGathering() {
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+            }
+        });
+    }
+
 }
+

@@ -46,7 +46,7 @@ public class StarterActivity extends Activity {
         if(logged_in){
             Log.i(TAG, "Logged in");
             /*start the home activity*/
-            intent = new Intent(StarterActivity.this, GatheringListActivity.class); //Default Activity
+            intent = new Intent(StarterActivity.this, LoginActivity.class); //Default Activity
 
         } //end if
 
@@ -55,7 +55,7 @@ public class StarterActivity extends Activity {
             Log.i(TAG, "Not logged in yet");
 
             /*start the login activity*/
-            intent = new Intent(StarterActivity.this, GatheringListActivity.class);
+            intent = new Intent(StarterActivity.this, LoginActivity.class);
 
         } //end else
 
@@ -67,4 +67,3 @@ public class StarterActivity extends Activity {
     }//end onCreate
 
 } //end StarterActivity
-

@@ -3,10 +3,12 @@ package gspot.com.sportify.Controller;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 
@@ -37,9 +39,6 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
             case R.id.home:
                 intent = new Intent(this, GatheringListActivity.class);
-                /*clear the activity stack and make the profile the new root*/
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
                 break;
 
             case R.id.log_out:
@@ -54,18 +53,27 @@ public class BaseNavBarActivity extends AppCompatActivity {
                 break;
 
             case R.id.active:
-                Toast.makeText(this, "Active: not yet implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.history:
-                Toast.makeText(this, "History: not yet implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.profile:
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                String UID = prefs.getString(Constants.KEY_UID, "");
                 intent = new Intent(this, ProfileActivity.class);
-                startActivity(intent);
+                intent.putExtra("viewingUser", UID);
+                intent.putExtra("cameFrom", "profile");
                 break;
         }//end case
+
+        if(intent != null){
+            startActivity(intent);
+            finish();
+        }
 
         return super.onOptionsItemSelected(item);
     } //end onOptionsItemSelected
 } //end BaseNavBarActivity
+
 
