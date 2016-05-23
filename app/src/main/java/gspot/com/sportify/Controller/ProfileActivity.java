@@ -73,7 +73,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     /* Member Variables */
-    private String mCurrentUser;
+    private String mCurrentUser, currentUser, viewingUser;
     private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_OTHER);
     private Profile mProfile;
     private GspotCalendar mCalendar;
@@ -145,9 +145,12 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* Get the uid from shared preferences */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        Intent intent = getIntent();
 
+        viewingUser = intent.getStringExtra("viewingUser");
         final android.content.Context context = this.getApplicationContext();
-        mProfileRef = Profile.profileRef(mCurrentUser);
+        Log.i(TAG,"UID" + viewingUser);
+        mProfileRef = Profile.profileRef(viewingUser);
 
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
@@ -168,7 +171,7 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mCalendar = mProfile.getmCalendar();
 
                 //set the state here, so the expandable list adapter knows what state where in
-                if (mCurrentUser.equals(mProfile.getmOwner())) {
+                if (mCurrentUser.equals(viewingUser)) {
                     mState.setState(StateWrapper.State.VIEW_MINE);
                 }
 
@@ -177,8 +180,10 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 setMySportsAdapter(context);
 
+                Log.i(TAG,"UID is "+ currentUser);
+                Log.i(TAG, "owner is" + viewingUser);
                 /* Give editing power to the owner of the profile */
-                if (mCurrentUser.equals(mProfile.getmOwner())) {
+                if (mCurrentUser.equals(viewingUser)) {
                     toggleToViewMine();
 
                 /* Ensure that an arbitrary user does not have access to edit profile */
@@ -322,8 +327,8 @@ public class ProfileActivity extends BaseNavBarActivity {
         if (fragment == null) {
             fragment = new AddSportFragment();
             mFragManager.beginTransaction()
-                .add(R.id.profile_container, fragment)
-                .commit();
+                    .add(R.id.profile_container, fragment)
+                    .commit();
         }
     }
 

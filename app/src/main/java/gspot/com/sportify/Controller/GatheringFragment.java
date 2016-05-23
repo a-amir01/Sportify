@@ -63,9 +63,10 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_location) EditText mLocationField;
     @Bind(R.id.gathering_time) EditText mTimeField;
     @Bind(R.id.gathering_host) EditText mHost;
-    @Bind(R.id.gathering_attendees) EditText mAttendees;
     @Bind(R.id.gathering_delete) Button mDelete;
     @Bind(R.id.gathering_edit) Button mEdit;
+    @Bind(R.id.host_display) EditText mHostDisplay;
+    @Bind(R.id.attendees_display) EditText mAttendeesDisplay;
 
     @OnClick(R.id.gathering_delete)
     void onClick(Button button){
@@ -95,12 +96,22 @@ public class GatheringFragment extends Fragment {
     }
 
     @OnClick(R.id.gathering_edit)
-    void onClick2 (Button button) {
+    void onClickEdit (Button button) {
         Intent intent = new Intent(getActivity(), GatheringActivity.class);
         intent.putExtra("Edit", true);
         App.mCurrentGathering = mGathering;
         getActivity().finish();
         startActivity(intent);
+    }
+
+    @OnClick (R.id.attendees_display)
+    void onClickAttending()
+    {
+        Intent intent = new Intent(getActivity(), ViewAttendingPendingActivity.class);
+        App.mCurrentGathering = mGathering;
+        intent.putExtra("gatheringUID", mGathering.getID());
+        getActivity().finish();
+        getActivity().startActivity(intent);
     }
 
 
@@ -147,7 +158,7 @@ public class GatheringFragment extends Fragment {
                     mLocationField.setText(mGathering.getLocation());
 
                     hostID = mGathering.getHostID();
-
+                    mAttendeesDisplay.setText(" and " + (mGathering.getAttendeeSize() -1) + " others are going ");
                     getHostname(hostID);
                 }catch(Exception e) {}
 
@@ -194,6 +205,7 @@ public class GatheringFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mHost.setText( dataSnapshot.getValue(String.class));
+                mHostDisplay.setText(dataSnapshot.getValue(String.class));
             }
 
             @Override
