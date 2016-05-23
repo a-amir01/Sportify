@@ -303,4 +303,3 @@ public class GatheringListFragment extends Fragment {
 
 
 }//end SportListFragment
-

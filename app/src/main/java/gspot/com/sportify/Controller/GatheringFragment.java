@@ -55,10 +55,6 @@ public class GatheringFragment extends Fragment {
 
 
     private static final String ARG_SPORT_ID = "sport_id";
-
-    @OnClick(R.id.sport_submit)
-    @OnTextChanged(R.id.sport_title)
-    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setGatheringTitle(text.toString()); }
     ValueEventListener m_lis;
     Firebase gathering;
 
@@ -71,14 +67,17 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_edit) Button mEdit;
     @Bind(R.id.host_display) EditText mHostDisplay;
     @Bind(R.id.attendees_display) EditText mAttendeesDisplay;
+    @Bind(R.id.accept_pending) Button mPendingDisplay;
+
 
     @OnClick(R.id.gathering_delete)
-    void onClickDelete(Button button){
+    void onClick(Button button){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         int status = mGathering.getStatus(mCurrentUser);
+        App.mCurrentGathering = mGathering;
 
         if(status == 1){
             deleteGathering();
@@ -114,10 +113,33 @@ public class GatheringFragment extends Fragment {
         Intent intent = new Intent(getActivity(), ViewAttendingPendingActivity.class);
         App.mCurrentGathering = mGathering;
         intent.putExtra("gatheringUID", mGathering.getID());
+        intent.putExtra("cameFrom", "attending");
         getActivity().finish();
         getActivity().startActivity(intent);
     }
 
+    @OnClick(R.id.accept_pending)
+    void onClickPending()
+    {
+        Intent intent = new Intent(getActivity(), ViewAttendingPendingActivity.class);
+        App.mCurrentGathering = mGathering;
+        intent.putExtra("gatheringUID", mGathering.getID());
+        intent.putExtra("cameFrom", "pending");
+        getActivity().finish();
+        getActivity().startActivity(intent);
+    }
+
+    @OnClick (R.id.host_display)
+    void onClickHost()
+    {
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        App.mCurrentGathering = mGathering;
+        intent.putExtra("viewingUser", mGathering.getHostID());
+        intent.putExtra("cameFrom", "viewing");
+        Log.d(TAG, "HOSTID" + mGathering.getHostID());
+        getActivity().finish();
+        getActivity().startActivity(intent);
+    }
 
     /* will be called when a new SportFragment needs to be created
      * This method Creates a fragment instance and bundles up &
@@ -134,8 +156,8 @@ public class GatheringFragment extends Fragment {
     } //end newInstance
 
     @Override
-        public void onCreate(Bundle savedInstanceState)
-        {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         /*Get the gathering ID from the previous fragment*/
@@ -163,9 +185,13 @@ public class GatheringFragment extends Fragment {
                     hostID = mGathering.getHostID();
                     mAttendeesDisplay.setText(" and " + (mGathering.getAttendeeSize() -1) + " others are going ");
                     getHostname(hostID);
+                    if (mGathering == null) {
+                        mDelete.setText("Join");
+                    }
+                    else {
+                        setButton();
+                    }
                 }catch(Exception e) {}
-
-                setButton();
             }
 
             @Override
@@ -173,7 +199,6 @@ public class GatheringFragment extends Fragment {
                 Log.e(TAG, "Fire    BaseError " + firebaseError.getMessage());
             }
         };
-
         gathering.addValueEventListener(m_lis);
     }//end onCreate
 
@@ -186,13 +211,6 @@ public class GatheringFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.view_gathering, parent, false);
         ButterKnife.bind(this, view);
-        /**show the sport*/
-        mTitleField.setText(mGathering.getGatheringTitle());
-
-
-
-        //Writes to the database a key of "Test" and a value of the title of the sport selected
-
 
         /**root of the fragments layout, return null if no layout.*/
         return view;
@@ -209,12 +227,12 @@ public class GatheringFragment extends Fragment {
     }
 
     void getHostname(String hostID) {
-       Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
 
         profileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mHost.setText( dataSnapshot.getValue(String.class));
+                mHost.setText( "Hosted By: " + dataSnapshot.getValue(String.class));
                 mHostDisplay.setText(dataSnapshot.getValue(String.class));
             }
 
@@ -287,10 +305,20 @@ public class GatheringFragment extends Fragment {
         int status = mGathering.getStatus(mCurrentUser);
 
         Log.d(TAG, "STATUS" + status);
-        if(status == 1){ mDelete.setText("Delete");} //host
-        else if (status == 2) {mDelete.setText("Leave");} //attendee
-        else if (status == 3) {mDelete.setText("Remove Request");} // leave gatherig
+        if(status == 1) {
+            if(mGathering.getPendingSize() <= 0) mPendingDisplay.setVisibility(View.GONE);
+            mDelete.setText("Delete");
+        } //host
+        else if (status == 2) {
+            mPendingDisplay.setVisibility(View.GONE);
+            mDelete.setText("Leave");
+        } //attendee
+        else if (status == 3) {
+            mPendingDisplay.setVisibility(View.GONE);
+            mDelete.setText("Remove Request");
+        } // leave gatherig
         else {
+            mPendingDisplay.setVisibility(View.GONE);
             if (mGathering.getIsPrivate()) { mDelete.setText("Request"); }
             else { mDelete.setText("Join"); }
         }

@@ -63,6 +63,7 @@ public class BaseNavBarActivity extends AppCompatActivity {
                 String UID = prefs.getString(Constants.KEY_UID, "");
                 intent = new Intent(this, ProfileActivity.class);
                 intent.putExtra("viewingUser", UID);
+                intent.putExtra("cameFrom", "profile");
                 break;
         }//end case
 
