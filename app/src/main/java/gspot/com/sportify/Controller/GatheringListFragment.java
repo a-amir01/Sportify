@@ -108,6 +108,7 @@ public class GatheringListFragment extends Fragment {
                 break;
             case R.id.action_add:
                 Intent intent = new Intent(getActivity(), GatheringActivity.class);
+                //intent.putExtra("Edit", false);
                 getActivity().finish();
                 getActivity().startActivity(intent);
 

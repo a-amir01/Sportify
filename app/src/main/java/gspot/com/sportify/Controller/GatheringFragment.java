@@ -3,6 +3,7 @@ package gspot.com.sportify.Controller;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.BinderThread;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +64,7 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_host) EditText mHost;
     @Bind(R.id.gathering_attendees) EditText mAttendees;
     @Bind(R.id.gathering_delete) Button mDelete;
+    @Bind(R.id.gathering_edit) Button mEdit;
 
     @OnClick(R.id.gathering_delete)
     void onClick(Button button){
@@ -89,6 +91,15 @@ public class GatheringFragment extends Fragment {
                 joinGathering(); }
         }
 
+    }
+
+    @OnClick(R.id.gathering_edit)
+    void onClick2 (Button button) {
+        Intent intent = new Intent(getActivity(), GatheringActivity.class);
+        intent.putExtra("Edit", true);
+        App.mCurrentGathering = mGathering;
+        getActivity().finish();
+        startActivity(intent);
     }
 
 

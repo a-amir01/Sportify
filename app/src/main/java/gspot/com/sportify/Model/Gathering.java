@@ -173,4 +173,13 @@ public class Gathering{
             }
         });
     }
+
+    public void updateGathering() {
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+            }
+        });
+    }
 }

@@ -79,6 +79,15 @@
         android:background="@drawable/delete_button"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="right" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:id="@+id/gathering_edit"
+        android:layout_weight="0.19" />
+
 
 </LinearLayout>
