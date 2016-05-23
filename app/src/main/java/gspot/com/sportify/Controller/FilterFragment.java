@@ -59,7 +59,7 @@ public class FilterFragment extends DialogFragment implements AdapterView.OnItem
         String title = getArguments().getString("title");
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        final View view = inflater.inflate(R.layout.filter_fragment, null);
+        final View view = inflater.inflate(R.layout.filter__fragment, null);
 
         ButterKnife.bind(this, view);
 

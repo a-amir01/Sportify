@@ -61,7 +61,6 @@ public class Gathering{
     private String mDate;
     private int attendeeSize;
 
-
     public Gathering() {
         mIsPrivate = false;
         mAttendees = new HashMap();
@@ -70,8 +69,8 @@ public class Gathering{
         attendeeSize = 1;
     }
 
-    public void setSportTitle (String title) { this.mGatheringTitle = title; }
-    public String getSportTitle () { return mGatheringTitle; }
+    public void setGatheringTitle (String title) { this.mGatheringTitle = title; }
+    public String getGatheringTitle () { return mGatheringTitle; }
 
     public void setLocation (String location) { this.mLocation = location; }
     public String getLocation () { return mLocation; }
@@ -141,6 +140,7 @@ public class Gathering{
 
     public void removePending(String userUID) {mPendings.remove(userUID);}
 
+    //public void setAttendeeSize() {attendeeSize = mAttendees.size();}
     public int getAttendeeSize(){ return mAttendees.size();}
 
     public int getStatus(String userUID){
@@ -196,5 +196,6 @@ public class Gathering{
             }
         });
     }
+
 }
 

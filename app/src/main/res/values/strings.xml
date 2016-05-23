@@ -3,7 +3,11 @@
     <string name="app_name">Sportify</string>
     <string name="gathering_title_label">Title</string>
     <string name="gathering_title_hint">Enter a title for the event.</string>
-    <string name="title_activity_view_profile">ViewProfileActivity</string>
+
+    <string name="title_activity_view_profile">My Profile</string>
+    <string name="title_activity_forgot_pwd">Forgot Password</string>
+    <string name="title_activity_change_pwd">Change Password</string>
+
     <string name="calendar">Calendar</string>
     <string name="description_hint">\"Enter a description</string>
     <string name="hint_location">Enter a location</string>
@@ -15,8 +19,13 @@
     <string name="active">Active</string>
     <string name="action_filter">Filter</string>
     <string name="action_add">Add</string>
+    <string name="forgot_pwd">Forgot Password?</string>
+    <string name="email">Email</string>
+    <string name="email_password">Send Email</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_pwd_hint">New Password</string>
+    <string name="re_pwd_hint">Re-Enter New Password</string>
     <string name="msg_failed_to_get_intent_data">No image selected</string>
-
     <string-array name="skill_lv_array">
         <item>Beginner</item>
         <item>Intermediate</item>
@@ -35,6 +44,5 @@
         <item>Tennis</item>
     </string-array>
     <string name="no_sports">No Sports To Add</string>
-
 
 </resources>

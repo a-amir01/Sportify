@@ -55,6 +55,10 @@ public class GatheringFragment extends Fragment {
 
 
     private static final String ARG_SPORT_ID = "sport_id";
+
+    @OnClick(R.id.sport_submit)
+    @OnTextChanged(R.id.sport_title)
+    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setGatheringTitle(text.toString()); }
     ValueEventListener m_lis;
     Firebase gathering;
 
@@ -69,7 +73,7 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.attendees_display) EditText mAttendeesDisplay;
 
     @OnClick(R.id.gathering_delete)
-    void onClick(Button button){
+    void onClickDelete(Button button){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         /*Writes to myGathering list */
@@ -115,7 +119,6 @@ public class GatheringFragment extends Fragment {
     }
 
 
-
     /* will be called when a new SportFragment needs to be created
      * This method Creates a fragment instance and bundles up &
      * sets its arguments,
@@ -152,7 +155,7 @@ public class GatheringFragment extends Fragment {
                     mGathering = dataSnapshot.getValue(Gathering.class);
 
                     /*Retrieve text information from the database*/
-                    mTitleField.setText(mGathering.getSportTitle());
+                    mTitleField.setText(mGathering.getGatheringTitle());
                     mDescriptionField.setText(mGathering.getDescription());
                     mTimeField.setText(mGathering.getTime());
                     mLocationField.setText(mGathering.getLocation());
@@ -183,6 +186,13 @@ public class GatheringFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.view_gathering, parent, false);
         ButterKnife.bind(this, view);
+        /**show the sport*/
+        mTitleField.setText(mGathering.getGatheringTitle());
+
+
+
+        //Writes to the database a key of "Test" and a value of the title of the sport selected
+
 
         /**root of the fragments layout, return null if no layout.*/
         return view;

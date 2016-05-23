@@ -132,7 +132,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         Intent intent = getIntent();
         toEdit = intent.getBooleanExtra("Edit", false);
         if (toEdit) {
-            mTitleField.setText(App.mCurrentGathering.getSportTitle());
+            mTitleField.setText(App.mCurrentGathering.getGatheringTitle());
             mDescriptionField.setText(App.mCurrentGathering.getDescription());
             mLocationField.setText(App.mCurrentGathering.getLocation());
             //Set date and time box
@@ -199,7 +199,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
     private void updateGathering() {
        // App.mCurrentGathering.setDate(mDateField.getText().toString());
-        App.mCurrentGathering.setSportTitle(mTitleField.getText().toString());
+        App.mCurrentGathering.setGatheringTitle(mTitleField.getText().toString());
         App.mCurrentGathering.setDescription(mDescriptionField.getText().toString());
         App.mCurrentGathering.setLocation(mLocationField.getText().toString());
       //  App.mCurrentGathering.setTime(mTimeField.getText().toString());
@@ -226,7 +226,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
         /*Writes the gathering to databse*/
         mgathering.setID(sportRef.getKey());
-        mgathering.setSportTitle(mTitleField.getText().toString());
+        mgathering.setGatheringTitle(mTitleField.getText().toString());
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.addAttendee(mCurrentUser);
