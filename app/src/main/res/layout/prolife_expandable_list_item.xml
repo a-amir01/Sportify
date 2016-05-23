@@ -52,6 +52,7 @@
         android:background="@drawable/profile_button"
         android:textStyle="bold"
         android:paddingLeft="4dp"
-        android:paddingRight="4dp" />
+        android:paddingRight="4dp"
+        android:textSize="10dp" />
 
 </LinearLayout>

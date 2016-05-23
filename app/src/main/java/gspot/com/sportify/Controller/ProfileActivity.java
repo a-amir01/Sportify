@@ -148,9 +148,10 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-
+        Log.e(TAG, "On create Profile");
         /* link the widgets to the members */
         ButterKnife.bind(this);
 
@@ -163,7 +164,6 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
-        //mProfile = new Profile("Patrick Hayes", mCurrentUser);
 
         /* Populate the page with the user's information */
         mProfileRefListener = mProfileRef.addValueEventListener(new ValueEventListener() {
@@ -185,7 +185,9 @@ public class ProfileActivity extends BaseNavBarActivity {
                 }
 
                 /* Set up the calendar with times from the database */
-                populateCalendar();
+                if (mCalendar != null) {
+                    populateCalendar();
+                }
 
                 setMySportsAdapter(context);
 

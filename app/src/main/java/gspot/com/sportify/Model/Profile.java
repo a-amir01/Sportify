@@ -1,8 +1,10 @@
 package gspot.com.sportify.Model;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -15,6 +17,7 @@ import gspot.com.sportify.utils.Constants;
  * Represents and holds all of a user's information.
  * Created by patrickhayes on 5/3/16.
  */
+
 public class Profile {
 
     /* Set of information that each profile has */
