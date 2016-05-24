@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             // By default we just finish the Activity and log them in automatically
 
             //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
             startActivity(intent);
             finish();
         } //end if
@@ -202,7 +202,7 @@ public class LoginActivity extends AppCompatActivity {
                 //add the user id to shared prefences so we can id the user on any page
                 mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
                 //Goes to the SportsList page
-                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
                 startActivity(intent);
                 finish();
             }
