@@ -15,20 +15,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
-import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.R;
-import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
-
 
 /**
  * Authors amir assad, on 4/17/16
@@ -47,11 +40,9 @@ public class GatheringListFragment extends Fragment {
     private static final String TAG = GatheringListFragment.class.getSimpleName();
 
     private static final String POSITION_ID = "position_id";
-    private final static String SPORT_TYPE_ID= "sport_type_id";
 
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE = 0;
-    private static final int REQUEST_CODE_FILTER = 1;
 
     /*the View to hold our list of Sports*/
     private RecyclerView mSportRecyclerView;
@@ -59,11 +50,8 @@ public class GatheringListFragment extends Fragment {
     /*Use to maintain the data for list and produce the view*/
     private SportAdapter mAdapter;
 
-    private List<String> mChosenSports;
-
-    private boolean mIsPrivateEvent;
-
-    private String mSkillLevel;
+    /*position of the sport that will be Viewed*/
+    public int mSportPosition;
 
 
     /*
@@ -94,7 +82,7 @@ public class GatheringListFragment extends Fragment {
         return view;
     }/*end onCreateView*/
 
-    /*Load the toolbar onto the screen*/
+    /*Load the toobar onto the screen*/
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.i(TAG, "onCreateOptionsMenu()");
@@ -114,18 +102,18 @@ public class GatheringListFragment extends Fragment {
         Log.i(TAG, "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case R.id.action_filter:
-                Intent intent = new Intent(getActivity(), FilterActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_FILTER);
+                FragmentManager fm = getFragmentManager();
+                FilterFragment alertDialog = FilterFragment.newInstance("Filter");
+                alertDialog.show(fm, "fragment_alert");
                 break;
             case R.id.action_add:
-                intent = new Intent(getActivity(), GatheringActivity.class);
+                Intent intent = new Intent(getActivity(), GatheringActivity.class);
+                //intent.putExtra("Edit", false);
                 getActivity().finish();
                 getActivity().startActivity(intent);
 
                 break;
         }//end case
-
-
 
         /*the baseActivity will handle the other options*/
         return super.onOptionsItemSelected(item);
@@ -151,20 +139,21 @@ public class GatheringListFragment extends Fragment {
             return;
         }/*end if*/
 
-        /*update the UI based on the filter settings*/
-        if(requestCode == REQUEST_CODE_FILTER){
+        /*correct fragment being called*/
+        if(requestCode == REQUEST_CODE)
+        {
             if(data == null) return;
 
-            /*Get the sports that were chosen by the filter*/
-            mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
-            mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
-            mSkillLevel = data.getStringExtra(Constants.SKILL_LEVEL);
+            /*store the position of the list item that was changed*/
+            mSportPosition = data.getIntExtra(POSITION_ID, -1);
 
-            if(mChosenSports != null){
-                Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
-            }
+            /*No Value found for the Id*/
+            if(mSportPosition == -1) {
+                Log.i(TAG, "No value found for the id " + POSITION_ID );
+                return;
+            }/*end if*/
+        }/*end if*/
 
-        }
         updateUI();
     }//end onActivityResult
 
@@ -173,22 +162,13 @@ public class GatheringListFragment extends Fragment {
      * sports that were changed in the GatheringFragment
      */
     private void updateUI() {
-        Log.i(TAG, "updateUI() ");
+        Log.i(TAG, "updateUI() " + mSportPosition);
 
         /*get the Sports from the hosting activity*/
         SportLab sportLab = SportLab.get(getActivity());
 
         /*get all the Sports*/
         List<Gathering> gatherings = sportLab.getSports();
-
-        /*go through the list and set the filters*/
-        if(mChosenSports != null && mChosenSports.size() > 0){
-            for(int i = 0; i < gatherings.size(); i++){
-                Gathering event = gatherings.get(i);
-                if(!mChosenSports.contains(event.getGatheringTitle())/*&& event.isPrivate() != mIsPrivateEvent && event.getSkillLEvel.equals(mSkillLevel)*/)
-                    gatherings.remove(i);
-            }//end for
-        }//end if
 
         /*there are currently no gatherings listed*/
         if(mAdapter == null) {
@@ -201,7 +181,9 @@ public class GatheringListFragment extends Fragment {
 
         /*only one sport will change at a time*/
         else {
-            mAdapter.notifyDataSetChanged();
+            /*notify on gatherings's update*/
+            mAdapter.notifyItemChanged(mSportPosition);
+
         }/*end else*/
 
     }/*end updateUI*/
@@ -319,5 +301,5 @@ public class GatheringListFragment extends Fragment {
         public int getItemCount() { return mGatherings.size(); }
     }//end SportAdapter
 
-}//end SportListFragment
 
+}//end SportListFragment

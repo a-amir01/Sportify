@@ -84,7 +84,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     /* Member Variables */
-    private String mCurrentUser;
+    private String mCurrentUser, viewingUser, cameFrom;
     private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_TEAMMATE);
     private Profile mProfile;
     private GspotCalendar mCalendar;
@@ -158,9 +158,14 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* Get the uid from shared preferences */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+        Intent intent = getIntent();
 
+        viewingUser = intent.getStringExtra("viewingUser");
+        cameFrom = intent.getStringExtra("cameFrom");
         final android.content.Context context = this.getApplicationContext();
-        mProfileRef = Profile.profileRef(mCurrentUser);
+        Log.i(TAG,"UID" + viewingUser);
+        mProfileRef = Profile.profileRef(viewingUser);
+
 
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
@@ -180,22 +185,21 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mCalendar = mProfile.getmCalendar();
 
                 //set the state here, so the expandable list adapter knows what state where in
-                if (mCurrentUser.equals(mProfile.getmOwner())) {
+                if (mCurrentUser.equals(viewingUser) && cameFrom.equals("profile")) {
                     mState.setState(StateWrapper.State.VIEW_MINE);
                 }
 
                 /* Set up the calendar with times from the database */
-                if (mCalendar != null) {
-                    populateCalendar();
-                }
+                populateCalendar();
 
                 setMySportsAdapter(context);
 
+                Log.i(TAG, "owner is" + viewingUser);
                 /* Give editing power to the owner of the profile */
-                if (mCurrentUser.equals(mProfile.getmOwner())) {
+                if (mCurrentUser.equals(viewingUser) && cameFrom.equals("profile")) {
                     toggleToViewMine();
 
-                /* Ensure that an arbitrary user does not have access to edit profile*/
+                /* Ensure that an arbitrary user does not have access to edit profile */
                 } else if (mProfile.isATeammate(mCurrentUser)){
                     toggleToViewMate();
                 } else {
