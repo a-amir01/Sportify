@@ -30,12 +30,15 @@ import gspot.com.sportify.utils.Constants;
  * and log the user in to the system.
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     /*Code for when the User requests sign up*/
     private static final int REQUEST_SIGNUP = 0;
+
+    /* Code for when the User requests forgot password */
+    private static final int REQUEST_PASSWORD = 1;
 
     /* A reference to the Firebase */
     private Firebase mFirebaseRef;
@@ -53,12 +56,16 @@ public class LoginActivity extends AppCompatActivity {
     /*Dialog box */
     ProgressDialog progressDialog;
 
+    /* Will hold the email and password from the form */
+    String mEmail, mPassword;
+
 
     /*link to the widgets*/
     @Bind(R.id.input_email) EditText mEmailText;
     @Bind(R.id.input_password) EditText mPasswordText;
     @Bind(R.id.btn_login) Button mLoginButton;
     @Bind(R.id.link_signup) TextView mSignupText;
+
 
     /* onClick()
      * Annotation listener for the login button
@@ -79,7 +86,24 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
 
         /*expecting data to be returned by SignupActivity*/
-        startActivityForResult(intent, REQUEST_SIGNUP);
+//        startActivityForResult(intent, REQUEST_SIGNUP);
+
+        /* Start SignupActivity */
+        startActivity(intent);
+    }//end onClick()
+
+    /* onClick()
+     * Annotation listener for the forgot password link
+     * Once the link is clicked the forgot password activity is started
+     * */
+    @OnClick(R.id.link_forgot_pwd)
+    void onClick (TextView view) {
+        Log.i(TAG, "onClick for forgot password");
+        /*create an intent to start the activity*/
+        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+
+        /*expecting data to be returned by SignupActivity*/
+        startActivityForResult(intent, REQUEST_PASSWORD);
     }//end onClick()
 
     @Override
@@ -117,21 +141,21 @@ public class LoginActivity extends AppCompatActivity {
             return;
         } //end if
 
-        if (requestCode == REQUEST_SIGNUP) {
-            /*successful sign up do not show the log in page anymore*/
-            setFirstTimePreference();
-            /*empty intent passed in*/
-            //TODO this needs to be verified later
-            //if(data == null) return;
-
-            // TODO: Implement successful signup logic here
-            // By default we just finish the Activity and log them in automatically
-
-            //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
-            startActivity(intent);
-            finish();
-        } //end if
+//        if (requestCode == REQUEST_SIGNUP) {
+//            /*successful sign up do not show the log in page anymore*/
+//            setFirstTimePreference();
+//            /*empty intent passed in*/
+//            //TODO this needs to be verified later
+//            //if(data == null) return;
+//
+//            // TODO: Implement successful signup logic here
+//            // By default we just finish the Activity and log them in automatically
+//
+//            //Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+//            Intent intent = new Intent(getApplicationContext(), GatheringListActivity.class);
+//            startActivity(intent);
+//            finish();
+//        } //end if
 
     } //end onActivityResult
 
@@ -151,18 +175,18 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         Log.d(TAG, "Login");
 
-        String email = mEmailText.getText().toString();
-        String password = mPasswordText.getText().toString();
+        mEmail = mEmailText.getText().toString();
+        mPassword = mPasswordText.getText().toString();
 
         //Checks user input
-        if(email.equals(""))
+        if(mEmail.equals(""))
         {
             mEmailText.setError("Please enter a valid email");
             return;
         }
 
         //Checks user input
-        if(password.equals(""))
+        if(mPassword.equals(""))
         {
             mPasswordText.setError("Please enter a valid password");
             return;
@@ -174,7 +198,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
         //Authenticate user input through firebase
-        mFirebaseRef.authWithPassword(email, password,
+        mFirebaseRef.authWithPassword(mEmail, mPassword,
                 new MyAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
     } //end login()
@@ -198,12 +222,31 @@ public class LoginActivity extends AppCompatActivity {
 
             if(authData != null)
             {
+                Log.v(TAG, "Data is not null");
                 setFirstTimePreference();
-                //add the user id to shared prefences so we can id the user on any page
+                //add the user id to shared preferences so we can id the user on any page
                 mSharedPrefEditor.putString(Constants.KEY_UID, authData.getUid()).apply();
+
                 //Goes to the SportsList page
                 Intent intent = new Intent(LoginActivity.this, GatheringListActivity.class);
                 startActivity(intent);
+
+                /* Send the user to change their password if the password is temporary */
+                if((Boolean) authData.getProviderData().get("isTemporaryPassword")) {
+                    Log.v(TAG, "Password Is Temporary");
+                    // Create an intent to send the user to change the
+                    // password
+                    Intent cPIntent = new Intent(LoginActivity.this,
+                            ChangePasswordActivity.class);
+
+                    // Send the user's email and temporary password with the intent
+                    cPIntent.putExtra("Email", mEmail);
+                    cPIntent.putExtra("TempPwd", mPassword);
+
+                    // Start the intent
+                    startActivity(cPIntent);
+                } //end if
+
                 finish();
             }
 
