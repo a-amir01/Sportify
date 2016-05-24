@@ -1,30 +1,40 @@
 package gspot.com.sportify.Controller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -41,6 +51,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -73,8 +84,8 @@ public class ProfileActivity extends BaseNavBarActivity {
     private static final String TAG = ProfileActivity.class.getSimpleName();
 
     /* Member Variables */
-    private String mCurrentUser, currentUser, viewingUser, cameFrom;
-    private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_OTHER);
+    private String mCurrentUser, viewingUser, cameFrom;
+    private StateWrapper mState = new StateWrapper(StateWrapper.State.VIEW_TEAMMATE);
     private Profile mProfile;
     private GspotCalendar mCalendar;
     private ImageView[][] mDaysOfWeek = new ImageView[7][4]; // Each calendar box
@@ -84,6 +95,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     private FragmentManager mFragManager;
     private Firebase mProfileRef;
     private ValueEventListener mProfileRefListener;
+    private ExpandableListAdapter mListAdapter;
 
     /* Bind the buttons and text fields */
     // @Bind(R.id.sport_title) EditText mTitleField;
@@ -99,7 +111,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     @Bind(R.id.profile_picture)
     ImageView mProfilePicture;
     @Bind(R.id.add_sport)
-    Button mAddSport;
+    ImageButton mAddSport;
     @Bind(R.id.sports_list)
     ExpandableListView mSportsList;
     @Bind(R.id.no_sports)
@@ -136,9 +148,10 @@ public class ProfileActivity extends BaseNavBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-
+        Log.e(TAG, "On create Profile");
         /* link the widgets to the members */
         ButterKnife.bind(this);
 
@@ -153,6 +166,7 @@ public class ProfileActivity extends BaseNavBarActivity {
         Log.i(TAG,"UID" + viewingUser);
         mProfileRef = Profile.profileRef(viewingUser);
 
+
         /* Updates and creates listeners for each calendar time cell */
         updateCalendarView();
 
@@ -163,8 +177,7 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 /* Create a user profile object from data in the database */
                 mProfile = dataSnapshot.getValue(Profile.class);
-
-                /* Retrieve text information from the database */
+                /* Retrieve text information from the database*/
                 mName.setText(mProfile.getmName());
                 mProfilePicture.setImageBitmap(UserPicture.StringToBitMap(mProfile.getmProfilePic()));
                 mBio.setText(mProfile.getmBio());
@@ -181,7 +194,6 @@ public class ProfileActivity extends BaseNavBarActivity {
 
                 setMySportsAdapter(context);
 
-                Log.i(TAG,"UID is "+ currentUser);
                 Log.i(TAG, "owner is" + viewingUser);
                 /* Give editing power to the owner of the profile */
                 if (mCurrentUser.equals(viewingUser) && cameFrom.equals("profile")) {
@@ -204,24 +216,7 @@ public class ProfileActivity extends BaseNavBarActivity {
         });
     }
 
-    /**
-     * Calls all the neccessary methods to set up the expandable list adapter
-     * Should be called every time the data in the expandable list changes
-     * @param context
-     */
-    void setMySportsAdapter(android.content.Context context) {
-        /* adapter */
-        prepareListData();
 
-        ExpandableListAdapter listAdapter = new ProfileExpandableListAdapter(context, mSportsParent, mSportsChildren, mState, mProfile);
-
-
-        mSportsList.setAdapter(listAdapter);
-        mSportsList.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
-
-        //if the person doesn't have any sport profiles tell them
-        displayNoSportsMessage();
-    }
 
     /*inflates a custom drop down menu and hides certain members
     * The implementation of each field in the main menu will be done
@@ -305,7 +300,7 @@ public class ProfileActivity extends BaseNavBarActivity {
     }
 
     /**
-     * Opens a fragment so a user add a new sport to their profile.
+     * Opens a dialog so a user add a new sport to their profile.
      * Displays all the possible sports they can choose from.
      */
     @OnClick(R.id.add_sport)
@@ -320,17 +315,52 @@ public class ProfileActivity extends BaseNavBarActivity {
             return;
         }
 
-
         mFragManager = getSupportFragmentManager();
-        Fragment fragment = mFragManager.findFragmentById(R.id.profile_container);
+        DialogFragment fragment = new AddSportFragment();
+        fragment.show(mFragManager,"Add Sport");
 
+        /*AlertDialog.Builder builderSingle = new AlertDialog.Builder(ProfileActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = (View) inflater.inflate(R.layout.sport_type, null);
 
-        if (fragment == null) {
-            fragment = new AddSportFragment();
-            mFragManager.beginTransaction()
-                    .add(R.id.profile_container, fragment)
-                    .commit();
+        builderSingle.setView(convertView);
+        builderSingle.setTitle("Select a sport to add to your profile");
+
+        List<String> sport_types = new ArrayList<String> (Arrays.asList(res.getStringArray(R.array.sport_types)));
+        List<String> currentSports = getMySportList();
+
+        //I user shouldn't be able to ave two basketball profiles, so hide all the sports they
+        //already have a profile for
+        if (currentSports != null) {
+            sport_types.removeAll(currentSports);
         }
+
+        final ListAdapter sportTypeListAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_sport_type, sport_types);
+        builderSingle.setAdapter(sportTypeListAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+                if (mProfile.getmMySports() == null) {
+                    mProfile.setmMySports(new ArrayList<MySport>());
+                }
+                //get the title of the sport from sport_type, then make a new MySport and add
+                //it to the users profile
+                mProfile.getmMySports().add(new MySport((String) sportTypeListAdapter.getItem(position)));
+
+                setMySportsAdapter(ProfileActivity.this);
+
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.show();
+        */
     }
 
     /**
@@ -357,11 +387,13 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* If the user is available at this time, set button to green */
         if (mCalendar.getAvailability(day, time)) {
-            mDaysOfWeek[day][time].setImageResource(R.color.available);
+            mDaysOfWeek[day][time].setImageResource(R.drawable.ic_check_box_filled);
+            mDaysOfWeek[day][time].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
         /* If the user is busy at this time, set button to red */
         } else {
-            mDaysOfWeek[day][time].setImageResource(R.color.busy);
+            mDaysOfWeek[day][time].setImageResource(R.drawable.ic_check_box_outline);
+            mDaysOfWeek[day][time].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -511,13 +543,15 @@ public class ProfileActivity extends BaseNavBarActivity {
         for (int i = 0; i < Constants.NUM_DAYS_OF_WEEK; ++i) {
             for (int j = 0; j < Constants.NUM_TIMES_OF_DAY; ++j) {
 
-                /* Set the color to green if available */
+                /* Set the checkout box to filled if available */
                 if (mCalendar.getAvailability(i, j)) {
-                    mDaysOfWeek[i][j].setImageResource(R.color.available);
+                    mDaysOfWeek[i][j].setImageResource(R.drawable.ic_check_box_filled);
+                    mDaysOfWeek[i][j].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
-                /* Set the color to red if busy */
+                /* Set the checkbox to empty if unavailable*/
                 } else {
-                    mDaysOfWeek[i][j].setImageResource(R.color.busy);
+                    mDaysOfWeek[i][j].setImageResource(R.drawable.ic_check_box_outline);
+                    mDaysOfWeek[i][j].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 }
 
             }
@@ -554,6 +588,26 @@ public class ProfileActivity extends BaseNavBarActivity {
                 mDaysOfWeek[i][j].setTag(new Integer(i * Constants.TAG_CODE + j));
             }
         }
+    }
+
+
+    /**
+     * Calls all the neccessary methods to set up the expandable list adapter
+     * Should be called every time the data in the expandable list changes
+     * @param context
+     */
+    void setMySportsAdapter(android.content.Context context) {
+        /* adapter */
+        prepareListData();
+
+        mListAdapter = new ProfileExpandableListAdapter(context, mSportsParent, mSportsChildren, mState, mProfile);
+
+
+        mSportsList.setAdapter(mListAdapter);
+        mSportsList.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+
+        //if the person doesn't have any sport profiles tell them
+        displayNoSportsMessage();
     }
 
 

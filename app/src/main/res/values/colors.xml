@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#FF5252</color>
     <color name="colorPrimaryText">#212121</color>
-    <color name="colorPrimaryTextInverse">#FFFFFF</color>
+    <color name="colorPrimaryTextInverse">#ffffff</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="available">#33bd2c</color>
     <color name="busy">#d21d1d</color>

@@ -46,7 +46,8 @@ public class StarterActivity extends Activity {
         if(logged_in){
             Log.i(TAG, "Logged in");
             /*start the home activity*/
-            intent = new Intent(StarterActivity.this, LoginActivity.class); //Default Activity
+
+            intent = new Intent(StarterActivity.this, GatheringListActivity.class); //Default Activity
 
         } //end if
 

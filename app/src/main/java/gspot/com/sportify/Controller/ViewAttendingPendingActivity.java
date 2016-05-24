@@ -1,21 +1,16 @@
 package gspot.com.sportify.Controller;
 
-import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.core.Tag;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,11 +20,9 @@ import android.widget.ListView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
-import gspot.com.sportify.utils.Constants;
 
 /**
  * This file views the attending List of Pending List
@@ -44,17 +37,15 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
     //Holds the UserUID
     private ArrayList<String> userUID = new ArrayList();
     private String gatheringUID, cameFrom;
-    ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> adapter;
     private Profile mProfile;
-    private ListView list;
-    //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    //String currentUID = prefs.getString(Constants.KEY_UID, "");
     @Bind (R.id.view_status) EditText mStatus;
+    @Bind(R.id.list_of_pending_requests_or_attendees) ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_attending_pending);
+        setContentView(R.layout.view_pending_attending);
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
@@ -69,9 +60,9 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
 
         mStatus.setEnabled(false);
 
+
         loadUserUID(gatheringUID);
-        populateListView(list);
-        list.requestLayout();
+        list.setAdapter(adapter);
         registerClickCallBack();
 
 
@@ -81,30 +72,19 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
 
     } //end onCreate()
 
-    private void populateListView (ListView list){
-
-        Log.d(TAG, "size of userList before "+ userList.size());
-
-        Log.d(TAG, "size of userList after "+ userList.size());
-        adapter.notifyDataSetChanged();
-        list.setAdapter(adapter);
-        list.requestLayout();
-
-    }
 
     void getHostname(String hostID) {
-        // Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
-        Firebase profileRef = App.dbref.child("profiles").child(hostID).child("mName");
+        Firebase profileRef = Profile.profileRef(hostID);
 
-        profileRef.addValueEventListener(new ValueEventListener() {
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String name =  dataSnapshot.getValue(String.class);
+                String name =  dataSnapshot.getValue(Profile.class).getmName();
+                if (name == null ) { name = "Please don't crash"; }
                 userList.add(name);
-                Log.d(TAG, "NAME" + name);
+                Log.d(TAG, "NAME " + name);
                 adapter.notifyDataSetChanged();
-                //list.requestLayout();
             }
 
             @Override
@@ -117,38 +97,38 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
 
     private void registerClickCallBack()
     {
-        ListView list = (ListView) findViewById(R.id.view_list);
-        if (list == null) throw new AssertionError();
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+        if (list != null) {
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
 
-                if(cameFrom.equals("attending")) {
-                    Intent intent = new Intent(listView.getContext(), ProfileActivity.class);
-                    String UID = userUID.get(position);
-                    intent.putExtra("viewingUser", UID);
-                    intent.putExtra("cameFrom", "list");
-                    //intent.putExtra("currentUser", currentUID);
-                    Log.i(TAG, "UID" + UID);
-                    listView.getContext().startActivity(intent);
-                    //or create other intents here
-                }
+                    if(cameFrom.equals("attending")) {
+                        Intent intent = new Intent(listView.getContext(), ProfileActivity.class);
+                        String UID = userUID.get(position);
+                        intent.putExtra("viewingUser", UID);
+                        intent.putExtra("cameFrom", "list");
+                        Log.i(TAG, "UID" + UID);
+                        listView.getContext().startActivity(intent);
+                        //or create other intents here
+                    }
 
-                else if(cameFrom.equals("pending"))
-                {
-                    String UID = userUID.get(position);
-                    App.mCurrentGathering.addPendingToAttending(UID);
-                    App.mCurrentGathering.updatePending(getApplicationContext());
-                    userList.remove(position);
-                    adapter.notifyDataSetChanged();
+                    else if(cameFrom.equals("pending"))
+                    {
+                        String UID = userUID.get(position);
+                        App.mCurrentGathering.addPendingToAttending(UID);
+                        App.mCurrentGathering.updatePending(getApplicationContext());
+                        userList.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            Log.e("TAG", "LOOLOOOLLOLOLLOOLLOLLLLOOLL");
+        }
     }
 
 
     private void loadUserUID (String gatheringUID) {
-        list = (ListView) findViewById(R.id.view_list);
         userUID.clear();
 
 
@@ -168,6 +148,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 Log.d(TAG, userUID.size() + " is the size of the list after none iteration");
                 for (DataSnapshot attendeeSnapshot: dataSnapshot.getChildren()) {
                     String participant = attendeeSnapshot.getValue (String.class);
+                    Log.e(TAG,"HHHHHHHHHH " + participant);
                     userUID.add(participant);
                     getHostname(participant);
                     Log.d(TAG, userUID.size() + " is the size of the list after iteration");

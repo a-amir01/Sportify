@@ -52,9 +52,6 @@ public class GatheringFragment extends Fragment {
     private String hostID, hostName, gatheringUID, mCurrentUser;
     private int sizeofAttendees;
 
-
-
-    private static final String ARG_SPORT_ID = "sport_id";
     ValueEventListener m_lis;
     Firebase gathering;
 
@@ -149,7 +146,7 @@ public class GatheringFragment extends Fragment {
     public static GatheringFragment newInstance(String sportId) {
         Log.d(TAG, "newInstance()");
         Bundle args = new Bundle();
-        args.putString(ARG_SPORT_ID, sportId);    /*store the sportId for later retreival*/
+        args.putString(Constants.ARG_SPORT_ID, sportId);    /*store the sportId for later retreival*/
         GatheringFragment fragment = new GatheringFragment();   /*create a new instance of the fragment*/
         fragment.setArguments(args);                    /*bundle up the arguments*/
         return fragment;

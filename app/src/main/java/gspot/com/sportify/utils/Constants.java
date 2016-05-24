@@ -43,6 +43,10 @@ public class Constants {
     public static final int NUM_DAYS_OF_WEEK = 7;
     public static final int TAG_CODE = 10;
 
+    /*Constants for Gatherings */
+    public static final String ARG_SPORT_ID = "sport_id";
+
+
     /*Constants for Profile Pictures */
     // this is the action code we use in our intent,
     // this way we know we're looking at the response from our own action
