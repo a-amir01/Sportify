@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
      * Once the link is clicked the signup activity is started
      * */
     @OnClick(R.id.link_signup)
-    void onClick () {
+    void onClickSignUp() {
         Log.i(TAG, "onClick for signup");
         /*create an intent to start the activity*/
         Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
@@ -82,6 +82,20 @@ public class LoginActivity extends AppCompatActivity {
 //        startActivityForResult(intent, REQUEST_SIGNUP);
 
         /* Start SignupActivity */
+        startActivity(intent);
+    }//end onClick()
+
+    /* onClick()
+     * Annotation listener for the forgot password link
+     * Once the link is clicked the forgot password activity is started
+     * */
+    @OnClick(R.id.link_forgot_pwd)
+    void onClickForgotPassword() {
+        Log.i(TAG, "onClick for ForgotPassword");
+        /*create an intent to start the activity*/
+        Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+
+        /* Start ForogotPasswordActivity */
         startActivity(intent);
     }//end onClick()
 

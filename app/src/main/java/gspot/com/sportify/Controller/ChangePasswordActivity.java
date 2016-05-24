@@ -39,6 +39,7 @@ public class ChangePasswordActivity extends Activity {
     @Bind(R.id.btn_change_password)
     Button mChangePwdButton;
 
+
     /* mEmail: will hold the email passed in with the intent
      * mTempPwd: will hold the temporary password from the form
      * mNewPwd: will hold the new password from the form
@@ -52,6 +53,7 @@ public class ChangePasswordActivity extends Activity {
      * */
     @OnClick(R.id.btn_change_password)
     void onClick(Button button) { changePassword(); }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
