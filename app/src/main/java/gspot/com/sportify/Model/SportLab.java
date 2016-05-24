@@ -29,30 +29,7 @@ public class SportLab {
     private SportLab(Context context){
         Log.i(TAG, "SportLab()");
 
-        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Gatherings");
-        gatheringRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                App.mGatherings.removeAll(App.mGatherings);
-                for (DataSnapshot gatheringSnapshot: dataSnapshot.getChildren()) {
-                    Gathering gathering = new Gathering();
-                    gathering = gatheringSnapshot.getValue (Gathering.class);
-                    App.mGatherings.add(gathering);
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
-
-            }
-        });
-
-
-
-
-
-
+        loadGatherings();
 
     }//end SportLab()
 
@@ -81,5 +58,25 @@ public class SportLab {
         return null;
     }//end getSport
 
+    void loadGatherings() {
+        Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Gatherings");
+        gatheringRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                App.mGatherings.removeAll(App.mGatherings);
+                for (DataSnapshot gatheringSnapshot: dataSnapshot.getChildren()) {
+                    Gathering gathering = new Gathering();
+                    gathering = gatheringSnapshot.getValue (Gathering.class);
+                    App.mGatherings.add(gathering);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e(TAG, "FireBaseError " + firebaseError.getMessage());
+
+            }
+        });
+    }
 
 }

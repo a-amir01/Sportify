@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import gspot.com.sportify.utils.Constants;
+import gspot.com.sportify.utils.DataBaseSports;
 
 /**
  * Created by amir assad on 4/17/16.
@@ -27,6 +28,11 @@ public class StarterActivity extends Activity {
 
         Log.i(TAG, "onCreate()");
 
+        /*start fresh and delete the file that is stored on user device*/
+        Log.i(TAG, "Deleteting file " + Constants.FILE_NAME + " from device");
+        deleteFile(Constants.FILE_NAME);
+
+
         /*the value stored here will remain on device until the app is deleted*/
         SharedPreferences settings = getSharedPreferences(Constants.STARTER_ID, Context.MODE_PRIVATE);
 
@@ -40,6 +46,7 @@ public class StarterActivity extends Activity {
         if(logged_in){
             Log.i(TAG, "Logged in");
             /*start the home activity*/
+
             intent = new Intent(StarterActivity.this, GatheringListActivity.class); //Default Activity
 
         } //end if
@@ -59,5 +66,5 @@ public class StarterActivity extends Activity {
         finish();
 
     }//end onCreate
-} //end StarterActivity
 
+} //end StarterActivity

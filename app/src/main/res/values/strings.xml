@@ -44,5 +44,10 @@
         <item>Tennis</item>
     </string-array>
     <string name="no_sports">No Sports To Add</string>
+    <string name="morning">Morning</string>
+    <string name="afternoon">Afternoon</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
+    <string name="save">Save</string>
 
 </resources>

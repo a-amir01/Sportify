@@ -44,7 +44,7 @@ import gspot.com.sportify.utils.Constants;
  * a sport, this fragments adds the sport to their profile
  * with default values which the user can modify.
  */
-public class AddSportFragment extends Fragment {
+public class AddSportFragment extends DialogFragment {
 
     private Profile mProfile;
 
@@ -61,11 +61,9 @@ public class AddSportFragment extends Fragment {
      * Called when Add Button is Pressed. (To be continued)
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
-        super.onCreate(savedInstanceState);
-
-
+        return super.onCreateDialog(savedInstanceState);
     }
 
     /** On Create View Method

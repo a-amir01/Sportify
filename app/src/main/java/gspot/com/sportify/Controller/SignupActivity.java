@@ -141,9 +141,9 @@ public class SignupActivity extends AppCompatActivity {
 
                 //store the information in firebase web
                 Profile profile = new Profile(name, (String) result.get("uid"));
-                MyGatherings gatheringList = new MyGatherings((String)result.get("uid"));
+                //MyGatherings gatheringList = new MyGatherings((String)result.get("uid"));
                 mFirebaseRef.child("profiles").child((String)result.get("uid")).setValue(profile);
-                mFirebaseRef.child("MyGatherings").child((String)result.get("uid")).setValue(gatheringList);
+                //mFirebaseRef.child("MyGatherings").child((String)result.get("uid")).setValue(gatheringList);
                 //mFirebaseRef.child("myEvents").child((String) result.get("uid"));
 
                 /*store the users uid in shared preferences so we know who they are */
