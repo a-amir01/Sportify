@@ -47,6 +47,17 @@ public class GatheringFragment extends Fragment {
     private String hostID, hostName, gatheringUID;
 
     private static final String ARG_SPORT_ID = "sport_id";
+
+
+    @Bind(R.id.sport_title) EditText mTitleField;
+    @Bind(R.id.sport_description) EditText mDescriptionField;
+    @Bind(R.id.sport_location) EditText mLocationField;
+    @Bind(R.id.sport_time) EditText mTimeField;
+
+    @OnClick(R.id.sport_submit)
+    void onClick(Button button){submitGathering();}
+    @OnTextChanged(R.id.sport_title)
+    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportName(text.toString()); }
     ValueEventListener m_lis;
     Firebase gathering;
 
@@ -70,6 +81,7 @@ public class GatheringFragment extends Fragment {
         getActivity().finish();
         startActivity(intent);
     }
+
 
     /* will be called when a new SportFragment needs to be created
      * This method Creates a fragment instance and bundles up &
@@ -136,6 +148,13 @@ public class GatheringFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.view_gathering, parent, false);
         ButterKnife.bind(this, view);
+        /**show the sport*/
+        mTitleField.setText(mGathering.getSportName());
+
+
+
+        //Writes to the database a key of "Test" and a value of the title of the sport selected
+
 
         /**root of the fragments layout, return null if no layout.*/
         return view;

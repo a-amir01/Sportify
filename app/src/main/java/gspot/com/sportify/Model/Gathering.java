@@ -1,13 +1,19 @@
 package gspot.com.sportify.Model;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.UUID;
 
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Authors Amir Assad, massoudmaher on 5/1/16.
@@ -47,16 +53,18 @@ public class Gathering{
     private String mSID;
     public String mID;
     private boolean mIsPrivate;
-    private ArrayList<String> mAttendees;
-    private ArrayList<String> mPendings;
+    private HashMap mPendings;
+    private HashMap mAttendees;
     private int mTimeOfDay;
     private String mDate;
+    private int attendeeSize;
 
     public Gathering() {
         mIsPrivate = false;
-        mAttendees = new ArrayList<String>();
-        mPendings = new ArrayList<String>();
+        mAttendees = new HashMap();
+        mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
+        attendeeSize = 1;
     }
 
     public void setSportTitle (String title) { this.mGatheringTitle = title; }
@@ -80,14 +88,22 @@ public class Gathering{
     public void setID (String ID) { this.mID = ID; }
     public String getID () { return mID; }
 
+    public String getmDate() {
+        return mDate;
+    }
+
+    public void setmDate(String mDate) {
+        this.mDate = mDate;
+    }
+
     public void setIsPrivate (boolean isPrivate) { this.mIsPrivate = isPrivate; }
     public boolean getIsPrivate () { return mIsPrivate; }
 
-    public void setAttendees(ArrayList<String> attendees) { this.mAttendees = attendees; }
-    public ArrayList<String> getAttendees () { return mAttendees; }
+    public void setAttendees(HashMap attendees) { this.mAttendees = attendees; }
+    public HashMap getAttendees () { return mAttendees; }
 
-    public void setPending(ArrayList<String> pendings) { this.mPendings = pendings; }
-    public ArrayList<String> getPendings () { return mPendings; }
+    public void setPendings(HashMap pendings) {this.mPendings = pendings;}
+    public HashMap getPendings() {return mPendings;}
 
     public void setTimeOfDay (int timeofDay) { this.mTimeOfDay = timeofDay; }
     public int getTimeOfDay () { return mTimeOfDay; }
@@ -96,10 +112,77 @@ public class Gathering{
     public String getDate () { return mDate; }
 
     public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
+    public SkillLevel toSkillLevel (String skillLevel) {
+        if (skillLevel.equals("Intermediate")) {
+            return SkillLevel.INTERMEDIATE;
+        }
+        else if (skillLevel.equals("Advanced")) {
+            return SkillLevel.ADVANCED;
+        }
+        else {
+            return SkillLevel.BEGINNER;
+        }
+    }
     public SkillLevel getSkillLevel () { return mSkillLevel;    }
 
     public void delete()
     {
         App.dbref.child("Gatherings").child(mID).removeValue();
+    }
+
+    public void addAttendee(String userUID) {mAttendees.put(userUID, userUID);}
+
+    public void addPending(String userUID) {mPendings.put(userUID, userUID);}
+
+    public void removeAttendee(String userUID) {mAttendees.remove(userUID);}
+
+    public void removePending(String userUID) {mPendings.remove(userUID);}
+
+    //public void setAttendeeSize() {attendeeSize = mAttendees.size();}
+    public int getAttendeeSize(){ return mAttendees.size();}
+
+    public int getStatus(String userUID){
+        boolean attending = false;
+        boolean pending = false;
+        boolean fresh = false;
+
+        if(userUID.equals(mHostID)) return 1; //host
+
+        if (mAttendees.get(userUID) != null) {
+            attending = true;
+        }
+
+        if(mPendings.get(userUID) != null) {
+            pending = true;
+        }
+        if(attending && !pending) return 2;
+        if(pending && !attending) return 3;
+
+        return 0; // for new
+    }
+
+    public void updateAttendees(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
+    }
+    public void updatePending(final Context context) {
+
+        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
+
+
+        profileRef.setValue(this, new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
+            }
+        });
     }
 }
