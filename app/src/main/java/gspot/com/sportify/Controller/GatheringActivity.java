@@ -86,7 +86,7 @@ public class GatheringActivity extends BaseNavBarActivity {
         myGatheringsID.updateChildren(updates);
         mgathering.setID(sportRef.getKey());
         mgathering.setDate(mDateField.getText().toString());
-        mgathering.setSportTitle(mTitleField.getText().toString());
+        mgathering.setGatheringTitle(mTitleField.getText().toString());
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.setTime(mTimeField.getText().toString());

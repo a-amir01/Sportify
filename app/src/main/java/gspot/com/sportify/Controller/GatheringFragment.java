@@ -48,16 +48,6 @@ public class GatheringFragment extends Fragment {
 
     private static final String ARG_SPORT_ID = "sport_id";
 
-
-    @Bind(R.id.sport_title) EditText mTitleField;
-    @Bind(R.id.sport_description) EditText mDescriptionField;
-    @Bind(R.id.sport_location) EditText mLocationField;
-    @Bind(R.id.sport_time) EditText mTimeField;
-
-    @OnClick(R.id.sport_submit)
-    void onClick(Button button){submitGathering();}
-    @OnTextChanged(R.id.sport_title)
-    void onTextChange(CharSequence text, int start, int before, int count) { mGathering.setSportName(text.toString()); }
     ValueEventListener m_lis;
     Firebase gathering;
 
@@ -119,7 +109,7 @@ public class GatheringFragment extends Fragment {
                     mGathering = dataSnapshot.getValue(Gathering.class);
 
                     /*Retrieve text information from the database*/
-                    mTitleField.setText(mGathering.getSportTitle());
+                    mTitleField.setText(mGathering.getGatheringTitle());
                     mDescriptionField.setText(mGathering.getDescription());
                     mTimeField.setText(mGathering.getTime());
                     mLocationField.setText(mGathering.getLocation());
@@ -149,7 +139,7 @@ public class GatheringFragment extends Fragment {
         View view = inflater.inflate(R.layout.view_gathering, parent, false);
         ButterKnife.bind(this, view);
         /**show the sport*/
-        mTitleField.setText(mGathering.getSportName());
+        mTitleField.setText(mGathering.getGatheringTitle());
 
 
 

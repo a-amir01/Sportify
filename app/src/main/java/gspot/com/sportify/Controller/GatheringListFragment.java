@@ -185,7 +185,7 @@ public class GatheringListFragment extends Fragment {
         if(mChosenSports != null && mChosenSports.size() > 0){
             for(int i = 0; i < gatherings.size(); i++){
                 Gathering event = gatherings.get(i);
-                if(!mChosenSports.contains(event.getSportName())/*&& event.isPrivate() != mIsPrivateEvent && event.getSkillLEvel.equals(mSkillLevel)*/)
+                if(!mChosenSports.contains(event.getGatheringTitle())/*&& event.isPrivate() != mIsPrivateEvent && event.getSkillLEvel.equals(mSkillLevel)*/)
                     gatherings.remove(i);
             }//end for
         }//end if
@@ -261,8 +261,8 @@ public class GatheringListFragment extends Fragment {
 
             Log.i(TAG, "bindSport()");
             mGathering = gathering;
-            Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
-            mTitleTextView.setText(mGathering.getSportTitle());
+            Log.d(TAG, "BIND SPORT" + mGathering.getGatheringTitle());
+            mTitleTextView.setText(mGathering.getGatheringTitle());
             if (mGathering.getIsPrivate()) {
                 mEventStatusView.setText("Private");
             }

@@ -67,8 +67,8 @@ public class Gathering{
         attendeeSize = 1;
     }
 
-    public void setSportTitle (String title) { this.mGatheringTitle = title; }
-    public String getSportTitle () { return mGatheringTitle; }
+    public void setGatheringTitle (String title) { this.mGatheringTitle = title; }
+    public String getGatheringTitle () { return mGatheringTitle; }
 
     public void setLocation (String location) { this.mLocation = location; }
     public String getLocation () { return mLocation; }
