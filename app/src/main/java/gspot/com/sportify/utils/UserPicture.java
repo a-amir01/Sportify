@@ -243,9 +243,10 @@ public class UserPicture {
             picture = Bitmap.createBitmap(subSampled, 0, 0, options.outWidth, options.outHeight,
                     orientation, false);
             subSampled.recycle();
-        } else
+        } else {
             // No re-orientation required, the picture is the subSampled bitmap
             picture = subSampled;
+        }
 
         Log.v(LOG_TAG, picture.toString());
         return picture;

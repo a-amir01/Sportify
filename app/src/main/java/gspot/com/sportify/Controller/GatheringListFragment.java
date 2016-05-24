@@ -108,6 +108,7 @@ public class GatheringListFragment extends Fragment {
                 break;
             case R.id.action_add:
                 Intent intent = new Intent(getActivity(), GatheringActivity.class);
+                //intent.putExtra("Edit", false);
                 getActivity().finish();
                 getActivity().startActivity(intent);
 
@@ -242,8 +243,8 @@ public class GatheringListFragment extends Fragment {
 
             Log.i(TAG, "bindSport()");
             mGathering = gathering;
-            Log.d(TAG, "BIND SPORT" + mGathering.getSportTitle());
-            mTitleTextView.setText(mGathering.getSportTitle());
+            Log.d(TAG, "BIND SPORT" + mGathering.getGatheringTitle());
+            mTitleTextView.setText(mGathering.getGatheringTitle());
             if (mGathering.getIsPrivate()) {
                 mEventStatusView.setText("Private");
             }
@@ -302,4 +303,3 @@ public class GatheringListFragment extends Fragment {
 
 
 }//end SportListFragment
-
