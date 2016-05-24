@@ -1,14 +1,13 @@
 package gspot.com.sportify.Controller;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
@@ -48,7 +47,7 @@ public class SignupActivity extends AppCompatActivity {
     @Bind(R.id.input_email) EditText mEmailText;
     //@Bind(R.id.input_password) EditText mPasswordText;
     @Bind(R.id.btn_signup) Button mSignupButton;
-    //@Bind(R.id.link_login) TextView mSigninText;
+    @Bind(R.id.link_login) TextView mSigninText;
     @Bind(R.id.input_name) EditText mNameText;
 
     /*Holds user info*/
@@ -80,9 +79,6 @@ public class SignupActivity extends AppCompatActivity {
 
         /*link the widgets to the members*/
         ButterKnife.bind(this);
-
-        mNameText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
-        mEmailText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
 
     } //end onCreate
 
@@ -145,9 +141,9 @@ public class SignupActivity extends AppCompatActivity {
 
                 //store the information in firebase web
                 Profile profile = new Profile(name, (String) result.get("uid"));
-                //MyGatherings gatheringList = new MyGatherings((String)result.get("uid"));
+                MyGatherings gatheringList = new MyGatherings((String)result.get("uid"));
                 mFirebaseRef.child("profiles").child((String)result.get("uid")).setValue(profile);
-                //mFirebaseRef.child("MyGatherings").child((String)result.get("uid")).setValue(gatheringList);
+                mFirebaseRef.child("MyGatherings").child((String)result.get("uid")).setValue(gatheringList);
                 //mFirebaseRef.child("myEvents").child((String) result.get("uid"));
 
                 /*store the users uid in shared preferences so we know who they are */
