@@ -2,6 +2,7 @@ package gspot.com.sportify.Controller;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
@@ -48,7 +48,7 @@ public class SignupActivity extends AppCompatActivity {
     @Bind(R.id.input_email) EditText mEmailText;
     @Bind(R.id.input_password) EditText mPasswordText;
     @Bind(R.id.btn_signup) Button mSignupButton;
-    @Bind(R.id.link_login) TextView mSigninText;
+    //@Bind(R.id.link_login) TextView mSigninText;
     @Bind(R.id.input_name) EditText mNameText;
 
     /*Holds user info*/
@@ -80,6 +80,10 @@ public class SignupActivity extends AppCompatActivity {
 
         /*link the widgets to the members*/
         ButterKnife.bind(this);
+
+        mNameText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
+        mEmailText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
+        mPasswordText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.colorBackground), PorterDuff.Mode.SRC_ATOP);
 
     } //end onCreate
 
