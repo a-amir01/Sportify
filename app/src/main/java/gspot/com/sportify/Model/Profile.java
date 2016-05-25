@@ -41,7 +41,6 @@ public class Profile {
         this.mContactInfo = "How would you like people to contact you? Write it here.";
         this.mCalendar = new GspotCalendar();
         this.mMySports = new ArrayList<MySport>();
-        this.mMySports.add(new MySport());
         this.mProfilePic = Constants.DEFAULT_PROFILE_PIC;
     }
 

@@ -119,14 +119,14 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
         Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
         sportTypeSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<CharSequence> Adapter1 = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.sport_types, android.R.layout.simple_spinner_item);
-        Adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> Adapter1 = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.sport_types, R.layout.spinner_style);
+        Adapter1.setDropDownViewResource(R.layout.spinner_style);
         sportTypeSpinner.setAdapter(Adapter1);
 
         Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
         skillLevelSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, android.R.layout.simple_spinner_item);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_style);
         skillLevelSpinner.setAdapter(dataAdapter);
 
         Intent intent = getIntent();

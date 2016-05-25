@@ -242,7 +242,7 @@ public class ProfileActivity extends BaseNavBarActivity {
             mNoSports.setText("" + mProfile.getmName().toString() + " doesn't have any "
                     + "sports profiles");
         } else {
-            mNoSports.setVisibility(View.INVISIBLE);
+            mNoSports.setVisibility(View.GONE);
         }
     }
 

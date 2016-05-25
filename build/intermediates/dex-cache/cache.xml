@@ -1,19 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
-
-    <item
-        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="854cd136d26fc3af3710c0ea3b4ae135106e7e66">
-        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_15119e3eaad6ce0475b95de86f6fdc392bb7e3ff\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.1\jars\classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="39ae02ce40c3ac828abbf780ce0ff5d7a28b7d6a">
-        <dex dex="C:\Users\Anshul\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-cardview-v7-23.0.1_2a87711ab5cfcf65d4f1c1169a016b1478a5ed28\classes.dex" />
-    </item>
-
-</items>
+<items version="2" />

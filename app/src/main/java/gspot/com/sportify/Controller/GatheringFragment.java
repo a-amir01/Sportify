@@ -156,6 +156,7 @@ public class GatheringFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "On Create");
 
         /*Get the gathering ID from the previous fragment*/
         Intent intent = getActivity().getIntent();

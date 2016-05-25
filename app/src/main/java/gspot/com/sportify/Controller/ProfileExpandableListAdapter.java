@@ -131,8 +131,12 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(mProfile.getmMySports().size() > 0) {
-                        mProfile.getmMySports().get(groupPosition).setmBio(editable.toString());
+                    if(mProfile.getmMySports().size() > 0 ) {
+                        if(editable.toString().length() == 0) {
+                            mProfile.getmMySports().get(groupPosition).setmBio("Write about yourself with respect to this sport.");
+                        } else {
+                            mProfile.getmMySports().get(groupPosition).setmBio(editable.toString());
+                        }
                     }
                 }
             });

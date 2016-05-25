@@ -29,7 +29,7 @@ public class SportTypes extends Observable {
 
                     SportType newPost = child.getValue(SportType.class);
                     newPost.addSID(child.getKey());
-                    Log.i("klfnwekfniwen", newPost.getName());
+                    Log.i("Sport Types", newPost.getName());
                     sportTypes.add(newPost);
                 }
 
