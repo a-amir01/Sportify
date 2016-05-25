@@ -52,7 +52,6 @@ public class GatheringListFragment extends Fragment implements Observer{
     private final static String SPORT_TYPE_ID= "sport_type_id";
 
     /*code to pass in startActivityForResult*/
-    private static final int REQUEST_CODE = 0;
     private static final int REQUEST_CODE_FILTER = 1;
 
     /*the View to hold our list of Sports*/
@@ -352,8 +351,6 @@ public class GatheringListFragment extends Fragment implements Observer{
             Log.d(TAG, "INTENT"+ mGathering.getID());
 
             App.mCurrentGathering = mGathering;
-            //intent.putExtra("gatheringUID", mGathering.getID());
-            //startActivityForResult(intent, REQUEST_CODE);
             startActivity(intent);
         } //end onClick()
 
