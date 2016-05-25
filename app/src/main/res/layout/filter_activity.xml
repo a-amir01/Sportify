@@ -51,6 +51,29 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beginner"
+            android:id="@+id/begginerCheckBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intermediate"
+            android:id="@+id/IntermediateCheckBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Advanced"
+            android:id="@+id/AdvancedCheckBox" />
+    </LinearLayout>
+
 
     <ExpandableListView
         android:layout_width="match_parent"

@@ -1,8 +1,9 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +16,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 
 /**
  * Authors amir assad, on 4/17/16
@@ -33,16 +43,17 @@ import gspot.com.sportify.utils.App;
  * showing the detailed description.
  */
 
-public class GatheringListFragment extends Fragment {
+public class GatheringListFragment extends Fragment implements Observer{
 
 
     /*use for logging*/
     private static final String TAG = GatheringListFragment.class.getSimpleName();
 
-    private static final String POSITION_ID = "position_id";
+    private final static String SPORT_TYPE_ID= "sport_type_id";
 
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE = 0;
+    private static final int REQUEST_CODE_FILTER = 1;
 
     /*the View to hold our list of Sports*/
     private RecyclerView mSportRecyclerView;
@@ -50,8 +61,20 @@ public class GatheringListFragment extends Fragment {
     /*Use to maintain the data for list and produce the view*/
     private SportAdapter mAdapter;
 
-    /*position of the sport that will be Viewed*/
-    public int mSportPosition;
+    /*contains the names of the sports chosen in filter*/
+    private List<String> mChosenSports;
+
+    /*filter: show private events*/
+    private boolean mIsPrivateEvent;
+
+    /*filter: show based on skill level*/
+    private boolean [] mSkillLevels;
+
+    /*the current user's id to get their gatherings*/
+    private String mCurrentUser;
+
+    /*the model that talks with the database*/
+    private SportLab mSportLab;
 
 
     /*
@@ -64,12 +87,16 @@ public class GatheringListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
         setHasOptionsMenu(true);
+
+        /*get the current user*/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mCurrentUser = prefs.getString(Constants.KEY_UID, "");
     }
 
     /*2nd function that will be called when an Object of GatheringListFragment is created */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle SavedInstanceState){
-        Log.i(TAG, "onCreateView()");
+        Log.i(TAG, "onCreateView() Amir Assad");
 
         View view = inflater.inflate(R.layout.fragment_gathering_list, container, false);
 
@@ -77,7 +104,18 @@ public class GatheringListFragment extends Fragment {
         /*recycler view delegates the positioning to the layout manager*/
         mSportRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        /*create a new sport lab*/
+        mSportLab = new SportLab();
+
+        /*let the observer know that this classes
+        * update function will be waiting
+        * for data to be updated*/
+        mSportLab.addObserver(this);
+
+        /*load the gatherings from the database*/
+        mSportLab.loadGatherings();
+
+        //updateUI(false);
 
         return view;
     }/*end onCreateView*/
@@ -100,23 +138,48 @@ public class GatheringListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i(TAG, "onOptionsItemSelected()");
+        Intent intent = null;
+
         switch (item.getItemId()) {
             case R.id.action_filter:
-                FragmentManager fm = getFragmentManager();
-                FilterFragment alertDialog = FilterFragment.newInstance("Filter");
-                alertDialog.show(fm, "fragment_alert");
+                intent = new Intent(getActivity(), FilterActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_FILTER);
                 break;
             case R.id.action_add:
-                Intent intent = new Intent(getActivity(), GatheringActivity.class);
-                //intent.putExtra("Edit", false);
+                intent = new Intent(getActivity(), GatheringActivity.class);
                 getActivity().finish();
                 getActivity().startActivity(intent);
 
+                break;
+            case R.id.active:
+                loadActiveGatherings();
                 break;
         }//end case
 
         /*the baseActivity will handle the other options*/
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadActiveGatherings() {
+
+        /*contains a list of a user's gathering id*/
+        final List<String> activeGatheringIds = new ArrayList<>();
+
+        App.dbref.child("MyGatherings").child(mCurrentUser).child("myGatherings").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot data: dataSnapshot.getChildren()){
+                    /*gathering ID*/
+                    activeGatheringIds.add(data.getValue(String.class));
+                }
+                //updateUIWithActiveEvents(activeGatheringIds);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
+
     }
 
     /*
@@ -139,54 +202,113 @@ public class GatheringListFragment extends Fragment {
             return;
         }/*end if*/
 
-        /*correct fragment being called*/
-        if(requestCode == REQUEST_CODE)
-        {
+        /*update the UI based on the filter settings*/
+        if(requestCode == REQUEST_CODE_FILTER){
             if(data == null) return;
 
-            /*store the position of the list item that was changed*/
-            mSportPosition = data.getIntExtra(POSITION_ID, -1);
+            /*Get the sports that were chosen by the filter*/
+            mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
+            mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
+            mSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
 
-            /*No Value found for the Id*/
-            if(mSportPosition == -1) {
-                Log.i(TAG, "No value found for the id " + POSITION_ID );
-                return;
-            }/*end if*/
-        }/*end if*/
+            if(mChosenSports != null){
+                Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
+            }
 
-        updateUI();
+        }
+        updateUI(true);
     }//end onActivityResult
 
     /*
      * UpdateUI populates the view with the list of all Sports or
      * sports that were changed in the GatheringFragment
      */
-    private void updateUI() {
-        Log.i(TAG, "updateUI() " + mSportPosition);
+    private void updateUI(boolean filter) {
+        Log.i(TAG, "updateUI() ");
 
-        /*get the Sports from the hosting activity*/
-        SportLab sportLab = SportLab.get(getActivity());
+        /*make a shallow copy*/
+        List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
 
-        /*get all the Sports*/
-        List<Gathering> gatherings = sportLab.getSports();
+        /*filter this list to specification*/
+        if(filter) filterUI(gatherings);
 
         /*there are currently no gatherings listed*/
         if(mAdapter == null) {
-            Log.d(TAG, "updateUI() mAdapter == null");
-            /*populate screen with all gatherings*/
             mAdapter = new SportAdapter(gatherings);
+
             /*set the data behind the list view*/
             mSportRecyclerView.setAdapter(mAdapter);
         }/*end if*/
 
         /*only one sport will change at a time*/
         else {
-            /*notify on gatherings's update*/
-            mAdapter.notifyItemChanged(mSportPosition);
-
+            Log.i(TAG, "notify");
+            mAdapter.setSports(gatherings);
+            mAdapter.notifyDataSetChanged();
         }/*end else*/
 
     }/*end updateUI*/
+
+    /*This is a utility function that will be called whenever the user
+    * has chosen a filter for their home page
+    * @Param gatherings: the list of gatherings to filter
+    * since gatherings is a reference the change will happen
+    * on the heap*/
+    private void filterUI(List<Gathering> gatherings) {
+        /*go through the list and set the filters*/
+
+        for (int i = 0; i < gatherings.size(); i++) {
+            Gathering event = gatherings.get(i);
+                /*If the sport is not in the list*/
+            if (mChosenSports != null && mChosenSports.size() > 0) {
+                //if the event type was in the filtered list
+                if (!mChosenSports.contains(event.getGatheringTitle())) {
+                    gatherings.remove(event);
+
+                    //changing the array size so go back and check the replacement
+                    --i;
+                    continue;
+                }
+            }//end outer if
+
+                /*If the sport is in the list but the access to event is not same*/
+            if (mIsPrivateEvent && !event.getIsPrivate()){
+                gatherings.remove(event);
+
+                //changing the array size so go back and check the replacement
+                --i;
+                continue;
+            } //end if
+
+                /*if atleast one of the skill levels is selected*/
+            if(mSkillLevels[0] || mSkillLevels[1] || mSkillLevels[2]){
+                /*if we have the sport and the access is the same, check for skill level*/
+                /*remove if event is beginner and beginner is not checked*/
+                if (event.getSkillLevel() == (Gathering.SkillLevel.BEGINNER) && !mSkillLevels[0]) {
+                    gatherings.remove(event);
+                    --i;
+                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.INTERMEDIATE) && !mSkillLevels[1]) {
+                    gatherings.remove(event);
+                    --i;
+
+                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.ADVANCED) && !mSkillLevels[2]) {
+                    gatherings.remove(event);
+                    --i;
+                }
+            }//end outer if
+
+        }//end for
+
+    }//end filter UI
+
+    /*Once the data is loaded from the databse update the UI
+    * this will be called when SportLab's loadFromDataBase has finished
+    * since the loading is asynchronous*/
+    @Override
+    public void update(Observable observable, Object data) {
+        Log.i(TAG, "update");
+        updateUI(false);
+    }
 
 
     /*Provide a reference to the views for each data item
@@ -228,11 +350,11 @@ public class GatheringListFragment extends Fragment {
             /*Create the SportActivity*/
             Intent intent = GatheringPagerActivity.newIntent(getActivity(), mGathering.getID());
             Log.d(TAG, "INTENT"+ mGathering.getID());
-            //Log.d(TAG, "INTENT" + gatheringUID);
 
             App.mCurrentGathering = mGathering;
-            intent.putExtra("gatheringUID", mGathering.getID());
-            startActivityForResult(intent, REQUEST_CODE);
+            //intent.putExtra("gatheringUID", mGathering.getID());
+            //startActivityForResult(intent, REQUEST_CODE);
+            startActivity(intent);
         } //end onClick()
 
 
@@ -299,6 +421,8 @@ public class GatheringListFragment extends Fragment {
 
         @Override
         public int getItemCount() { return mGatherings.size(); }
+
+        public void setSports(List<Gathering> gatherings) { mGatherings = gatherings; }
     }//end SportAdapter
 
 

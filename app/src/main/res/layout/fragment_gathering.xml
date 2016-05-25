@@ -20,16 +20,26 @@
                 android:hint="@string/gathering_title_hint"
                 android:padding="8dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Sport:"
-                android:id="@+id/sport_type" />
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/sport_type_spinner" />
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sport:"
+                    android:id="@+id/sport_type"
+                    android:paddingLeft="10dp"
+                    android:layout_weight="0.5"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sport_type_spinner"
+                    android:background="#f4921a"
+                    android:layout_weight="0.5"/>
+            </LinearLayout>
 
             <EditText
                 android:layout_width="match_parent"
@@ -48,7 +58,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="109dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:layout_width="match_parent"
@@ -61,21 +71,32 @@
                     android:layout_height="wrap_content"
                     android:text="TIME"
                     android:id="@+id/timepicker" />
+
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Skill Level:"
-                android:id="@+id/skill_lv" />
 
-
-
-            <Spinner
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/skill_lv_spinner" />
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Skill Level:"
+                    android:id="@+id/skill_lv"
+                    android:paddingLeft="10dp"
+                    android:layout_weight="0.5" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/skill_lv_spinner"
+                    android:gravity="right"
+                    android:background="#f4921a"
+                    android:layout_weight="0.5" />
+            </LinearLayout>
 
             <CheckBox
                 android:layout_width="94dp"
