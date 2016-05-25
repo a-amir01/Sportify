@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#14d1d7">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -77,10 +77,10 @@
 
     <ExpandableListView
         android:layout_width="match_parent"
-        android:layout_height="486dp"
+        android:layout_height="394dp"
         android:id="@+id/expandableList"
-        android:childDivider="#ffff"
-        android:divider="#add8e6"
+        android:childDivider="@color/colorPrimary"
+        android:divider="#ffff"
         android:dividerHeight="0.5dp"
         android:layout_gravity="center_horizontal"
         android:paddingTop="10dp"/>

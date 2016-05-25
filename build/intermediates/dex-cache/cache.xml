@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
-
-    <item
-        jar="/home/amir/Android/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="dd3148062355d6b04f00760566e2b2bfd7346fb4">
-        <dex dex="/home/amir/Android/SportsApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_c678b1a6b217792e6a9125831bf931600775468b/classes.dex" />
-    </item>
-
-</items>
+<items version="2" />

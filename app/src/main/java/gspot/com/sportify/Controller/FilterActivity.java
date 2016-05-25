@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -42,7 +43,7 @@ import gspot.com.sportify.utils.GatheringTypeProvider;
  * with the key Constants.SPORT_TYPE_ID which can be used to
  * filter out the array list that the recycler view uses
  */
-public class FilterActivity extends Activity implements CompoundButton.OnCheckedChangeListener, Observer {
+public class FilterActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, Observer {
 
     private static final String TAG = FilterActivity.class.getSimpleName();
 
