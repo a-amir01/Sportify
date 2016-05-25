@@ -46,6 +46,7 @@ public class Gathering{
         }
     }
 
+    private String mSportTitle;
     private SkillLevel mSkillLevel;
     private String mGatheringTitle;
     private String mLocation;
@@ -69,8 +70,7 @@ public class Gathering{
         attendeeSize = 1;
         pendingSize = 0;
     }
-
-    public void setGatheringTitle (String title) { this.mGatheringTitle = title; }
+    public void setGatheringTitle (String title) { this.mGatheringTitle = title.toUpperCase(); }
     public String getGatheringTitle () { return mGatheringTitle; }
 
     public void setLocation (String location) { this.mLocation = location; }
@@ -126,7 +126,7 @@ public class Gathering{
             return SkillLevel.BEGINNER;
         }
     }
-    public SkillLevel getSkillLevel () { return mSkillLevel;    }
+    public SkillLevel getSkillLevel () { return mSkillLevel; }
 
     public void delete()
     {

@@ -3,7 +3,6 @@ package gspot.com.sportify.Controller;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.BinderThread;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,16 +17,13 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
+
 import gspot.com.sportify.Model.Gathering;
-import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.utils.App;
@@ -144,7 +140,7 @@ public class GatheringFragment extends Fragment {
      * attaching arguments to a fragment must be done after the fragment is created
      * but before it is added to an activity.*/
     public static GatheringFragment newInstance(String sportId) {
-        Log.d(TAG, "newInstance()");
+        Log.d(TAG, "newInstance() " + sportId);
         Bundle args = new Bundle();
         args.putString(Constants.ARG_SPORT_ID, sportId);    /*store the sportId for later retreival*/
         GatheringFragment fragment = new GatheringFragment();   /*create a new instance of the fragment*/
@@ -157,13 +153,24 @@ public class GatheringFragment extends Fragment {
     {
         super.onCreate(savedInstanceState);
 
-        /*Get the gathering ID from the previous fragment*/
-        Intent intent = getActivity().getIntent();
+        Log.i(TAG, "onCreate");
 
-        gatheringUID = intent.getStringExtra("gatheringUID");
+        gatheringUID = getArguments().getString(Constants.ARG_SPORT_ID);
+
+    }//end onCreate
+
+    /**inflate the layout for the fragments view and return the view to the host*/
+    @Override                //*inflate the layout   *from the activities   *layout recreate from a saved state
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
+    {/**gets called when its the 1st time drawing its UI*/
+        /**the 3rd param: whether the inflated layout should be attached to the 2nd param during inflation*/
+        Log.d(TAG, "onCreateView()");
+
+        View view = inflater.inflate(R.layout.view_gathering, parent, false);
+        ButterKnife.bind(this, view);
 
         /*Read the Gathering with the unique gatheringID*/
-
+        /*Retrieve text information from the database*/
         gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(gatheringUID);
         /*Populate page with gathering*/
         m_lis = new ValueEventListener() {
@@ -196,18 +203,9 @@ public class GatheringFragment extends Fragment {
                 Log.e(TAG, "Fire    BaseError " + firebaseError.getMessage());
             }
         };
+
         gathering.addValueEventListener(m_lis);
-    }//end onCreate
 
-    /**inflate the layout for the fragments view and return the view to the host*/
-    @Override                //*inflate the layout   *from the activities   *layout recreate from a saved state
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
-    {/**gets called when its the 1st time drawing its UI*/
-        /**the 3rd param: whether the inflated layout should be attached to the 2nd param during inflation*/
-        Log.d(TAG, "onCreateView()");
-
-        View view = inflater.inflate(R.layout.view_gathering, parent, false);
-        ButterKnife.bind(this, view);
 
         /**root of the fragments layout, return null if no layout.*/
         return view;
@@ -220,7 +218,7 @@ public class GatheringFragment extends Fragment {
         super.onDestroyView();
         Log.i(TAG, "onDestroyView()");
         ButterKnife.unbind(this);
-        gathering.removeEventListener(m_lis);
+        //gathering.removeEventListener(m_lis);
     }
 
     void getHostname(String hostID) {

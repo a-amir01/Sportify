@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.App;
 
 /**
  * Authors amir assad, on 4/17/16
@@ -68,7 +70,8 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.activity_sport_pager_view_pager);
 
-        mGatherings = SportLab.get(this).getSports();
+        /*get all the gatherings*/
+        mGatherings = App.mGatherings;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -86,11 +89,9 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
                 /*get the gathering that is being loaded*/
                 Gathering gathering = mGatherings.get(position);
 
-                /*the position of the fragment that is being loaded*/
-               // gathering.mPosition = position;
+                //Toast.makeText(getApplicationContext(), gathering.getGatheringTitle(), Toast.LENGTH_LONG);
 
-                /*position of the current gathering on screen*/
-                mCurrSportPos = mViewPager.getCurrentItem();
+                Log.i(TAG, gathering.getID());
 
                 return GatheringFragment.newInstance(gathering.getID());
             }
@@ -109,7 +110,7 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
          * id that will match the sportID
          */
         for(int i = 0; i < mGatherings.size(); i++){
-            if(mGatherings.get(i).getID() == sportId){
+            if(mGatherings.get(i).getID().equals(sportId)){
                 mViewPager.setCurrentItem(i);
                 break;
             }/*end if*/

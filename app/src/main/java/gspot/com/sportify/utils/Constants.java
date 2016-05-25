@@ -36,7 +36,8 @@ public class Constants {
     public final static String SPORT_TYPE_ID= "sport_type_id";
     public final static String SPORT_ACCESS_ID = "sport_access_id";
     public final static String SKILL_LEVEL = "skill_level";
-    public final static String FILE_NAME = "checkedSportsFilter.txt";
+    public final static String SPORTS_FILTER_FILE = "checkedSportsFilter.txt";
+    public final static String SKILL_LEVEL_FILE = "skilllevelfile.txt";
 
     /*Constants for profiles */
     public static final int NUM_TIMES_OF_DAY = 4;
@@ -45,6 +46,8 @@ public class Constants {
 
     /*Constants for Gatherings */
     public static final String ARG_SPORT_ID = "sport_id";
+
+    public enum SkillLevel { BEGGINER, INTERMEDIATE, ADVANCED }
 
 
     /*Constants for Profile Pictures */

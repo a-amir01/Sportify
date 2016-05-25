@@ -117,6 +117,8 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         setContentView(R.layout.fragment_gathering);
         ButterKnife.bind(this);
 
+
+
         Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
         sportTypeSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<CharSequence> Adapter1 = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.sport_types, android.R.layout.simple_spinner_item);
