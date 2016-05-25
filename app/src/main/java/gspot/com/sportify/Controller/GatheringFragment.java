@@ -34,7 +34,7 @@ import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
 /**
- * Authors amir assad, Aaron, Yunfan Yang on 4/17/16
+ * Authors amir assad, Aaron, Yunfan Yang, Danny on 4/17/16
  * This class uses the fragment_gathering.xml
  * This class is the detailed view of a gathering
  * it will be editable if the user is a host else
@@ -47,10 +47,10 @@ public class GatheringFragment extends Fragment {
 
     /*the Gathering profile*/
     private Gathering mGathering;
-    private Profile mProfile;
 
-    private String hostID, hostName, gatheringUID, mCurrentUser;
-    private int sizeofAttendees;
+    private String hostID, gatheringUID, mCurrentUser;
+
+    int status;
 
     ValueEventListener m_lis;
     Firebase gathering;
@@ -60,21 +60,26 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.gathering_location) EditText mLocationField;
     @Bind(R.id.gathering_time) EditText mTimeField;
     @Bind(R.id.gathering_host) EditText mHost;
-    @Bind(R.id.gathering_delete) Button mDelete;
+    @Bind(R.id.gathering_options) Button mOptions;
     @Bind(R.id.gathering_edit) Button mEdit;
     @Bind(R.id.host_display) EditText mHostDisplay;
     @Bind(R.id.attendees_display) EditText mAttendeesDisplay;
     @Bind(R.id.accept_pending) Button mPendingDisplay;
 
 
-    @OnClick(R.id.gathering_delete)
-    void onClick(Button button){
+    /*
+     * Checks the status of the User and sets
+     * buttons accordingly
+     */
+    @OnClick(R.id.gathering_options)
+    void onClick(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        /*Writes to myGathering list */
+        //Gets the status of the User
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
-        int status = mGathering.getStatus(mCurrentUser);
+        status = mGathering.getStatus(mCurrentUser);
         App.mCurrentGathering = mGathering;
+
 
         if(status == 1){
             deleteGathering();
@@ -90,11 +95,14 @@ public class GatheringFragment extends Fragment {
                 requestGathering();
             }
             else {
-                joinGathering(); }
+                joinGathering(); } //New User
         }
 
     }
 
+    /*
+     * Brings user to the edit page
+     */
     @OnClick(R.id.gathering_edit)
     void onClickEdit (Button button) {
         Intent intent = new Intent(getActivity(), GatheringActivity.class);
@@ -104,6 +112,7 @@ public class GatheringFragment extends Fragment {
         startActivity(intent);
     }
 
+    //Shows the viewer who's going
     @OnClick (R.id.attendees_display)
     void onClickAttending()
     {
@@ -115,6 +124,7 @@ public class GatheringFragment extends Fragment {
         getActivity().startActivity(intent);
     }
 
+    //Shows pending Requests to the host
     @OnClick(R.id.accept_pending)
     void onClickPending()
     {
@@ -126,6 +136,7 @@ public class GatheringFragment extends Fragment {
         getActivity().startActivity(intent);
     }
 
+    //Brings user to the host's profile
     @OnClick (R.id.host_display)
     void onClickHost()
     {
@@ -183,7 +194,7 @@ public class GatheringFragment extends Fragment {
                     mAttendeesDisplay.setText(" and " + (mGathering.getAttendeeSize() -1) + " others are going ");
                     getHostname(hostID);
                     if (mGathering == null) {
-                        mDelete.setText("Join");
+                        mOptions.setText("Join");
                     }
                     else {
                         setButton();
@@ -223,6 +234,7 @@ public class GatheringFragment extends Fragment {
         gathering.removeEventListener(m_lis);
     }
 
+    //Takes a snapshot of the ID and retrieves the name
     void getHostname(String hostID) {
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
 
@@ -240,6 +252,8 @@ public class GatheringFragment extends Fragment {
         });
 
     }
+
+    //Deletes the gathering from the database
     void deleteGathering() {
         if(gathering != null && m_lis != null)
             gathering.removeEventListener(m_lis);
@@ -252,6 +266,7 @@ public class GatheringFragment extends Fragment {
         startActivity(intent);
     }
 
+    //Leaves attending updates the Database
     void leaveAttending () {
         Log.i(TAG, "LEAVE ATTENDING");
         /*Gets user's UID*/
@@ -260,8 +275,10 @@ public class GatheringFragment extends Fragment {
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.removeAttendee(mCurrentUser);
-        mGathering.updateAttendees(getActivity().getApplicationContext());
+        mGathering.updateGathering(getActivity().getApplicationContext());
     }
+
+    //Leaves pending and udpates the Database
     void leavePending () {
         Log.i(TAG, "LEAVE PENDING");
         /*Gets user's UID*/
@@ -270,8 +287,10 @@ public class GatheringFragment extends Fragment {
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.removePending(mCurrentUser);
-        mGathering.updatePending(getActivity().getApplicationContext());
+        mGathering.updateGathering(getActivity().getApplicationContext());
     }
+
+    //Join gathering and updates the Database
     void joinGathering () {
         Log.i(TAG, "JOIN");
       /*Gets user's UID*/
@@ -280,9 +299,10 @@ public class GatheringFragment extends Fragment {
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.addAttendee(mCurrentUser);
-        mGathering.updateAttendees(getActivity().getApplicationContext());
+        mGathering.updateGathering(getActivity().getApplicationContext());
     }
 
+    //Request to join private Gathering and updates in Database
     void requestGathering() {
         Log.i(TAG, "Reqeust");
       /*Gets user's UID*/
@@ -291,9 +311,10 @@ public class GatheringFragment extends Fragment {
         /*Writes to myGathering list */
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.addPending(mCurrentUser);
-        mGathering.updateAttendees(getActivity().getApplicationContext());
+        mGathering.updateGathering(getActivity().getApplicationContext());
     }
 
+    //Set all the buttons
     void setButton() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -302,22 +323,26 @@ public class GatheringFragment extends Fragment {
         int status = mGathering.getStatus(mCurrentUser);
 
         Log.d(TAG, "STATUS" + status);
-        if(status == 1) {
+        if(status == 1) { //Host
             if(mGathering.getPendingSize() <= 0) mPendingDisplay.setVisibility(View.GONE);
-            mDelete.setText("Delete");
+            mOptions.setText("Delete");
         } //host
-        else if (status == 2) {
+        else if (status == 2) { //Attending
             mPendingDisplay.setVisibility(View.GONE);
-            mDelete.setText("Leave");
+            mEdit.setVisibility(View.GONE);
+            mOptions.setText("Leave");
         } //attendee
-        else if (status == 3) {
+        else if (status == 3) { //Has a Pending Request
             mPendingDisplay.setVisibility(View.GONE);
-            mDelete.setText("Remove Request");
+            mEdit.setVisibility(View.GONE);
+            mOptions.setText("Remove Request");
         } // leave gatherig
-        else {
+
+        else { //new User
             mPendingDisplay.setVisibility(View.GONE);
-            if (mGathering.getIsPrivate()) { mDelete.setText("Request"); }
-            else { mDelete.setText("Join"); }
+            mEdit.setVisibility(View.GONE);
+            if (mGathering.getIsPrivate()) { mOptions.setText("Request"); }
+            else { mOptions.setText("Join"); }
         }
     }
 }

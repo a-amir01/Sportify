@@ -91,7 +91,7 @@
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:id="@+id/gathering_delete"
+            android:id="@+id/gathering_options"
             android:background="@drawable/delete_button"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

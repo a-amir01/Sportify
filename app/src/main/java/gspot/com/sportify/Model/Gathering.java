@@ -18,7 +18,7 @@ import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
 /**
- * Authors Amir Assad, massoudmaher on 5/1/16.
+ * Authors Aaron, Amir Assad, massoudmaher on 5/1/16.
  * Class that represents a single gathering
  * Purpose is to instantiate one of these for each created event and push to firebase
  */
@@ -147,11 +147,12 @@ public class Gathering{
 
     public void removePending(String userUID) {mPendings.remove(userUID);}
 
-    //public void setAttendeeSize() {attendeeSize = mAttendees.size();}
     public int getAttendeeSize(){ return mAttendees.size();}
 
     public int getPendingSize(){ return mPendings.size();}
 
+
+    //Determines what the viewer is
     public int getStatus(String userUID){
         boolean attending = false;
         boolean pending = false;
@@ -172,33 +173,7 @@ public class Gathering{
         return 0; // for new
     }
 
-
-    public void updateAttendees(final Context context) {
-
-        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
-
-
-        profileRef.setValue(this, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
-            }
-        });
-    }
-    public void updatePending(final Context context) {
-
-        Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
-
-
-        profileRef.setValue(this, new Firebase.CompletionListener() {
-            @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                Toast.makeText(context, "Save Successful", Toast.LENGTH_SHORT);
-            }
-        });
-    }
-
-    public void updateGathering() {
+    public void updateGathering(final Context context) {
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(mID);
         profileRef.setValue(this, new Firebase.CompletionListener() {
             @Override

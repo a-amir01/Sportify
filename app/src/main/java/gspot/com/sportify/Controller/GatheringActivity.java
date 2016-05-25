@@ -43,7 +43,7 @@ import gspot.com.sportify.utils.TimePickerFragment;
 
 
 /**
- * Created by DannyChan on 5/8/16.
+ * Created by DannyChan and Aaron on 5/8/16.
  */
 public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener {
 
@@ -197,19 +197,24 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         ButterKnife.unbind(this);
     }
 
+    /*
+     * Updates the gathering
+     */
     private void updateGathering() {
        // App.mCurrentGathering.setDate(mDateField.getText().toString());
         App.mCurrentGathering.setGatheringTitle(mTitleField.getText().toString());
         App.mCurrentGathering.setDescription(mDescriptionField.getText().toString());
         App.mCurrentGathering.setLocation(mLocationField.getText().toString());
-      //  App.mCurrentGathering.setTime(mTimeField.getText().toString());
-        App.mCurrentGathering.updateGathering();
+        App.mCurrentGathering.updateGathering(getApplicationContext());
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
         startActivity(intent);
 
     }
 
+    /*
+     * Writes event to the database
+     */
     private void submitGathering() {
         Firebase postID = new Firebase(Constants.FIREBASE_URL).child("Gatherings");
 
@@ -230,7 +235,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         mgathering.setDescription(mDescriptionField.getText().toString());
         mgathering.setLocation(mLocationField.getText().toString());
         mgathering.addAttendee(mCurrentUser);
-        //mgathering.addPending(mCurrentUser);
         mgathering.setDate(mDateString);
         mgathering.setTime(mTimeString);
         sportRef.setValue(mgathering);
