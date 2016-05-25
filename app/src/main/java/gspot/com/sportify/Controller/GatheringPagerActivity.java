@@ -31,7 +31,6 @@ import gspot.com.sportify.utils.App;
 public class GatheringPagerActivity extends BaseNavBarActivity {
 
     private static final String EXTRA_SPORT_ID = "sport_id";
-    private static final String POSITION_ID = "position_id";
     private static final String TAG = GatheringPagerActivity.class.getSimpleName();
 
     /*load the pager*/
@@ -39,10 +38,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
 
     /*list of all mGatherings*/
     private List<Gathering> mGatherings;
-
-    /*Used when the back button is pressed
-     *position of the sport we are at in the list*/
-    private int mCurrSportPos;
 
     /*
      * Function to Create a new intent and save the sport Id for when the
@@ -65,9 +60,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         /*get the id of the GatheringFragment that was passed into newIntent*/
         String sportId = getIntent().getStringExtra(EXTRA_SPORT_ID);
 
-
-        Log.d(TAG, "onCreate()" + sportId);
-
         mViewPager = (ViewPager) findViewById(R.id.activity_sport_pager_view_pager);
 
         /*get all the gatherings*/
@@ -88,10 +80,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
 
                 /*get the gathering that is being loaded*/
                 Gathering gathering = mGatherings.get(position);
-
-                //Toast.makeText(getApplicationContext(), gathering.getGatheringTitle(), Toast.LENGTH_LONG);
-
-                Log.i(TAG, gathering.getID());
 
                 return GatheringFragment.newInstance(gathering.getID());
             }
@@ -133,32 +121,4 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         return true;
     } //end onCreateOptionsMenu
 
-    /*
-     * this function will be called when the
-     * user presses the back button*/
-    @Override
-    public void onBackPressed() {
-
-        Log.d(TAG, "onBackPressed()");
-
-        /*you must first set the result before calling the
-         * super class family */
-        returnResult(mCurrSportPos);
-        super.onBackPressed();
-    }/*end onBackPressed*/
-
-    /*
-    * Function to store the value we want to return back to the caller
-    * this function calls setResult because this activity was called by
-    * startActivityForResult and this is how we get the data back to the caller
-    * @param position: the position of the sport in the list*/
-    public void returnResult(int position) {
-        Log.d(TAG, "returnResult " + position);
-        /*start a new intent to store data in*/
-        Intent data = new Intent();
-        /*store the position*/
-        data.putExtra(POSITION_ID, position);
-        /*return the position back to the caller*/
-        setResult(RESULT_OK, data);
-    }/*end returnResult*/
 }

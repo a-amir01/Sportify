@@ -52,6 +52,9 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
                 /*go back to the login activity*/
                 intent = new Intent(this, LoginActivity.class);
+
+                startActivity(intent);
+                finish();
                 break;
 
             case R.id.active:
@@ -71,13 +74,9 @@ public class BaseNavBarActivity extends AppCompatActivity {
                 intent = new Intent(this, ProfileActivity.class);
                 intent.putExtra("viewingUser", UID);
                 intent.putExtra("cameFrom", "profile");
+                startActivity(intent);
                 break;
         }//end case
-
-        if(intent != null){
-            startActivity(intent);
-            finish();
-        }
 
         return super.onOptionsItemSelected(item);
     } //end onOptionsItemSelected
