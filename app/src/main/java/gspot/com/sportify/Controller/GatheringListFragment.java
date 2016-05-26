@@ -321,7 +321,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     @Override
     public void update(Observable observable, Object data) {
         Log.i(TAG, "update");
-        updateUI(!FILTER, !ACTIVE, null);
+        updateUI(FILTER, !ACTIVE, null);
     }
 
     /* this function will see if the gatherings parameter is part
