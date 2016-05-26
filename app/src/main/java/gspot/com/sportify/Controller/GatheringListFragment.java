@@ -43,7 +43,6 @@ import gspot.com.sportify.utils.Constants;
  * the gathering. GatheringPagerActivity is in charge of
  * showing the detailed description.
  */
-
 public class GatheringListFragment extends Fragment implements Observer{
 
 
