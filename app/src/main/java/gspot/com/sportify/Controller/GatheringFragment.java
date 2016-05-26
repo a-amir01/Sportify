@@ -209,7 +209,7 @@ public class GatheringFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getContext(), "This event is no longer available.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "This event is no longer available.", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             }

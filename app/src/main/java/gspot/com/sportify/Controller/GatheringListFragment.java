@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
@@ -79,6 +82,8 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*the model that talks with the database*/
     private SportLab mSportLab;
 
+    /*Hold a reference to the menuItem for active gatherings*/
+    private MenuItem mActiveGatheringCheckBox;
 
     /*
     * 1st function to be called when the object gets instantiated
@@ -102,6 +107,8 @@ public class GatheringListFragment extends Fragment implements Observer{
         Log.i(TAG, "onCreateView() Amir Assad");
 
         View view = inflater.inflate(R.layout.fragment_gathering_list, container, false);
+
+        ButterKnife.bind(getActivity());
 
         mSportRecyclerView = (RecyclerView)view.findViewById(R.id.sport_recycler_view);
         /*recycler view delegates the positioning to the layout manager*/
@@ -156,6 +163,8 @@ public class GatheringListFragment extends Fragment implements Observer{
 
                 break;
             case R.id.active:
+                mActiveGatheringCheckBox = item;
+
                 if(item.isChecked())
                     loadActiveGatherings();
                 else
@@ -176,7 +185,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*contains a list of a user's gathering id*/
         final List<String> activeGatheringIds = new ArrayList<>();
 
-        App.dbref.child("MyGatherings").child(mCurrentUser).child("myGatherings").addListenerForSingleValueEvent(new ValueEventListener() {
+        App.dbref.child("MyGatherings").child(mCurrentUser).child("myGatherings").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "onDataChange");
@@ -321,6 +330,14 @@ public class GatheringListFragment extends Fragment implements Observer{
     @Override
     public void update(Observable observable, Object data) {
         Log.i(TAG, "update");
+
+        /*If the data base is modified the listener will immediately be called
+        * if the user is viewing their gatherings, then dont update the UI until
+        * they un-check the active button*/
+        if(mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
+            return;
+        }
+
         updateUI(FILTER, !ACTIVE, null);
     }
 
