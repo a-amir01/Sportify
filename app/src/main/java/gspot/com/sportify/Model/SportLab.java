@@ -47,7 +47,7 @@ public class SportLab extends Observable{
     public void loadGatherings() {
         Log.i(TAG, "loadGatherings");
         Firebase gatheringRef = new Firebase("https://gspot.firebaseio.com/Gatherings");
-        gatheringRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        gatheringRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.i(TAG, "onDataChange");
