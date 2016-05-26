@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,10 @@ public class GatheringListFragment extends Fragment implements Observer{
 
     private final static String SPORT_TYPE_ID= "sport_type_id";
 
+    private final static boolean FILTER = true;
+
+    private final static boolean ACTIVE = true;
+
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE_FILTER = 1;
 
@@ -67,7 +72,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     private boolean mIsPrivateEvent;
 
     /*filter: show based on skill level*/
-    private boolean [] mSkillLevels;
+    private boolean [] mSkillLevels = { false, false, false };
 
     /*the current user's id to get their gatherings*/
     private String mCurrentUser;
@@ -112,6 +117,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         mSportLab.addObserver(this);
 
         /*load the gatherings from the database*/
+        /*update() will call updateUI*/
         mSportLab.loadGatherings();
 
         //updateUI(false);
@@ -146,12 +152,16 @@ public class GatheringListFragment extends Fragment implements Observer{
                 break;
             case R.id.action_add:
                 intent = new Intent(getActivity(), GatheringActivity.class);
-                getActivity().finish();
-                getActivity().startActivity(intent);
+                //getActivity().finish();
+                startActivity(intent);
 
                 break;
             case R.id.active:
-                loadActiveGatherings();
+                if(item.isChecked())
+                    loadActiveGatherings();
+                else
+                    updateUI(FILTER, !ACTIVE, null);
+
                 break;
         }//end case
 
@@ -159,26 +169,30 @@ public class GatheringListFragment extends Fragment implements Observer{
         return super.onOptionsItemSelected(item);
     }
 
+    /*utilty function to load all the user's
+    * active gathering id into a list*/
     private void loadActiveGatherings() {
 
+        Log.i(TAG, "loadActiveGatherings");
         /*contains a list of a user's gathering id*/
         final List<String> activeGatheringIds = new ArrayList<>();
 
         App.dbref.child("MyGatherings").child(mCurrentUser).child("myGatherings").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i(TAG, "onDataChange");
                 for(DataSnapshot data: dataSnapshot.getChildren()){
                     /*gathering ID*/
                     activeGatheringIds.add(data.getValue(String.class));
                 }
-                //updateUIWithActiveEvents(activeGatheringIds);
+                /*update the UI without any filtering*/
+                updateUI(!FILTER, ACTIVE, activeGatheringIds);
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
-
     }
 
     /*
@@ -215,21 +229,23 @@ public class GatheringListFragment extends Fragment implements Observer{
             }
 
         }
-        updateUI(true);
+        updateUI(FILTER, !ACTIVE, null);
     }//end onActivityResult
 
     /*
      * UpdateUI populates the view with the list of all Sports or
      * sports that were changed in the GatheringFragment
      */
-    private void updateUI(boolean filter) {
+    private void updateUI(boolean filter, boolean active, List<String> activeIDs) {
         Log.i(TAG, "updateUI() ");
 
         /*make a shallow copy*/
         List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
 
-        /*filter this list to specification*/
-        if(filter) filterUI(gatherings);
+        /*filter this list to specification and we have already filtered before*/
+        if(filter) filterGatheringList(gatherings);
+
+        else if(active) updateListWithActiveEvents(gatherings, activeIDs);
 
         /*there are currently no gatherings listed*/
         if(mAdapter == null) {
@@ -253,7 +269,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     * @Param gatherings: the list of gatherings to filter
     * since gatherings is a reference the change will happen
     * on the heap*/
-    private void filterUI(List<Gathering> gatherings) {
+    private void filterGatheringList(List<Gathering> gatherings) {
         /*go through the list and set the filters*/
 
         for (int i = 0; i < gatherings.size(); i++) {
@@ -306,9 +322,23 @@ public class GatheringListFragment extends Fragment implements Observer{
     @Override
     public void update(Observable observable, Object data) {
         Log.i(TAG, "update");
-        updateUI(false);
+        updateUI(!FILTER, !ACTIVE, null);
     }
 
+    /* this function will see if the gatherings parameter is part
+    * of the user's gatherings if not it will remove it from
+    * the gatherings parameter which is a reference to the gatherings in
+    * updateUI()*/
+    private void updateListWithActiveEvents(List<Gathering> gatherings, List<String> activeGatheringIds) {
+        for(int i = 0; i < gatherings.size(); i++) {
+            Gathering event = gatherings.get(i);
+
+            if (!activeGatheringIds.contains(event.getID())){
+                gatherings.remove(event);
+                --i;
+            } //end if
+        } //end for
+    } //end updateListWithActiveEvents
 
     /*Provide a reference to the views for each data item
       Complex data items may need more than one view per item, and
