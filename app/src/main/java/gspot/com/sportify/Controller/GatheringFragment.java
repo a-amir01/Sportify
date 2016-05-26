@@ -1,6 +1,7 @@
 package gspot.com.sportify.Controller;
 
 import android.content.SharedPreferences;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -18,6 +20,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 
+import java.util.Timer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -196,7 +199,21 @@ public class GatheringFragment extends Fragment {
                         setButton();
                     }
                 }catch(Exception e) {}
+
+                /*the ValueEventListener will be called evertime the database has changed in real time
+                * if the current gathering we are trying to get is no longer availble then
+                * mGathering will be null*/
+                if(mGathering == null){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(getContext(), "This event is no longer available.", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }
             }
+
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
