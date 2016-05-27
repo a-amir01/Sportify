@@ -15,4 +15,5 @@ public class App {
     public static List<Gathering> mGatherings = new ArrayList<>();
     /* current gathering selected*/
     public static Gathering mCurrentGathering = null;
+
 }
