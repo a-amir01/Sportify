@@ -209,7 +209,7 @@ public class GatheringFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(getActivity(), "This event is no longer available.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Refreshing data.", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             }
@@ -235,7 +235,7 @@ public class GatheringFragment extends Fragment {
         super.onDestroyView();
         Log.i(TAG, "onDestroyView()");
         ButterKnife.unbind(this);
-        //gathering.removeEventListener(m_lis);
+        gathering.removeEventListener(m_lis);
     }
 
     void getHostname(String hostID) {
@@ -262,9 +262,7 @@ public class GatheringFragment extends Fragment {
         App.mGatherings.remove(App.mCurrentGathering);
         App.mCurrentGathering = null;
 
-        Intent intent = new Intent(getActivity(), GatheringListActivity.class);
         getActivity().finish();
-        startActivity(intent);
     }
 
     void leaveAttending () {

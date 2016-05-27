@@ -74,7 +74,9 @@
             android:id="@+id/AdvancedCheckBox" />
     </LinearLayout>
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="394dp"
@@ -108,5 +110,7 @@
             android:layout_weight="0.5"/>
             <!--android:background="#ffff"/>-->
     </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

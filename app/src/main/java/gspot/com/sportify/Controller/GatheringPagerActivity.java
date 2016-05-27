@@ -75,7 +75,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
             * fast loading*/
             @Override
             public Fragment getItem(int position) {
-
                 Log.d(TAG, "getItem()::FSPA " + position + " " + mViewPager.getCurrentItem());
 
                 /*get the gathering that is being loaded*/

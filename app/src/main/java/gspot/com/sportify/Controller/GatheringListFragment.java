@@ -335,7 +335,10 @@ public class GatheringListFragment extends Fragment implements Observer{
         * if the user is viewing their gatherings, then dont update the UI until
         * they un-check the active button*/
         if(mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
-            return;
+            Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
+            mActiveGatheringCheckBox.setChecked(false);
+            mAdapter.notifyDataSetChanged();
+            //return;
         }
 
         updateUI(FILTER, !ACTIVE, null);
@@ -348,7 +351,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     private void updateListWithActiveEvents(List<Gathering> gatherings, List<String> activeGatheringIds) {
         for(int i = 0; i < gatherings.size(); i++) {
             Gathering event = gatherings.get(i);
-
+            /*if not the user's gathering then remove it*/
             if (!activeGatheringIds.contains(event.getID())){
                 gatherings.remove(event);
                 --i;
