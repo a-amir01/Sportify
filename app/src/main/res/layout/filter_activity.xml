@@ -12,10 +12,11 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp">
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Private Events"
+            android:textColor="@color/white"
             android:paddingRight="20dp"
             android:id="@+id/event_access_specifier"
             android:checked="false"
@@ -31,20 +32,22 @@
         android:paddingTop="10dp"
         android:weightSum="1">
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Expand All"
+            android:textColor="@color/white"
             android:id="@+id/expand_all"
             android:layout_gravity="center_horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="20dp"
             android:layout_weight="0.5" />
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select All"
+            android:textColor="@color/white"
             android:id="@+id/select_all"
             android:paddingRight="20dp"
             android:layout_weight="0.5" />
@@ -59,19 +62,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Beginner"
-            android:id="@+id/begginerCheckBox" />
+            android:textColor="@color/white"
+            android:id="@+id/begginerCheckBox"
+            android:buttonTint="@color/white"/>
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Intermediate"
-            android:id="@+id/IntermediateCheckBox" />
+            android:textColor="@color/white"
+            android:id="@+id/IntermediateCheckBox"
+            android:buttonTint="@color/white" />
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Advanced"
-            android:id="@+id/AdvancedCheckBox" />
+            android:textColor="@color/white"
+            android:id="@+id/AdvancedCheckBox"
+            android:buttonTint="@color/white" />
     </LinearLayout>
 
     <RelativeLayout
@@ -85,16 +94,18 @@
         android:divider="#ffff"
         android:dividerHeight="0.5dp"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp"
+        android:layout_above="@+id/linearLayout"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearLayout">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save"
@@ -102,7 +113,7 @@
             android:layout_weight="0.5"/>
             <!--android:background="#ffff"/>-->
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cancel"

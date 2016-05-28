@@ -1,7 +1,13 @@
 package gspot.com.sportify.Controller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -9,14 +15,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import android.content.Intent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -123,7 +121,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 }
             });
         } else {
-            Log.e("TAG", "LOOLOOOLLOLOLLOOLLOLLLLOOLL");
+            Log.e(TAG, "LOOLOOOLLOLOLLOOLLOLLLLOOLL");
         }
     }
 
