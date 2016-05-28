@@ -165,4 +165,9 @@ public class Profile {
         //TODO check whether a user is a teammate of the profile owner
         return true;
     }
+
+    public static boolean playerCanMakeGathering(int dayOfWeek, String time, String UID) {
+        //// TODO: 5/28/16
+        return true;
+    }
 }

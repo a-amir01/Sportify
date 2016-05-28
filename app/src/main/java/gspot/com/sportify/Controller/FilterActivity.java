@@ -3,7 +3,9 @@ package gspot.com.sportify.Controller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.CheckBox;
@@ -68,12 +70,21 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
     private boolean [] mSkillLevels;
 
+    private boolean mMatchMyAvailability;
+
     @Bind(R.id.expand_all) Switch mExpandAllSwitch;
     @Bind(R.id.select_all) Switch mSelectAllSwitch;
     @Bind(R.id.event_access_specifier) Switch mEventAccessSpecifier;
     @Bind(R.id.begginerCheckBox) CheckBox mBegginerCheckBox;
     @Bind(R.id.IntermediateCheckBox) CheckBox mIntermediateCheckBox;
     @Bind(R.id.AdvancedCheckBox) CheckBox mAdvancedCheckBox;
+
+    @Bind(R.id.match_my_availability) Switch mMatchMyAvailabilitySwitch;
+
+    @OnCheckedChanged(R.id.match_my_availability)
+    public void onMatchMyAvailabilityCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        mMatchMyAvailability = isChecked;
+    }
 
 
     @OnCheckedChanged(R.id.expand_all)
@@ -116,6 +127,7 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
         data.putStringArrayListExtra(Constants.SPORT_TYPE_ID, selectedSports);
         data.putExtra(Constants.SPORT_ACCESS_ID, sIsPrivateEvent);
         data.putExtra(Constants.SKILL_LEVEL, mSkillLevels);
+        data.putExtra(Constants.MATCH_MY_AVAILABILITY, mMatchMyAvailability);
 
         /*set the boolean hashmap data on device*/
         saveDataOnDevice();
