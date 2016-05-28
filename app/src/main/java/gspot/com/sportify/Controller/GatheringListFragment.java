@@ -32,6 +32,7 @@ import java.util.Observer;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
+import gspot.com.sportify.Model.GspotCalendar;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
@@ -57,6 +58,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     private final static boolean FILTER = true;
 
     private final static boolean ACTIVE = true;
+    private GspotCalendar mCalendar = new GspotCalendar();
 
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE_FILTER = 1;
@@ -99,6 +101,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*get the current user*/
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+
     }
 
     /*2nd function that will be called when an Object of GatheringListFragment is created */
@@ -121,10 +124,12 @@ public class GatheringListFragment extends Fragment implements Observer{
         * update function will be waiting
         * for data to be updated*/
         mSportLab.addObserver(this);
+        mCalendar.addObserver(this);
 
         /*load the gatherings from the database*/
         /*update() will call updateUI*/
         mSportLab.loadGatherings();
+        mCalendar.getCalendar(mCurrentUser);
 
         //updateUI(false);
 
@@ -303,6 +308,8 @@ public class GatheringListFragment extends Fragment implements Observer{
                 continue;
             } //end if
 
+
+
                 /*if atleast one of the skill levels is selected*/
             if(mSkillLevels[0] || mSkillLevels[1] || mSkillLevels[2]){
                 /*if we have the sport and the access is the same, check for skill level*/
@@ -331,17 +338,21 @@ public class GatheringListFragment extends Fragment implements Observer{
     public void update(Observable observable, Object data) {
         Log.i(TAG, "update");
 
-        /*If the data base is modified the listener will immediately be called
-        * if the user is viewing their gatherings, then dont update the UI until
-        * they un-check the active button*/
-        if(mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
-            Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
-            mActiveGatheringCheckBox.setChecked(false);
-            mAdapter.notifyDataSetChanged();
-            //return;
-        }
-
-        updateUI(FILTER, !ACTIVE, null);
+       if (data instanceof SportLab) {
+           /*If the data base is modified the listener will immediately be called
+            * if the user is viewing their gatherings, then dont update the UI until
+            * they un-check the active button*/
+           if (mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
+               Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
+               mActiveGatheringCheckBox.setChecked(false);
+               mAdapter.notifyDataSetChanged();
+               //return;
+           }
+       }else if (data instanceof GspotCalendar) {
+           Toast.makeText(getContext(), "Calendar Fetched", Toast.LENGTH_SHORT).show();
+       } else {
+           updateUI(FILTER, !ACTIVE, null);
+       }
     }
 
     /* this function will see if the gatherings parameter is part

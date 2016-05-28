@@ -5,11 +5,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import gspot.com.sportify.utils.Constants;
 
@@ -161,12 +165,4 @@ public class Profile {
         //TODO check whether a user is a teammate of the profile owner
         return true;
     }
-
-    public static boolean playerCanMakeGathering(int dayOfWeek, String time, String UID) {
-        //// TODO: 5/28/16
-        return true;
-    }
-
-
-
 }

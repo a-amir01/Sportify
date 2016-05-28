@@ -1,14 +1,22 @@
 package gspot.com.sportify.Model;
 
+import android.util.Log;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /** GSpot Calendar
  * Represents a calendar indicating a user's
  * times of availability.
  * Created by patrickhayes on 5/3/16.
  */
-public class GspotCalendar {
+public class GspotCalendar extends Observable{
 
     /* Represents the times that the user is available */
     private List<List<Boolean>> calendarGrid;
@@ -70,5 +78,29 @@ public class GspotCalendar {
     public boolean getAvailability(int dayOfWeek, int timeOfDay) {
         return calendarGrid.get(dayOfWeek).get(timeOfDay);
     }
+
+    public void getCalendar(String UID) {
+        Firebase profileRef = Profile.profileRef(UID);
+
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                GspotCalendar calendarTemp =  dataSnapshot.getValue(Profile.class).getmCalendar();
+                calendarGrid = calendarTemp.getCalendarGrid();
+
+                 /*To notify the observers we have changed*/
+                setChanged();
+                notifyObservers();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+
 
 }
