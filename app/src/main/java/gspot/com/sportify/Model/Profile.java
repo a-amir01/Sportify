@@ -162,5 +162,11 @@ public class Profile {
         return true;
     }
 
+    public static boolean playerCanMakeGathering(int dayOfWeek, String time, String UID) {
+        //// TODO: 5/28/16
+        return true;
+    }
+
+
 
 }
