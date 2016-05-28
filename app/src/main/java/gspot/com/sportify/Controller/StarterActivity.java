@@ -29,8 +29,9 @@ public class StarterActivity extends Activity {
         Log.i(TAG, "onCreate()");
 
         /*start fresh and delete the file that is stored on user device*/
-        Log.i(TAG, "Deleteting file " + Constants.FILE_NAME + " from device");
-        deleteFile(Constants.FILE_NAME);
+        Log.i(TAG, "Deleteting file " + Constants.SPORTS_FILTER_FILE + " from device");
+        deleteFile(Constants.SPORTS_FILTER_FILE);
+        deleteFile(Constants.SKILL_LEVEL_FILE);
 
 
         /*the value stored here will remain on device until the app is deleted*/

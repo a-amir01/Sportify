@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.App;
 
 /**
  * Authors amir assad, on 4/17/16
@@ -29,7 +31,6 @@ import gspot.com.sportify.R;
 public class GatheringPagerActivity extends BaseNavBarActivity {
 
     private static final String EXTRA_SPORT_ID = "sport_id";
-    private static final String POSITION_ID = "position_id";
     private static final String TAG = GatheringPagerActivity.class.getSimpleName();
 
     /*load the pager*/
@@ -37,10 +38,6 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
 
     /*list of all mGatherings*/
     private List<Gathering> mGatherings;
-
-    /*Used when the back button is pressed
-     *position of the sport we are at in the list*/
-    private int mCurrSportPos;
 
     /*
      * Function to Create a new intent and save the sport Id for when the
@@ -63,12 +60,10 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         /*get the id of the GatheringFragment that was passed into newIntent*/
         String sportId = getIntent().getStringExtra(EXTRA_SPORT_ID);
 
-
-        Log.d(TAG, "onCreate()" + sportId);
-
         mViewPager = (ViewPager) findViewById(R.id.activity_sport_pager_view_pager);
 
-        mGatherings = SportLab.get(this).getSports();
+        /*get all the gatherings*/
+        mGatherings = App.mGatherings;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -80,17 +75,10 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
             * fast loading*/
             @Override
             public Fragment getItem(int position) {
-
                 Log.d(TAG, "getItem()::FSPA " + position + " " + mViewPager.getCurrentItem());
 
                 /*get the gathering that is being loaded*/
                 Gathering gathering = mGatherings.get(position);
-
-                /*the position of the fragment that is being loaded*/
-               // gathering.mPosition = position;
-
-                /*position of the current gathering on screen*/
-                mCurrSportPos = mViewPager.getCurrentItem();
 
                 return GatheringFragment.newInstance(gathering.getID());
             }
@@ -109,7 +97,7 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
          * id that will match the sportID
          */
         for(int i = 0; i < mGatherings.size(); i++){
-            if(mGatherings.get(i).getID() == sportId){
+            if(mGatherings.get(i).getID().equals(sportId)){
                 mViewPager.setCurrentItem(i);
                 break;
             }/*end if*/
@@ -132,32 +120,4 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         return true;
     } //end onCreateOptionsMenu
 
-    /*
-     * this function will be called when the
-     * user presses the back button*/
-    @Override
-    public void onBackPressed() {
-
-        Log.d(TAG, "onBackPressed()");
-
-        /*you must first set the result before calling the
-         * super class family */
-        returnResult(mCurrSportPos);
-        super.onBackPressed();
-    }/*end onBackPressed*/
-
-    /*
-    * Function to store the value we want to return back to the caller
-    * this function calls setResult because this activity was called by
-    * startActivityForResult and this is how we get the data back to the caller
-    * @param position: the position of the sport in the list*/
-    public void returnResult(int position) {
-        Log.d(TAG, "returnResult " + position);
-        /*start a new intent to store data in*/
-        Intent data = new Intent();
-        /*store the position*/
-        data.putExtra(POSITION_ID, position);
-        /*return the position back to the caller*/
-        setResult(RESULT_OK, data);
-    }/*end returnResult*/
 }

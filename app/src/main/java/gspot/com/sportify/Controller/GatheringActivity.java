@@ -208,10 +208,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         App.mCurrentGathering.setLocation(mLocationField.getText().toString());
       //  App.mCurrentGathering.setTime(mTimeField.getText().toString());
         App.mCurrentGathering.updateGathering();
-        Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
-        startActivity(intent);
-
     }
 
     private void submitGathering() {
@@ -239,9 +236,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         mgathering.setTime(mTimeString);
         mgathering.setDayOfWeek(mDayOfWeek);
         sportRef.setValue(mgathering);
-        Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
-        startActivity(intent);
     }
 
     /**

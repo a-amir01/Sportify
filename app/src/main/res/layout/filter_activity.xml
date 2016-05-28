@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#14d1d7">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -51,13 +51,38 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beginner"
+            android:id="@+id/begginerCheckBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Intermediate"
+            android:id="@+id/IntermediateCheckBox" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Advanced"
+            android:id="@+id/AdvancedCheckBox" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ExpandableListView
         android:layout_width="match_parent"
-        android:layout_height="486dp"
+        android:layout_height="394dp"
         android:id="@+id/expandableList"
-        android:childDivider="#ffff"
-        android:divider="#add8e6"
+        android:childDivider="@color/colorPrimary"
+        android:divider="#ffff"
         android:dividerHeight="0.5dp"
         android:layout_gravity="center_horizontal"
         android:paddingTop="10dp"/>
@@ -85,5 +110,7 @@
             android:layout_weight="0.5"/>
             <!--android:background="#ffff"/>-->
     </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

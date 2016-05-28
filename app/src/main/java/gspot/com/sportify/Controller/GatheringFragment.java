@@ -1,11 +1,15 @@
 package gspot.com.sportify.Controller;
 
 import android.content.SharedPreferences;
+
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.BinderThread;
 import android.support.v4.app.DialogFragment;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,24 +20,21 @@ import android.widget.Button;
 import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
 import org.w3c.dom.Text;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Timer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
+
 import gspot.com.sportify.Model.Gathering;
-import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.R;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.utils.App;
@@ -155,7 +156,7 @@ public class GatheringFragment extends Fragment {
      * attaching arguments to a fragment must be done after the fragment is created
      * but before it is added to an activity.*/
     public static GatheringFragment newInstance(String sportId) {
-        Log.d(TAG, "newInstance()");
+        Log.d(TAG, "newInstance() " + sportId);
         Bundle args = new Bundle();
         args.putString(Constants.ARG_SPORT_ID, sportId);    /*store the sportId for later retreival*/
         GatheringFragment fragment = new GatheringFragment();   /*create a new instance of the fragment*/
@@ -169,13 +170,24 @@ public class GatheringFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "On Create");
 
-        /*Get the gathering ID from the previous fragment*/
-        Intent intent = getActivity().getIntent();
+        Log.i(TAG, "onCreate");
 
-        gatheringUID = intent.getStringExtra("gatheringUID");
+        gatheringUID = getArguments().getString(Constants.ARG_SPORT_ID);
+
+    }//end onCreate
+
+    /**inflate the layout for the fragments view and return the view to the host*/
+    @Override                //*inflate the layout   *from the activities   *layout recreate from a saved state
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
+    {/**gets called when its the 1st time drawing its UI*/
+        /**the 3rd param: whether the inflated layout should be attached to the 2nd param during inflation*/
+        Log.d(TAG, "onCreateView()");
+
+        View view = inflater.inflate(R.layout.view_gathering2, parent, false);
+        ButterKnife.bind(this, view);
 
         /*Read the Gathering with the unique gatheringID*/
-
+        /*Retrieve text information from the database*/
         gathering = new Firebase(Constants.FIREBASE_URL_GATHERINGS).child(gatheringUID);
         /*Populate page with gathering*/
         m_lis = new ValueEventListener() {
@@ -207,25 +219,29 @@ public class GatheringFragment extends Fragment {
                         setButton();
                     }
                 }catch(Exception e) {}
+
+                /*the ValueEventListener will be called evertime the database has changed in real time
+                * if the current gathering we are trying to get is no longer availble then
+                * mGathering will be null*/
+                if(mGathering == null){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(getActivity(), "Refreshing data.", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+                }
             }
+
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 Log.e(TAG, "Fire    BaseError " + firebaseError.getMessage());
             }
         };
+
         gathering.addValueEventListener(m_lis);
-    }//end onCreate
-
-    /**inflate the layout for the fragments view and return the view to the host*/
-    @Override                //*inflate the layout   *from the activities   *layout recreate from a saved state
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
-    {/**gets called when its the 1st time drawing its UI*/
-        /**the 3rd param: whether the inflated layout should be attached to the 2nd param during inflation*/
-        Log.d(TAG, "onCreateView()");
-
-        View view = inflater.inflate(R.layout.view_gathering2, parent, false);
-        ButterKnife.bind(this, view);
 
         /**root of the fragments layout, return null if no layout.*/
         return view;
@@ -244,7 +260,7 @@ public class GatheringFragment extends Fragment {
     void getHostname(String hostID) {
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
 
-        profileRef.addValueEventListener(new ValueEventListener() {
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mHost.setText(dataSnapshot.getValue(String.class));
@@ -264,9 +280,7 @@ public class GatheringFragment extends Fragment {
         App.mGatherings.remove(App.mCurrentGathering);
         App.mCurrentGathering = null;
 
-        Intent intent = new Intent(getActivity(), GatheringListActivity.class);
         getActivity().finish();
-        startActivity(intent);
     }
 
     void leaveAttending () {

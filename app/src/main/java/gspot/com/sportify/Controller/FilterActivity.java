@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
 import android.widget.Switch;
@@ -41,7 +43,7 @@ import gspot.com.sportify.utils.GatheringTypeProvider;
  * with the key Constants.SPORT_TYPE_ID which can be used to
  * filter out the array list that the recycler view uses
  */
-public class FilterActivity extends Activity implements CompoundButton.OnCheckedChangeListener, Observer {
+public class FilterActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, Observer {
 
     private static final String TAG = FilterActivity.class.getSimpleName();
 
@@ -63,11 +65,15 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
     /*Are all options selected?*/
     private static boolean sIsAllSelected;
 
-    private String mSkillLevel;
+    private boolean [] mSkillLevels;
 
     @Bind(R.id.expand_all) Switch mExpandAllSwitch;
     @Bind(R.id.select_all) Switch mSelectAllSwitch;
     @Bind(R.id.event_access_specifier) Switch mEventAccessSpecifier;
+    @Bind(R.id.begginerCheckBox) CheckBox mBegginerCheckBox;
+    @Bind(R.id.IntermediateCheckBox) CheckBox mIntermediateCheckBox;
+    @Bind(R.id.AdvancedCheckBox) CheckBox mAdvancedCheckBox;
+
 
     @OnCheckedChanged(R.id.expand_all)
     public void onExpandAllCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -83,6 +89,21 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
         sIsPrivateEvent = isChecked;
     }
 
+    @OnCheckedChanged(R.id.begginerCheckBox)
+    public void onBegginerClick(CompoundButton buttonView, boolean isChecked){
+        mSkillLevels[0] = isChecked;
+    }
+
+    @OnCheckedChanged(R.id.IntermediateCheckBox)
+    public void onIntermediateClick(CompoundButton buttonView, boolean isChecked){
+        mSkillLevels[1] = isChecked;
+    }
+
+    @OnCheckedChanged(R.id.AdvancedCheckBox)
+    public void onAdvancedClick(CompoundButton buttonView, boolean isChecked){
+        mSkillLevels[2] = isChecked;
+    }
+
     @OnClick(R.id.saveButton)
     public void onClickSave(){
         /*get th list of sports selected*/
@@ -93,7 +114,7 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
 
         data.putStringArrayListExtra(Constants.SPORT_TYPE_ID, selectedSports);
         data.putExtra(Constants.SPORT_ACCESS_ID, sIsPrivateEvent);
-        data.putExtra(Constants.SKILL_LEVEL, mSkillLevel);
+        data.putExtra(Constants.SKILL_LEVEL, mSkillLevels);
 
         /*set the boolean hashmap data on device*/
         saveDataOnDevice();
@@ -127,6 +148,8 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
         /*Asynchronous tasks*/
         mDataBaseSports.readSportTypes();
 
+        mSkillLevels = new boolean[3];
+
     }//end onCreate
 
     /*don't let the user press the back button*/
@@ -141,12 +164,18 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
     private void saveDataOnDevice() {
         try {
             /*open for writing*/
-            FileOutputStream fStream = openFileOutput(Constants.FILE_NAME, Context.MODE_PRIVATE) ;
+            FileOutputStream fStream = openFileOutput(Constants.SPORTS_FILTER_FILE, Context.MODE_PRIVATE) ;
             /*user output stream to write*/
             ObjectOutputStream oStream = new ObjectOutputStream(fStream);
 
             /*write the hashtable to the txt file*/
             oStream.writeObject(mExpandableListAdapter.getSelectedBooleanHashMap());
+            oStream.flush();
+            oStream.close();
+
+            fStream = openFileOutput(Constants.SKILL_LEVEL_FILE, Context.MODE_PRIVATE);
+            oStream = new ObjectOutputStream(fStream);
+            oStream.writeObject(mSkillLevels);
             oStream.flush();
             oStream.close();
 
@@ -169,11 +198,16 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
 
         try {
             /*open for reading*/
-            inStream = openFileInput(Constants.FILE_NAME);
+            inStream = openFileInput(Constants.SPORTS_FILTER_FILE);
             /*read from the inputStream*/
             ois = new ObjectInputStream(inStream);
             /*get the filters*/
             filters = (HashMap<Integer, boolean[]>) ois.readObject();
+
+            inStream = openFileInput(Constants.SKILL_LEVEL_FILE);
+            ois = new ObjectInputStream(inStream);
+
+            mSkillLevels = (boolean[]) ois.readObject();
 
             Log.i(TAG, "De-Serialization Success");
         }catch (Exception e){
@@ -253,6 +287,10 @@ public class FilterActivity extends Activity implements CompoundButton.OnChecked
 
         /*set the event specifier*/
         mEventAccessSpecifier.setChecked(sIsPrivateEvent);
+
+        mBegginerCheckBox.setChecked(mSkillLevels[0]);
+        mIntermediateCheckBox.setChecked(mSkillLevels[1]);
+        mAdvancedCheckBox.setChecked(mSkillLevels[2]);
 
     } //end update
 }//end FilterActivity

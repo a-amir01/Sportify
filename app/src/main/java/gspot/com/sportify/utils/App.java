@@ -17,4 +17,5 @@ public class App {
     public static List<String> mSportTypes = new SportTypes().getSportTypes();
     /* current gathering selected*/
     public static Gathering mCurrentGathering = null;
+
 }
