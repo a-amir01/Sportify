@@ -331,48 +331,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         DialogFragment fragment = new AddSportFragment();
         fragment.show(mFragManager,"Add Sport");
 
-        /*AlertDialog.Builder builderSingle = new AlertDialog.Builder(ProfileActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.sport_type, null);
-
-        builderSingle.setView(convertView);
-        builderSingle.setTitle("Select a sport to add to your profile");
-
-        List<String> sport_types = new ArrayList<String> (Arrays.asList(res.getStringArray(R.array.sport_types)));
-        List<String> currentSports = getMySportList();
-
-        //I user shouldn't be able to ave two basketball profiles, so hide all the sports they
-        //already have a profile for
-        if (currentSports != null) {
-            sport_types.removeAll(currentSports);
-        }
-
-        final ListAdapter sportTypeListAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_sport_type, sport_types);
-        builderSingle.setAdapter(sportTypeListAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                if (mProfile.getmMySports() == null) {
-                    mProfile.setmMySports(new ArrayList<MySport>());
-                }
-                //get the title of the sport from sport_type, then make a new MySport and add
-                //it to the users profile
-                mProfile.getmMySports().add(new MySport((String) sportTypeListAdapter.getItem(position)));
-
-                setMySportsAdapter(ProfileActivity.this);
-
-                dialog.dismiss();
-            }
-        });
-
-        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        builderSingle.show();
-        */
     }
 
     /**

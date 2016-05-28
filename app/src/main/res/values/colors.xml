@@ -6,7 +6,7 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorPrimaryTextInverse">#ffffff</color>
     <color name="colorBackground">#FFFFFF</color>
-    <color name="available">#33bd2c</color>
+    <color name="available">#3afc31</color>
     <color name="busy">#d21d1d</color>
     <color name="hintColor">#a0FFFFFF</color>
     <color name="textColorLogin">#FFFFFF</color>

@@ -58,6 +58,7 @@ public class Gathering{
     private HashMap mPendings;
     private HashMap mAttendees;
     private int mTimeOfDay;
+    private int mDayOfWeek;
     private String mDate;
     private int attendeeSize, pendingSize;
 
@@ -66,8 +67,17 @@ public class Gathering{
         mAttendees = new HashMap();
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
+        mDayOfWeek = 0;
         attendeeSize = 1;
         pendingSize = 0;
+    }
+
+    public int getDayOfWeek() {
+        return mDayOfWeek;
+    }
+
+    public void setDayOfWeek(int mDayOfWeek) {
+        this.mDayOfWeek = mDayOfWeek;
     }
 
     public void setGatheringTitle (String title) { this.mGatheringTitle = title; }

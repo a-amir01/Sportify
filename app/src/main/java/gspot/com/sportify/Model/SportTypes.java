@@ -60,17 +60,20 @@ public class SportTypes extends Observable {
 
                     Log.e("Sport Types", newPost);
                     sports.add(newPost);
+                    Log.e("SIZZE", "" + sports.size());
 
                 }
-                Log.e("Sport Types", "" + sports.size());
+                Log.d("Sport Types", "" + sports.size());
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
+                Log.e("FIREBASE ERROR", "SportTypes");
 
             }
         });
 
+        Log.e("SPORT Types", "Size " + sports.size());
         return sports;
     }
 }

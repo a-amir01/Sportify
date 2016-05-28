@@ -54,6 +54,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     private Gathering mgathering;
     private String m_hostID, mCurrentUser;
     private boolean toEdit;
+    private int mDayOfWeek;
     private String mDateString;
     private String mTimeString;
     private Button dateButton;
@@ -115,19 +116,21 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         setContentView(R.layout.fragment_gathering);
         ButterKnife.bind(this);
 
-        Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
-        sportTypeSpinner.setOnItemSelectedListener(this);
-        List<String> sport_types = new SportTypes().getSportTypes();
-        ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
-        Log.i(TAG, "" + sport_types.size());
-        sportTypeListAdapter.setDropDownViewResource(R.layout.spinner_style);
-        sportTypeSpinner.setAdapter(sportTypeListAdapter);
-
         Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
         skillLevelSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
         dataAdapter.setDropDownViewResource(R.layout.spinner_style);
         skillLevelSpinner.setAdapter(dataAdapter);
+
+        Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
+        sportTypeSpinner.setOnItemSelectedListener(this);
+        List<String> sport_types = new ArrayList<>();
+        sport_types.addAll(App.mSportTypes);
+        sport_types.add("Test");
+        ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
+        Log.e(TAG, "Sportype Size " + sport_types.size());
+        sportTypeListAdapter.setDropDownViewResource(R.layout.spinner_style);
+        sportTypeSpinner.setAdapter(sportTypeListAdapter);
 
         Intent intent = getIntent();
         toEdit = intent.getBooleanExtra("Edit", false);
@@ -165,6 +168,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         switch (parent.getId()) {
             case R.id.sport_type_spinner:
                 String sport = parent.getItemAtPosition(position).toString();
+                Log.e(TAG, sport);
                 if (toEdit) {
                     App.mCurrentGathering.setSID(sport);
                 }
@@ -233,6 +237,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         //mgathering.addPending(mCurrentUser);
         mgathering.setDate(mDateString);
         mgathering.setTime(mTimeString);
+        mgathering.setDayOfWeek(mDayOfWeek);
         sportRef.setValue(mgathering);
         Intent intent = new Intent(this, GatheringListActivity.class);
         finish();
@@ -243,8 +248,9 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
      * Set date, to be called from DatePickerDialog
      * @param newDate
      */
-    public void setDateString(String newDate) {
+    public void setDateString(String newDate, int dayOfWeek) {
         mDateString = newDate;
+        mDayOfWeek = dayOfWeek;
         Log.d(TAG, "date set to: " + mDateString);
     }
 
