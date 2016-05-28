@@ -41,7 +41,9 @@
         android:id="@+id/sport_bio_content"
         android:inputType="textMultiLine"
         android:textColor="@color/colorPrimaryText"
-        android:text="This is a sports bio" />
+        android:text="This is a sports bio"
+        android:maxLines="14"
+        android:minLines="1" />
 
     <Button
         android:layout_width="wrap_content"

@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -178,6 +179,8 @@ public class ProfileActivity extends BaseNavBarActivity {
                 /* Create a user profile object from data in the database */
                 mProfile = dataSnapshot.getValue(Profile.class);
                 /* Retrieve text information from the database*/
+                mName.setEllipsize(TextUtils.TruncateAt.END);
+                mName.setMaxLines(4);
                 mName.setText(mProfile.getmName());
                 mProfilePicture.setImageBitmap(UserPicture.StringToBitMap(mProfile.getmProfilePic()));
                 mBio.setText(mProfile.getmBio());
@@ -279,18 +282,27 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Save and View if the button is pressed in Editm Mode */
         } else {
-            if (mName.getText().length() != 0){
+            if (mName.getText().length() != 0 ){
                 mProfile.setmName(mName.getText().toString());
             } else {
                 mName.setText(mProfile.getmName());
             }
             if (mBio.getText().length() != 0){
-                mProfile.setmBio(mBio.getText().toString());
+                if (mBio.getText().length() > 200) {
+                    mProfile.setmBio("Please keep your bio under 200 characters.");
+                }
+                else {
+                    mProfile.setmBio(mBio.getText().toString());
+                }
             } else {
                 mBio.setText(mProfile.getmBio());
             }
             if (mContactInfo.getText().length() != 0){
-                mProfile.setmContactInfo(mContactInfo.getText().toString());
+                if (mContactInfo.getText().length() > 50) {
+                    mProfile.setmContactInfo("Please keep your contact info under 50 characters");
+                } else {
+                    mProfile.setmContactInfo(mContactInfo.getText().toString());
+                }
             } else {
                 mContactInfo.setText(mProfile.getmContactInfo());
             }
