@@ -15,7 +15,11 @@
         android:padding="8dp"
         android:inputType="textMultiLine"
         android:text="title"
-        android:layout_weight="0.19" />
+        android:layout_weight="0.19"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -25,7 +29,22 @@
         android:hint="Enter a description"
         android:inputType="textMultiLine"
         android:text="description"
-        android:layout_weight="0.17" />
+        android:layout_weight="0.17"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/gathering_date"
+        android:layout_weight="0.19"
+        android:text="date"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -35,7 +54,11 @@
         android:inputType="textMultiLine"
         android:text="location"
         android:layout_weight="0.08"
-        android:id="@+id/gathering_location" />
+        android:id="@+id/gathering_location"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -45,7 +68,11 @@
         android:hint="@string/hint_time"
         android:inputType="textMultiLine"
         android:text="time"
-        android:layout_weight="0.11" />
+        android:layout_weight="0.11"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -53,7 +80,11 @@
         android:id="@+id/gathering_host"
         android:layout_gravity="center_horizontal"
         android:text="host"
-        android:layout_weight="0.08" />
+        android:layout_weight="0.08"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -63,13 +94,19 @@
             android:layout_width="126dp"
             android:layout_height="wrap_content"
             android:id="@+id/host_display"
-            android:layout_gravity="left|top" />
+            android:layout_gravity="left|top"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
         <EditText
             android:layout_width="251dp"
             android:layout_height="wrap_content"
             android:id="@+id/attendees_display"
-            android:layout_gravity="right|center_vertical" />
+            android:layout_gravity="right|center_vertical"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
     </FrameLayout>
 
