@@ -32,7 +32,9 @@ import java.util.Observer;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
+import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.Model.SportLab;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
@@ -85,6 +87,8 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*Hold a reference to the menuItem for active gatherings*/
     private MenuItem mActiveGatheringCheckBox;
 
+    /*Match my availability*/
+    private boolean mMatch_My_Availability;
     /*
     * 1st function to be called when the object gets instantiated
     * tell the host activity that your fragment
@@ -231,8 +235,10 @@ public class GatheringListFragment extends Fragment implements Observer{
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
             mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
             mSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
+            mMatch_My_Availability = data.getBooleanExtra(Constants.MATCH_MY_AVAILABILITY, false);
 
             if(mChosenSports != null){
+                SportTypes st = new SportTypes();
                 Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
             }
 
@@ -320,6 +326,11 @@ public class GatheringListFragment extends Fragment implements Observer{
                 }
             }//end outer if
 
+            /*match my availability*/
+            if(!Profile.playerCanMakeGathering(event.getDayOfWeek(), event.getTime(), mCurrentUser)) {
+                gatherings.remove(event);
+                --i;
+            }
         }//end for
 
     }//end filter UI
