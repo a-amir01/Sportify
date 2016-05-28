@@ -10,18 +10,34 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:weightSum="1">
 
         <android.support.v7.widget.SwitchCompat
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Private Events"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Match Schedule"
             android:textColor="@color/white"
-            android:paddingRight="20dp"
-            android:id="@+id/event_access_specifier"
-            android:checked="false"
+            android:id="@+id/event_match_schedule"
+            android:layout_gravity="center_horizontal"
             android:paddingLeft="10dp"
-            android:layout_gravity="center_horizontal" />
+            android:paddingStart="10dp"
+            android:paddingRight="20dp"
+            android:paddingEnd="20dp"
+            android:layout_weight="0.5"
+            android:theme="@style/SwitchCompatTheme"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Closed Events"
+            android:textColor="@color/white"
+            android:id="@+id/event_access_specifier"
+            android:layout_gravity="center_horizontal"
+            android:paddingRight="20dp"
+            android:paddingEnd="20dp"
+            android:layout_weight="0.5"
+            android:theme="@style/SwitchCompatTheme"/>
 
     </LinearLayout>
 
@@ -40,8 +56,11 @@
             android:id="@+id/expand_all"
             android:layout_gravity="center_horizontal"
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:paddingRight="20dp"
-            android:layout_weight="0.5" />
+            android:paddingEnd="20dp"
+            android:layout_weight="0.5"
+            android:theme="@style/SwitchCompatTheme"/>
 
         <android.support.v7.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -50,7 +69,9 @@
             android:textColor="@color/white"
             android:id="@+id/select_all"
             android:paddingRight="20dp"
-            android:layout_weight="0.5" />
+            android:paddingEnd="20dp"
+            android:layout_weight="0.5"
+            android:theme="@style/SwitchCompatTheme"/>
 
     </LinearLayout>
 
