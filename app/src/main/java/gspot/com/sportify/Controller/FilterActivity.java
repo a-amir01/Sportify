@@ -1,15 +1,14 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
@@ -26,7 +25,6 @@ import java.util.Observer;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
-
 import butterknife.OnClick;
 import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.Model.SportTypes;
@@ -67,9 +65,9 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
     private boolean [] mSkillLevels;
 
-    @Bind(R.id.expand_all) Switch mExpandAllSwitch;
-    @Bind(R.id.select_all) Switch mSelectAllSwitch;
-    @Bind(R.id.event_access_specifier) Switch mEventAccessSpecifier;
+    @Bind(R.id.expand_all) SwitchCompat mExpandAllSwitch;
+    @Bind(R.id.select_all) SwitchCompat mSelectAllSwitch;
+    @Bind(R.id.event_access_specifier) SwitchCompat mEventAccessSpecifier;
     @Bind(R.id.begginerCheckBox) CheckBox mBegginerCheckBox;
     @Bind(R.id.IntermediateCheckBox) CheckBox mIntermediateCheckBox;
     @Bind(R.id.AdvancedCheckBox) CheckBox mAdvancedCheckBox;
