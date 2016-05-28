@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 
@@ -89,7 +90,7 @@ public class AddSportFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_add_sport, container, false);
         ButterKnife.bind(this, v);
 
-        List<String> sport_types = new ArrayList<String> (Arrays.asList(res.getStringArray(R.array.sport_types)));
+        List<String> sport_types = new SportTypes().getSportTypes();
         ProfileActivity activity = (ProfileActivity) getActivity();
         List<String> currentSports = activity.getMySportList();
         mProfile = activity.getProfile();

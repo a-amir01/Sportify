@@ -2,12 +2,15 @@ package gspot.com.sportify.Model;
 
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.deser.std.StringArrayDeserializer;
+import com.fasterxml.jackson.databind.type.ArrayType;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 import gspot.com.sportify.utils.App;
@@ -18,6 +21,7 @@ import gspot.com.sportify.utils.App;
 public class SportTypes extends Observable {
 
     public ArrayList<SportType> sportTypes = new ArrayList<>();
+    public ArrayList<String> sports = new ArrayList<>();
 
     public void readSportTypes() {
 
@@ -43,5 +47,30 @@ public class SportTypes extends Observable {
 
             }
         });
+    }
+
+    public List<String>  getSportTypes() {
+        App.dbref.child("Sports").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot child: dataSnapshot.getChildren()) {
+
+                    String newPost = child.getValue(SportType.class).getName();
+
+                    Log.e("Sport Types", newPost);
+                    sports.add(newPost);
+
+                }
+                Log.e("Sport Types", "" + sports.size());
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        return sports;
     }
 }

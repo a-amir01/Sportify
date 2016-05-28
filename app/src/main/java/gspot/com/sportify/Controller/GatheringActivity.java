@@ -35,6 +35,7 @@ import butterknife.OnClick;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.SportLab;
 import gspot.com.sportify.Model.SportType;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
@@ -47,10 +48,7 @@ import gspot.com.sportify.utils.TimePickerFragment;
  */
 public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener {
 
-    private static final String TAG =
-
-
-            DatePickerFragment.class.getSimpleName();
+    private static final String TAG = GatheringActivity.class.getSimpleName();
     private static final int REQUEST_DATE = 0;
 
     private Gathering mgathering;
@@ -119,9 +117,11 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
         Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
         sportTypeSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<CharSequence> Adapter1 = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.sport_types, R.layout.spinner_style);
-        Adapter1.setDropDownViewResource(R.layout.spinner_style);
-        sportTypeSpinner.setAdapter(Adapter1);
+        List<String> sport_types = new SportTypes().getSportTypes();
+        ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
+        Log.i(TAG, "" + sport_types.size());
+        sportTypeListAdapter.setDropDownViewResource(R.layout.spinner_style);
+        sportTypeSpinner.setAdapter(sportTypeListAdapter);
 
         Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
         skillLevelSpinner.setOnItemSelectedListener(this);
@@ -145,7 +145,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
 
 
-            int sportspinnerPosition = Adapter1.getPosition(App.mCurrentGathering.getSID());
+            int sportspinnerPosition = sportTypeListAdapter.getPosition(App.mCurrentGathering.getSID());
             sportTypeSpinner.setSelection(sportspinnerPosition);
 
             int skillLevelPosition = dataAdapter.getPosition(App.mCurrentGathering.getSkillLevel().toString());
