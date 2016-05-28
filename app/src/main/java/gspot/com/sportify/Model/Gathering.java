@@ -218,6 +218,11 @@ public class Gathering{
         });
     }
 
+    public static boolean playerCanMakeGathering (GspotCalendar calendar) {
+        //// TODO: 5/28/16
+        return true;
+    }
+
 
 }
 

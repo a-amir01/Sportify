@@ -334,7 +334,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             }//end outer if
 
             /*match my availability*/
-            if(!Profile.playerCanMakeGathering(event.getDayOfWeek(), event.getTime(), mCurrentUser)) {
+            if(!event.playerCanMakeGathering(mCalendar)) {
                 gatherings.remove(event);
                 --i;
             }
