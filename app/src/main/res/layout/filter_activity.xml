@@ -77,31 +77,38 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="3">
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Beginner"
             android:textColor="@color/white"
             android:id="@+id/begginerCheckBox"
-            android:buttonTint="@color/white"/>
+            app:buttonTint="@color/white"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"/>
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Intermediate"
             android:textColor="@color/white"
             android:id="@+id/IntermediateCheckBox"
-            android:buttonTint="@color/white" />
+            app:buttonTint="@color/white"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"/>
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Advanced"
             android:textColor="@color/white"
             android:id="@+id/AdvancedCheckBox"
-            android:buttonTint="@color/white" />
+            app:buttonTint="@color/white"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
     <RelativeLayout
