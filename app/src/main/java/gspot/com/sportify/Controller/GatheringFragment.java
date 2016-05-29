@@ -95,7 +95,6 @@ public class GatheringFragment extends Fragment {
         Intent intent = new Intent(getActivity(), GatheringActivity.class);
         intent.putExtra("Edit", true);
         App.mCurrentGathering = mGathering;
-        getActivity().finish();
         startActivity(intent);
     }
 
@@ -107,7 +106,6 @@ public class GatheringFragment extends Fragment {
         intent.putExtra("gatheringUID", mGathering.getID());
         intent.putExtra("cameFrom", "attending");
         intent.putExtra("gatheringSport", mGathering.getSport());
-        getActivity().finish();
         getActivity().startActivity(intent);
     }
 
@@ -123,7 +121,6 @@ public class GatheringFragment extends Fragment {
         intent.putExtra("gatheringUID", mGathering.getID());
         intent.putExtra("cameFrom", "pending");
         intent.putExtra("gatheringSport", mGathering.getSport());
-        getActivity().finish();
         getActivity().startActivity(intent);
     }
 
@@ -135,7 +132,6 @@ public class GatheringFragment extends Fragment {
         intent.putExtra("viewingUser", mGathering.getHostID());
         intent.putExtra("cameFrom", "viewing");
         Log.d(TAG, "HOSTID" + mGathering.getHostID());
-        getActivity().finish();
         getActivity().startActivity(intent);
     }
 
@@ -162,6 +158,8 @@ public class GatheringFragment extends Fragment {
         Log.i(TAG, "onCreate");
 
         gatheringUID = getArguments().getString(Constants.ARG_SPORT_ID);
+
+
 
     }//end onCreate
 
