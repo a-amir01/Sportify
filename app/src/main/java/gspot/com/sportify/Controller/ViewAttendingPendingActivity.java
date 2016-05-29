@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -163,6 +164,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
         private TextView mName;
         private ImageView mPicture;
         private TextView mSkill;
+        private Button mAccept;
 
 
         public PlayerHolder(View itemView) {
@@ -174,6 +176,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             mName = (TextView)itemView.findViewById(R.id.player_name);
             mPicture = (ImageView) itemView.findViewById(R.id.player_picture);
             mSkill= (TextView) itemView.findViewById(R.id.player_skill_lv);
+            mAccept = (Button) itemView.findViewById(R.id.accept_request);
 
             /*when the player is clicked in the list*/
             itemView.setOnClickListener(this);
@@ -183,35 +186,15 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
         public void onClick(View v) {
             Log.i(TAG, "onClick()" + mPlayer.getmOwner());
 
-            if(cameFrom.equals("attending")) {
-                Log.i(TAG, "ATTENDING");
-                Intent intent = new Intent(context, ProfileActivity.class);
-                String UID = mPlayer.getmOwner();
-                intent.putExtra("viewingUser", UID);
-                intent.putExtra("cameFrom", "list");
-                Log.i(TAG, "UID" + UID);
-                startActivity(intent);
-                //or create other intents here
-            }
+            Log.i(TAG, "ATTENDING");
+            Intent intent = new Intent(context, ProfileActivity.class);
+            String UID = mPlayer.getmOwner();
+            intent.putExtra("viewingUser", UID);
+            intent.putExtra("cameFrom", "list");
+            Log.i(TAG, "UID" + UID);
+            startActivity(intent);
+            //or create other intents here
 
-            //else if(cameFrom.equals("pending"))
-            else
-            {
-                Log.i(TAG, "PENDING");
-                String UID = mPlayer.getmOwner();
-                App.mCurrentGathering.addPendingToAttending(UID);
-                App.mCurrentGathering.updatePending(getApplicationContext());
-                mPlayersList.remove(mPlayer);
-
-                Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(UID).child("myGatherings");
-
-                Map<String, Object> updates = new HashMap<String, Object>();
-                updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
-                Log.i(TAG, "UID IS" + UID);
-                Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
-                myGatheringsID.updateChildren(updates);
-                mAdapter.notifyDataSetChanged();
-            }
 
             Log.i(TAG, "END OF FUNCTION");
         } //end onClick()
@@ -241,6 +224,21 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 mSkill.setVisibility(View.VISIBLE);
                 mSkill.setText(mySports.get(indexOfSport).getmSkillLevel().toString());
             }
+
+            Log.i(TAG, "PENDING");
+            String UID = mPlayer.getmOwner();
+            App.mCurrentGathering.addPendingToAttending(UID);
+            App.mCurrentGathering.updatePending(getApplicationContext());
+            mPlayersList.remove(mPlayer);
+
+            Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(UID).child("myGatherings");
+
+            Map<String, Object> updates = new HashMap<String, Object>();
+            updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
+            Log.i(TAG, "UID IS" + UID);
+            Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
+            myGatheringsID.updateChildren(updates);
+            mAdapter.notifyDataSetChanged();
 
         }/*end bindSport*/
     }/*end SportHolder*/
