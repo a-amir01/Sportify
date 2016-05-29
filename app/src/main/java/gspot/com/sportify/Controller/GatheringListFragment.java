@@ -160,14 +160,15 @@ public class GatheringListFragment extends Fragment implements Observer{
 
         /*if we have returned from gatheringPagerActivity*/
         if(sInActive){
+            getActivity().setTitle(R.string.my_events);
             mActiveGatheringButton.setVisible(false);
             mHomeButton.setVisible(true);
         }
         else{
+            getActivity().setTitle(R.string.events);
             /*dont show the home button*/
             mHomeButton.setVisible(false);
         }
-
     }
 
     /*respond to a click event on one of the choices on the toolbar*/
@@ -188,6 +189,7 @@ public class GatheringListFragment extends Fragment implements Observer{
                 break;
 
             case R.id.active:
+                getActivity().setTitle(R.string.my_events);
                 Toast.makeText(getActivity(), "Your events based on filter settings", Toast.LENGTH_SHORT).show();
 
                 /*reduce lis to user's events*/
@@ -198,6 +200,7 @@ public class GatheringListFragment extends Fragment implements Observer{
                 break;
 
             case R.id.home:
+                getActivity().setTitle(R.string.events);
                 /*dont reduce list to user's events*/
                 sFromFilter = false;
                 sInActive = false;
