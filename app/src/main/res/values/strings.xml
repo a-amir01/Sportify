@@ -194,5 +194,8 @@
     <string name="intermediate">Intermediate</string>
     <string name="advanced">Advanced</string>
     <string name="cancel">Cancel</string>
+    <string name="delete_sport">Delete Sport</string>
+    <string name="sports_bio">This is a sports bio</string>
+    <string name="bio">Bio:</string>
 
 </resources>

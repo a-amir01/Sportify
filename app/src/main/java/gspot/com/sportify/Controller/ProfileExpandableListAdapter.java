@@ -1,12 +1,9 @@
 package gspot.com.sportify.Controller;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
@@ -102,7 +95,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
             skillLevelText.setVisibility(View.GONE);
             sportBioContent.setEnabled(true);
             deleteSport.setVisibility(View.VISIBLE);
-
+            //deleteSport.setFocusable(false);
             deleteSport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
