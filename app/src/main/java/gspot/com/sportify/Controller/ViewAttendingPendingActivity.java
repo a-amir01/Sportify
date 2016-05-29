@@ -274,7 +274,11 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
+        menu.findItem(R.id.home).setVisible(false);
+        /*dont enable the user to log out from this page*/
+        menu.findItem(R.id.log_out).setVisible(false);
+        menu.findItem(R.id.profile).setVisible(false);
+        menu.findItem(R.id.active).setVisible(false);
         return true;
     } //end onCreateOptionsMenu
 }
