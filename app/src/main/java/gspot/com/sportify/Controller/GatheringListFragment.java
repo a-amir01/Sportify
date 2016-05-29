@@ -83,7 +83,10 @@ public class GatheringListFragment extends Fragment implements Observer{
     private SportLab mSportLab;
 
     /*Hold a reference to the menuItem for active gatherings*/
-    private MenuItem mActiveGatheringCheckBox;
+    private MenuItem mActiveGatheringButton;
+
+    /*Hold a reference to the home button*/
+    private MenuItem mHomeButton;
 
     /*
     * 1st function to be called when the object gets instantiated
@@ -141,8 +144,13 @@ public class GatheringListFragment extends Fragment implements Observer{
         inflater.inflate(R.menu.activity_main_actions, menu);
         inflater.inflate(R.menu.main, menu);
 
+        /*get a reference to the menu buttons*/
+        mActiveGatheringButton = menu.findItem(R.id.active);
+        mHomeButton = menu.findItem(R.id.home);
+
         /*dont show the home button*/
-        menu.findItem(R.id.home).setVisible(false);
+        mHomeButton.setVisible(false);
+
     }
 
     /*respond to a click event on one of the choices on the toolbar*/
@@ -158,18 +166,20 @@ public class GatheringListFragment extends Fragment implements Observer{
                 break;
             case R.id.action_add:
                 intent = new Intent(getActivity(), GatheringActivity.class);
-                //getActivity().finish();
                 startActivity(intent);
 
                 break;
             case R.id.active:
-                mActiveGatheringCheckBox = item;
+                mActiveGatheringButton.setVisible(false);
+                mHomeButton.setVisible(true);
+                loadActiveGatherings();
+                break;
 
-                if(item.isChecked())
-                    loadActiveGatherings();
-                else
-                    updateUI(FILTER, !ACTIVE, null);
-
+            case R.id.home:
+                mActiveGatheringButton.setVisible(true);
+                mHomeButton.setVisible(false);
+                /*reload list with all events*/
+                updateUI(FILTER, !ACTIVE, null);
                 break;
         }//end case
 
@@ -334,11 +344,10 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*If the data base is modified the listener will immediately be called
         * if the user is viewing their gatherings, then dont update the UI until
         * they un-check the active button*/
-        if(mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
+        if(mActiveGatheringButton != null && mActiveGatheringButton.isChecked()) {
             Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
-            mActiveGatheringCheckBox.setChecked(false);
+            mActiveGatheringButton.setChecked(false);
             mAdapter.notifyDataSetChanged();
-            //return;
         }
 
         updateUI(FILTER, !ACTIVE, null);

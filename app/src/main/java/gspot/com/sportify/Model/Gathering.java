@@ -59,6 +59,7 @@ public class Gathering{
     private HashMap mPendings;
     private HashMap mAttendees;
     private int mTimeOfDay;
+    private int mDdayOfWeek;
     private String mDate;
     private int attendeeSize, pendingSize;
 

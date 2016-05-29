@@ -232,6 +232,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         //mgathering.addPending(mCurrentUser);
         mgathering.setDate(mDateString);
         mgathering.setTime(mTimeString);
+
         sportRef.setValue(mgathering);
         finish();
     }
