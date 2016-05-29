@@ -1,44 +1,33 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import gspot.com.sportify.Model.Gathering;
-import gspot.com.sportify.Model.SportLab;
-import gspot.com.sportify.Model.SportType;
-import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
-import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.DatePickerFragment;
 import gspot.com.sportify.utils.TimePickerFragment;
 
@@ -113,7 +102,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_gathering);
+        setContentView(R.layout.fragment_gathering_update);
         ButterKnife.bind(this);
 
         Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
@@ -135,6 +124,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         Intent intent = getIntent();
         toEdit = intent.getBooleanExtra("Edit", false);
         if (toEdit) {
+            setTitle("Edit Event");
             mTitleField.setText(App.mCurrentGathering.getGatheringTitle());
             mDescriptionField.setText(App.mCurrentGathering.getDescription());
             mLocationField.setText(App.mCurrentGathering.getLocation());
