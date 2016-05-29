@@ -18,4 +18,10 @@ public class App {
     /* current gathering selected*/
     public static Gathering mCurrentGathering = null;
 
+    /*filter: show based on skill level*/
+    public static boolean [] mCurrentSkillLevels = { false, false, false };
+    /*Match my availability*/
+    public static boolean mMatch_My_Availability;
+    /*filter: show private events*/
+    public static boolean mIsPrivateEvent;
 }
