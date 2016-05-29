@@ -5,11 +5,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import gspot.com.sportify.utils.Constants;
 
@@ -41,7 +45,6 @@ public class Profile {
         this.mContactInfo = "How would you like people to contact you? Write it here.";
         this.mCalendar = new GspotCalendar();
         this.mMySports = new ArrayList<MySport>();
-        this.mMySports.add(new MySport());
         this.mProfilePic = Constants.DEFAULT_PROFILE_PIC;
     }
 

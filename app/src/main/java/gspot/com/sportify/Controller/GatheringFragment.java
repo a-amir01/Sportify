@@ -1,7 +1,7 @@
 package gspot.com.sportify.Controller;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Button;
-import android.content.Intent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -19,16 +18,12 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-
-import java.util.Timer;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import gspot.com.sportify.Model.Gathering;
-import gspot.com.sportify.R;
 import gspot.com.sportify.Model.Profile;
+import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
@@ -54,19 +49,20 @@ public class GatheringFragment extends Fragment {
     ValueEventListener m_lis;
     Firebase gathering;
 
-    @Bind(R.id.gathering_title) EditText mTitleField;
-    @Bind(R.id.gathering_description) EditText mDescriptionField;
-    @Bind(R.id.gathering_location) EditText mLocationField;
-    @Bind(R.id.gathering_time) EditText mTimeField;
-    @Bind(R.id.gathering_host) EditText mHost;
-    @Bind(R.id.gathering_delete) Button mDelete;
-    @Bind(R.id.gathering_edit) Button mEdit;
-    @Bind(R.id.host_display) EditText mHostDisplay;
-    @Bind(R.id.attendees_display) EditText mAttendeesDisplay;
-    @Bind(R.id.accept_pending) Button mPendingDisplay;
+    @Bind(R.id.gathering_title) TextView mTitleField;
+    @Bind(R.id.description_variable) TextView mDescriptionField;
+    @Bind(R.id.location_variable) TextView mLocationField;
+    @Bind(R.id.date_variable) TextView mDate;
+    @Bind(R.id.time_variable) TextView mTimeField;
+    @Bind(R.id.host_variable) TextView mHost;
+    @Bind(R.id.public_or_private) TextView mPublicOrPrivate;
+    @Bind(R.id.skill_level_variable) TextView mSkillLevel;
+    @Bind(R.id.request_join_leave_delete_button) Button mDelete;
+    @Bind(R.id.edit_gathering_button) Button mEdit;
+    @Bind(R.id.view_pending_button) Button mPendingDisplay;
 
 
-    @OnClick(R.id.gathering_delete)
+    @OnClick(R.id.request_join_leave_delete_button)
     void onClick(Button button){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -94,7 +90,7 @@ public class GatheringFragment extends Fragment {
 
     }
 
-    @OnClick(R.id.gathering_edit)
+    @OnClick(R.id.edit_gathering_button)
     void onClickEdit (Button button) {
         Intent intent = new Intent(getActivity(), GatheringActivity.class);
         intent.putExtra("Edit", true);
@@ -103,7 +99,7 @@ public class GatheringFragment extends Fragment {
         startActivity(intent);
     }
 
-    @OnClick (R.id.attendees_display)
+    @OnClick (R.id.view_players_button)
     void onClickAttending()
     {
         Intent intent = new Intent(getActivity(), ViewAttendingPendingActivity.class);
@@ -114,9 +110,13 @@ public class GatheringFragment extends Fragment {
         getActivity().startActivity(intent);
     }
 
-    @OnClick(R.id.accept_pending)
+    @OnClick(R.id.view_pending_button)
     void onClickPending()
     {
+        if(mGathering.getPendingSize() <= 0){
+            Toast.makeText(this.getContext(), "There are no current requests", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(getActivity(), ViewAttendingPendingActivity.class);
         App.mCurrentGathering = mGathering;
         intent.putExtra("gatheringUID", mGathering.getID());
@@ -125,7 +125,7 @@ public class GatheringFragment extends Fragment {
         getActivity().startActivity(intent);
     }
 
-    @OnClick (R.id.host_display)
+    @OnClick (R.id.host_variable)
     void onClickHost()
     {
         Intent intent = new Intent(getActivity(), ProfileActivity.class);
@@ -155,6 +155,7 @@ public class GatheringFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "On Create");
 
         Log.i(TAG, "onCreate");
 
@@ -169,7 +170,7 @@ public class GatheringFragment extends Fragment {
         /**the 3rd param: whether the inflated layout should be attached to the 2nd param during inflation*/
         Log.d(TAG, "onCreateView()");
 
-        View view = inflater.inflate(R.layout.view_gathering, parent, false);
+        View view = inflater.inflate(R.layout.view_gathering2, parent, false);
         ButterKnife.bind(this, view);
 
         /*Read the Gathering with the unique gatheringID*/
@@ -187,11 +188,18 @@ public class GatheringFragment extends Fragment {
                     mTitleField.setText(mGathering.getGatheringTitle());
                     mDescriptionField.setText(mGathering.getDescription());
                     mTimeField.setText(mGathering.getTime());
+                    mDate.setText(mGathering.getDate());
                     mLocationField.setText(mGathering.getLocation());
+                    mSkillLevel.setText(mGathering.getSkillLevel().toString());
+                    if(mGathering.getIsPrivate() == true) {
+                        mPublicOrPrivate.setText("Closed");
+                    } else {
+                        mPublicOrPrivate.setText("Public");
+                    }
 
                     hostID = mGathering.getHostID();
-                    mAttendeesDisplay.setText(" and " + (mGathering.getAttendeeSize() -1) + " others are going ");
                     getHostname(hostID);
+
                     if (mGathering == null) {
                         mDelete.setText("Join");
                     }
@@ -223,7 +231,6 @@ public class GatheringFragment extends Fragment {
 
         gathering.addValueEventListener(m_lis);
 
-
         /**root of the fragments layout, return null if no layout.*/
         return view;
     }//end onCreateView
@@ -241,11 +248,10 @@ public class GatheringFragment extends Fragment {
     void getHostname(String hostID) {
         Firebase profileRef = new Firebase(Constants.FIREBASE_URL_PROFILES).child(hostID).child("mName");
 
-        profileRef.addValueEventListener(new ValueEventListener() {
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mHost.setText( "Hosted By: " + dataSnapshot.getValue(String.class));
-                mHostDisplay.setText(dataSnapshot.getValue(String.class));
+                mHost.setText(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -316,18 +322,21 @@ public class GatheringFragment extends Fragment {
 
         Log.d(TAG, "STATUS" + status);
         if(status == 1) {
-            if(mGathering.getPendingSize() <= 0) mPendingDisplay.setVisibility(View.GONE);
+            mPendingDisplay.setVisibility(View.VISIBLE);
             mDelete.setText("Delete");
         } //host
         else if (status == 2) {
             mPendingDisplay.setVisibility(View.GONE);
+            mEdit.setVisibility(View.GONE);
             mDelete.setText("Leave");
         } //attendee
         else if (status == 3) {
+            mEdit.setVisibility(View.GONE);
             mPendingDisplay.setVisibility(View.GONE);
             mDelete.setText("Remove Request");
         } // leave gatherig
         else {
+            mEdit.setVisibility(View.GONE);
             mPendingDisplay.setVisibility(View.GONE);
             if (mGathering.getIsPrivate()) { mDelete.setText("Request"); }
             else { mDelete.setText("Join"); }

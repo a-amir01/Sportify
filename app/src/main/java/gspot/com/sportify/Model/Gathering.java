@@ -2,6 +2,7 @@
 package gspot.com.sportify.Model;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -59,7 +60,7 @@ public class Gathering{
     private HashMap mPendings;
     private HashMap mAttendees;
     private int mTimeOfDay;
-    private int mDdayOfWeek;
+    private int mDayOfWeek;
     private String mDate;
     private int attendeeSize, pendingSize;
 
@@ -68,9 +69,20 @@ public class Gathering{
         mAttendees = new HashMap();
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
+        mDayOfWeek = 0;
         attendeeSize = 1;
         pendingSize = 0;
     }
+
+    /** Getter and Setters*/
+    public void setDayOfWeek(int mDayOfWeek) {
+        this.mDayOfWeek = mDayOfWeek;
+    }
+    public int getDayOfWeek() {
+        return mDayOfWeek;
+    }
+
+
     public void setGatheringTitle (String title) { this.mGatheringTitle = title.toUpperCase(); }
     public String getGatheringTitle () { return mGatheringTitle; }
 
@@ -95,7 +107,6 @@ public class Gathering{
     public String getmDate() {
         return mDate;
     }
-
     public void setmDate(String mDate) {
         this.mDate = mDate;
     }
@@ -207,6 +218,9 @@ public class Gathering{
             }
         });
     }
+
+
+
 
 }
 

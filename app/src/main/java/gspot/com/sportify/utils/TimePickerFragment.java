@@ -49,7 +49,7 @@ public class TimePickerFragment extends DialogFragment
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-        String timeString = hourOfDay + ":" + minute;
+        String timeString = String.format("%02d:%02d", hourOfDay, minute);
 
         // Return string representation of time to calling Activity, GatheringActivity.java
         ((GatheringActivity)getActivity()).setmTimeString(timeString);

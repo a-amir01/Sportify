@@ -8,7 +8,10 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import gspot.com.sportify.Controller.GatheringActivity;
 import gspot.com.sportify.R;
@@ -56,16 +59,19 @@ public class DatePickerFragment extends DialogFragment
      */
     public void onDateSet(DatePicker view, int year, int month, int day) {
 
-        String dateString = month + "-" + day + "-" + year;
-
+        SimpleDateFormat simpledateformat = new SimpleDateFormat("EEE, MMM d, yy");
+        GregorianCalendar date = new GregorianCalendar(year, month, day);
+        simpledateformat.setCalendar(date);
+        String dateString = simpledateformat.format(date.getTime());
+        int dayOfTheWeek = date.get(date.DAY_OF_WEEK) - 1;
         // Return dateString to calling activity (GatheringActivity.Java)
-        ((GatheringActivity)getActivity()).setDateString(dateString);
+        ((GatheringActivity)getActivity()).setDateString(dateString, dayOfTheWeek);
 
         // Update button to display newString
         Button dateButton = (Button)getActivity().findViewById(R.id.datepicker);
         dateButton.setText(dateString);
 
-        Log.d(TAG, "Date picked: " + year + "-" +  month + "-" + day);
+        Log.e(TAG, "Date picked: " + year + "-" +  month + "-" + day + "-" + dayOfTheWeek);
     }
 
 

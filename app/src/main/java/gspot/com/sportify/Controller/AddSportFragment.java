@@ -21,6 +21,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -35,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.Constants;
 
@@ -73,17 +75,27 @@ public class AddSportFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView()");
+
+        Resources res = getResources();
+        TextView title = (TextView) getDialog().findViewById(android.R.id.title);
+        title.setText("Choose a sport");
+        title.setTextColor( res.getColor(R.color.colorPrimaryText));
+
+        final int titleDividerId = res.getIdentifier("titleDivider", "id", "android");
+        final View titleDivider = getDialog().findViewById(titleDividerId);
+        if (titleDivider != null) {
+            titleDivider.setBackgroundColor(res.getColor(R.color.colorPrimary));
+        }
+
         View v = inflater.inflate(R.layout.fragment_add_sport, container, false);
         ButterKnife.bind(this, v);
 
-
-        Resources res = getResources();
-        List<String> sport_types = new ArrayList<String> (Arrays.asList(res.getStringArray(R.array.sport_types)));
+        List<String> sport_types = new SportTypes().getSportTypes();
         ProfileActivity activity = (ProfileActivity) getActivity();
         List<String> currentSports = activity.getMySportList();
         mProfile = activity.getProfile();
 
-        //I user shouldn't be able to ave two basketball profiles, so hide all the sports they
+        //I user shouldn't be able to have two basketball profiles, so hide all the sports they
         //already have a profile for
         if (currentSports != null) {
             sport_types.removeAll(currentSports);

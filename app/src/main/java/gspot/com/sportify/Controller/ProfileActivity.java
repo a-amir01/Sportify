@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -178,6 +179,8 @@ public class ProfileActivity extends BaseNavBarActivity {
                 /* Create a user profile object from data in the database */
                 mProfile = dataSnapshot.getValue(Profile.class);
                 /* Retrieve text information from the database*/
+                mName.setEllipsize(TextUtils.TruncateAt.END);
+                mName.setMaxLines(4);
                 mName.setText(mProfile.getmName());
                 mProfilePicture.setImageBitmap(UserPicture.StringToBitMap(mProfile.getmProfilePic()));
                 mBio.setText(mProfile.getmBio());
@@ -228,6 +231,8 @@ public class ProfileActivity extends BaseNavBarActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         /*dont show this filed in this screen*/
         menu.findItem(R.id.profile).setVisible(false);
+        menu.findItem(R.id.active).setVisible(false);
+        menu.findItem(R.id.home).setVisible(false);
 
         return true;
     } //end onCreateOptionsMenu
@@ -242,7 +247,7 @@ public class ProfileActivity extends BaseNavBarActivity {
             mNoSports.setText("" + mProfile.getmName().toString() + " doesn't have any "
                     + "sports profiles");
         } else {
-            mNoSports.setVisibility(View.INVISIBLE);
+            mNoSports.setVisibility(View.GONE);
         }
     }
 
@@ -279,18 +284,27 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         /* Save and View if the button is pressed in Editm Mode */
         } else {
-            if (mName.getText().length() != 0){
+            if (mName.getText().length() != 0 ){
                 mProfile.setmName(mName.getText().toString());
             } else {
                 mName.setText(mProfile.getmName());
             }
             if (mBio.getText().length() != 0){
-                mProfile.setmBio(mBio.getText().toString());
+                if (mBio.getText().length() > 200) {
+                    mProfile.setmBio("Please keep your bio under 200 characters.");
+                }
+                else {
+                    mProfile.setmBio(mBio.getText().toString());
+                }
             } else {
                 mBio.setText(mProfile.getmBio());
             }
             if (mContactInfo.getText().length() != 0){
-                mProfile.setmContactInfo(mContactInfo.getText().toString());
+                if (mContactInfo.getText().length() > 50) {
+                    mProfile.setmContactInfo("Please keep your contact info under 50 characters");
+                } else {
+                    mProfile.setmContactInfo(mContactInfo.getText().toString());
+                }
             } else {
                 mContactInfo.setText(mProfile.getmContactInfo());
             }
@@ -319,48 +333,6 @@ public class ProfileActivity extends BaseNavBarActivity {
         DialogFragment fragment = new AddSportFragment();
         fragment.show(mFragManager,"Add Sport");
 
-        /*AlertDialog.Builder builderSingle = new AlertDialog.Builder(ProfileActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        View convertView = (View) inflater.inflate(R.layout.sport_type, null);
-
-        builderSingle.setView(convertView);
-        builderSingle.setTitle("Select a sport to add to your profile");
-
-        List<String> sport_types = new ArrayList<String> (Arrays.asList(res.getStringArray(R.array.sport_types)));
-        List<String> currentSports = getMySportList();
-
-        //I user shouldn't be able to ave two basketball profiles, so hide all the sports they
-        //already have a profile for
-        if (currentSports != null) {
-            sport_types.removeAll(currentSports);
-        }
-
-        final ListAdapter sportTypeListAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item_sport_type, sport_types);
-        builderSingle.setAdapter(sportTypeListAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int position) {
-                if (mProfile.getmMySports() == null) {
-                    mProfile.setmMySports(new ArrayList<MySport>());
-                }
-                //get the title of the sport from sport_type, then make a new MySport and add
-                //it to the users profile
-                mProfile.getmMySports().add(new MySport((String) sportTypeListAdapter.getItem(position)));
-
-                setMySportsAdapter(ProfileActivity.this);
-
-                dialog.dismiss();
-            }
-        });
-
-        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        builderSingle.show();
-        */
     }
 
     /**
