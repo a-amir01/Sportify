@@ -12,7 +12,8 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="start"
-        android:layout_above="@+id/linearLayout2">
+        android:layout_above="@+id/linearLayout2"
+        android:fillViewport="false">
         <LinearLayout
               android:orientation="vertical" android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -53,7 +54,9 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/bullet"
                     android:id="@+id/bullet"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"/>
 
                 <!--Host-->
                 <TextView
@@ -137,24 +140,24 @@
 
             <!--Description Label-->
             <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/description_title"
-                        android:id="@+id/description_title"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/description_title"
+                android:id="@+id/description_title"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"/>
 
             <!--Description Field-->
             <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/description"
-                        android:id="@+id/description_variable"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingBottom="20dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/description"
+                android:id="@+id/description_variable"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -176,34 +179,26 @@
             android:id="@+id/view_players_row">
 
             <!--View Players-->
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/view_players_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
                 android:minWidth="120dp"
                 android:text="@string/view_players"
-                android:background="@drawable/profile_button"
-                android:textColor="@color/abc_primary_text_material_dark"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                style="?android:attr/buttonBarStyle"/>
+                android:theme="@style/AppTheme.Button.Colored"/>
 
             <!--Options Button (Dynamically Changes)-->
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/request_join_leave_delete_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
                 android:minWidth="75dp"
                 android:text="@string/join"
-                android:background="@drawable/profile_button"
-                android:textColor="@color/abc_primary_text_material_dark"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                style="?android:attr/buttonBarStyle"/>
+                android:theme="@style/AppTheme.Button.Colored"/>
         </LinearLayout>
 
         <!--Second Row of buttons-->
@@ -214,34 +209,26 @@
             android:weightSum="2">
 
             <!--Edit-->
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/edit_gathering_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
                 android:minWidth="75dp"
                 android:text="@string/edit"
-                android:background="@drawable/profile_button"
-                android:textColor="@color/abc_primary_text_material_dark"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                style="?android:attr/buttonBarStyle"/>
+                android:theme="@style/AppTheme.Button.Colored"/>
 
             <!--Pending and Attending (Dynamically changes)-->
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/view_pending_button"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|center_horizontal"
                 android:minWidth="120dp"
                 android:text="@string/requests"
-                android:background="@drawable/profile_button"
-                android:textColor="@color/abc_primary_text_material_dark"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_weight="1"
-                style="?android:attr/buttonBarStyle"/>
+                android:theme="@style/AppTheme.Button.Colored"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

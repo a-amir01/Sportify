@@ -56,10 +56,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical|center_horizontal"
                     android:minWidth="100dp"
-                    android:text="Save"
-                    android:background="@drawable/profile_button"
-                    android:textColor="@color/abc_primary_text_material_dark"
-                    android:textStyle="bold" />
+                    android:text="@string/save"
+                    android:textStyle="bold"
+                    android:theme="@style/AppTheme.Button.Colored"/>
             </LinearLayout>
 
         </LinearLayout>

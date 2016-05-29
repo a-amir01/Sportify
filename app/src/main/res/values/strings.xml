@@ -172,7 +172,7 @@
     <string name="save">Save</string>
     <string name="public_event">Public</string>
     <string name="closed_event">Closed</string>
-    <string name="bullet"> • </string>
+    <string name="bullet">•</string>
     <string name="host">Host</string>
     <string name="sport">Sport</string>
     <string name="skill_level">Skill Level</string>
@@ -186,5 +186,13 @@
     <string name="join">Join</string>
     <string name="edit">Edit</string>
     <string name="requests">Requests</string>
+    <string name="match_schedule">Match Schedule</string>
+    <string name="closed_events">Closed Events</string>
+    <string name="expand_all">Expand All</string>
+    <string name="select_all">Select All</string>
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
