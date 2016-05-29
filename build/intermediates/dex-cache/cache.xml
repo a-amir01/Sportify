@@ -1,2 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0-alpha1\jars\libs\internal_impl-24.0.0-alpha1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="e57fba0a2d57d3501d8f4ff44c23092978804845">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.0.0-alpha1_4b5a673cb55888e0a8b0f31e57342b7e1e8192ac\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\2.5.2\f19f10d6276aa0b380e2d05d2ab3272d693a5433\firebase-client-android-2.5.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f19f10d6276aa0b380e2d05d2ab3272d693a5433">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\firebase-client-android-2.5.2_902f4289d76bfd4c1d1ed4aa8e6faebc8f8fd7c9\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="9f7e9c25998073f404028501cc660a0b15768b2e">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_7b92a64c414c985965d30aade2281c6d43cd7b43\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0-alpha1\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="9aaaea3a89040f8176f810c85e288fc74d5d1f12">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.0.0-alpha1_61a86d7c86db8be9435e524832397ea2c35ebb0b\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-23.3.0_0ab4d88090b62ef14632a02fc63f302aab1bb970\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.0.0-alpha1\support-annotations-24.0.0-alpha1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="b8062546971a3d196343232a19a3c0016272ba47">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.0.0-alpha1_7444a20c2294f585667d7c79c94f4f118ec34444\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\jackson-databind-2.2.2_eacaff1b2fbccb149e349732f5658f0351421b3e\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-23.3.0_db58c3dc2deb04b89effa2f71ee05cee662573ce\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.1\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="39ae02ce40c3ac828abbf780ce0ff5d7a28b7d6a">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-cardview-v7-23.0.1_1e97bc38ea83d46d4140d3c17fdf3675afedfe4a\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.3.0_a39ccfde5218c065eac51bd1b9c467882a13e1d8\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.12\6ec0bbd3e161a73ed672284b587fd32309a86d7a\tubesock-0.0.12.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="6ec0bbd3e161a73ed672284b587fd32309a86d7a">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\tubesock-0.0.12_db6674ad5f4619ea54dc7268d73331d0b811d280\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="debf30ce0a7560396b6235edef77e447006454c2">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-23.3.0_c5a69dfb68684125ece12d9e9b09e16b751d019b\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.1.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-basement-8.1.0_b00f6d04c37fa1dc79e35672a4091e62227fa85c\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\butterknife-7.0.1_4ffb86ce6421872d76267257fc92006c4d325c1f\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\8.1.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-8.1.0_813e458cdbcf8b90563ef6bca63451d778e82fb8\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\jackson-annotations-2.2.2_4f5e80de31d6807400d50fff6efa436c25d1b394\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-23.3.0_ad32f51860c77935a688b5b623381735dc391113\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\2.5.2\91731b8f5868a3e8a8a773f29b8d06b5c358f5bb\firebase-client-jvm-2.5.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="91731b8f5868a3e8a8a773f29b8d06b5c358f5bb">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\firebase-client-jvm-2.5.2_c749ecaa1bb4fc079f84cce067c7273998342fd1\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\exploded-aar\com.makeramen\roundedimageview\2.2.1\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="814fc0c3ec69a944add398217d90077301501a74">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.makeramen-roundedimageview-2.2.1_97326bf66a9fc8952df9cdf1015d98bcc4f4cf45\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\jackson-core-2.2.2_08baf8445142a681c9ca2476ac197a0e76ba0798\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="28026cfbb773253f2db73272cb8efea1d83e8e27">
+        <dex dex="C:\Users\Armin\AndroidStudioProjects\SportsApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_b2539ed266e6d0faf9d876d23182d00cf4edc902\classes.dex" />
+    </item>
+
+</items>
