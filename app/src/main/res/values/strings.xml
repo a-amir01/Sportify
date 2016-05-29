@@ -2,7 +2,9 @@
     <string name="action_settings">something</string>
     <string name="app_name">Sportify</string>
     <string name="gathering_title_label">Title</string>
-    <string name="gathering_title_hint">Enter a title for the event.</string>
+    <string name="gathering_title_hint">Event name</string>
+    <string name="gathering_description_hint">Description</string>
+    <string name="private_checkbox_label">Closed</string>
 
     <string name="title_activity_view_profile">Profile</string>
     <string name="title_activity_forgot_pwd">Forgot Password</string>
@@ -10,7 +12,7 @@
 
     <string name="calendar">Calendar</string>
     <string name="description_hint">\"Enter a description</string>
-    <string name="hint_location">Enter a location</string>
+    <string name="hint_location">Location</string>
     <string name="hint_time">Enter a time</string>
     <string name="log_out">Log Out</string>
     <string name="home">Events</string>
@@ -169,5 +171,32 @@
     <string name="evening">Evening</string>
     <string name="night">Night</string>
     <string name="save">Save</string>
+    <string name="public_event">Public</string>
+    <string name="closed_event">Closed</string>
+    <string name="bullet">•</string>
+    <string name="host">Host</string>
+    <string name="sport">Sport</string>
+    <string name="skill_level">Skill Level</string>
+    <string name="date">Date</string>
+    <string name="at">at</string>
+    <string name="time">Time</string>
+    <string name="location">Location</string>
+    <string name="description_title">Description:</string>
+    <string name="description">Description</string>
+    <string name="view_players">View Players</string>
+    <string name="join">Join</string>
+    <string name="edit">Edit</string>
+    <string name="requests">Requests</string>
+    <string name="match_schedule">Match Schedule</string>
+    <string name="closed_events">Closed Events</string>
+    <string name="expand_all">Expand All</string>
+    <string name="select_all">Select All</string>
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_sport">Delete Sport</string>
+    <string name="sports_bio">This is a sports bio</string>
+    <string name="bio">Bio:</string>
 
 </resources>
