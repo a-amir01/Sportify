@@ -201,12 +201,8 @@ public class ProfileActivity extends BaseNavBarActivity {
                 /* Give editing power to the owner of the profile */
                 if (mCurrentUser.equals(viewingUser) && cameFrom.equals("profile")) {
                     toggleToViewMine();
-
-                /* Ensure that an arbitrary user does not have access to edit profile */
-                } else if (mProfile.isATeammate(mCurrentUser)){
-                    toggleToViewMate();
                 } else {
-                    toggleToViewOther();
+                    toggleToViewMate();
                 }
             }
 

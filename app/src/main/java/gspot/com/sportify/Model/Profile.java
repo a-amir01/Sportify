@@ -2,14 +2,19 @@ package gspot.com.sportify.Model;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import gspot.com.sportify.utils.Constants;
 
@@ -157,10 +162,29 @@ public class Profile {
         return new Firebase(Constants.FIREBASE_URL_PROFILES).child(profileId);
     }
 
-    public boolean isATeammate(String userId) {
-        //TODO check whether a user is a teammate of the profile owner
-        return true;
+    public List<String> getMySportsAsString () {
+
+        List<String> toReturn = new ArrayList<>();
+        if (mMySports == null) { mMySports = new ArrayList<>();}
+        for (MySport sport: mMySports) {
+            toReturn.add(sport.getmSport());
+        }
+
+        return toReturn;
     }
 
+    public int getIndexOfSport (String sport) {
 
+        int indexOfSport = -1;
+        //set the skill of the player only if they have that sport in their profile
+        List<MySport> mySports = getmMySports();
+        List<String> mySportsOnlyNames = getMySportsAsString();
+
+        if (mySports == null) {
+            indexOfSport = -1;
+        } else {
+            indexOfSport = mySportsOnlyNames.indexOf(sport);
+        }
+        return indexOfSport;
+    }
 }

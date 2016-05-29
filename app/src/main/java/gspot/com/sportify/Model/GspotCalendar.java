@@ -1,14 +1,24 @@
 package gspot.com.sportify.Model;
 
+import android.util.Log;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+
+import gspot.com.sportify.utils.Constants;
 
 /** GSpot Calendar
  * Represents a calendar indicating a user's
  * times of availability.
  * Created by patrickhayes on 5/3/16.
  */
-public class GspotCalendar {
+public class GspotCalendar extends Observable{
 
     /* Represents the times that the user is available */
     private List<List<Boolean>> calendarGrid;
@@ -70,5 +80,58 @@ public class GspotCalendar {
     public boolean getAvailability(int dayOfWeek, int timeOfDay) {
         return calendarGrid.get(dayOfWeek).get(timeOfDay);
     }
+
+    public void getCalendar(String UID) {
+        Firebase profileRef = Profile.profileRef(UID);
+
+        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                GspotCalendar calendarTemp =  dataSnapshot.getValue(Profile.class).getmCalendar();
+                calendarGrid = calendarTemp.getCalendarGrid();
+
+                 /*To notify the observers we have changed*/
+                setChanged();
+                notifyObservers();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    public boolean playerCanMakeGathering (Gathering gathering) {
+
+        Log.e("Gathering", this.toString());
+
+        int dayOfWeek = gathering.getDayOfWeek();
+        int time = GspotCalendar.convertTimeStringToEncodedInt(gathering.getTime());
+
+        return getAvailability(dayOfWeek, time);
+    }
+
+    private static int convertTimeStringToEncodedInt(String time) {
+        if (time == null) { time = "00:00";}
+        String hourString = time.split(":")[0];
+        int hour =  Integer.parseInt(hourString);
+        int encodedHour = -1;
+
+        if (Constants.EARLY_MORNING <= hour && hour < Constants.NOON) {
+            encodedHour = 0;
+        } else if (Constants.NOON <= hour && hour < Constants.EVENING) {
+            encodedHour = 1;
+        } else if (Constants.EVENING <= hour && hour < Constants.NIGHT) {
+            encodedHour = 2;
+        } else {
+            encodedHour = 3;
+        }
+
+        return encodedHour;
+    }
+
+
 
 }

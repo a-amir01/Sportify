@@ -41,6 +41,7 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
             case R.id.home:
                 intent = new Intent(this, GatheringListActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.log_out:
@@ -62,10 +63,6 @@ public class BaseNavBarActivity extends AppCompatActivity {
                     item.setChecked(false);
                 else
                     item.setChecked(true);
-                break;
-
-            case R.id.history:
-                Toast.makeText(this, "not yet implemented", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.profile:
