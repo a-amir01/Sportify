@@ -318,7 +318,6 @@ public class GatheringListFragment extends Fragment implements Observer{
             } //end for
         }
 
-
         for (int i = 0; i < gatherings.size(); i++) {
             Gathering event = gatherings.get(i);
                 /*If the sport is not in the list*/
