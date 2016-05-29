@@ -16,7 +16,7 @@
     <string name="home">Events</string>
     <string name="profile">Profile</string>
     <string name="history">History</string>
-    <string name="active">Active</string>
+    <string name="active">My Events</string>
     <string name="action_filter">Filter</string>
     <string name="action_add">Add</string>
     <string name="forgot_pwd">Forgot Password?</string>
