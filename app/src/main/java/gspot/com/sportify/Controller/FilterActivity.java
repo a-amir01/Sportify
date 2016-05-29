@@ -1,15 +1,16 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ExpandableListView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
@@ -26,8 +27,8 @@ import java.util.Observer;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
-
 import butterknife.OnClick;
+import gspot.com.sportify.Model.GspotCalendar;
 import gspot.com.sportify.Model.SportType;
 import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
@@ -61,18 +62,26 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
     /*Is the private filed selected?*/
     private static boolean sIsPrivateEvent;
+    private static boolean sIsScheduleEvent;
 
     /*Are all options selected?*/
     private static boolean sIsAllSelected;
 
     private boolean [] mSkillLevels;
 
-    @Bind(R.id.expand_all) Switch mExpandAllSwitch;
-    @Bind(R.id.select_all) Switch mSelectAllSwitch;
-    @Bind(R.id.event_access_specifier) Switch mEventAccessSpecifier;
+    @Bind(R.id.expand_all) SwitchCompat mExpandAllSwitch;
+    @Bind(R.id.select_all) SwitchCompat mSelectAllSwitch;
+    @Bind(R.id.event_match_schedule) SwitchCompat mMatchMyAvailabilitySwitch;
+    @Bind(R.id.event_access_specifier) SwitchCompat mEventAccessSpecifier;
     @Bind(R.id.begginerCheckBox) CheckBox mBegginerCheckBox;
     @Bind(R.id.IntermediateCheckBox) CheckBox mIntermediateCheckBox;
     @Bind(R.id.AdvancedCheckBox) CheckBox mAdvancedCheckBox;
+
+
+    @OnCheckedChanged(R.id.event_match_schedule)
+    public void onMatchMyAvailabilityCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        sIsScheduleEvent = isChecked;
+    }
 
 
     @OnCheckedChanged(R.id.expand_all)
@@ -115,6 +124,7 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
         data.putStringArrayListExtra(Constants.SPORT_TYPE_ID, selectedSports);
         data.putExtra(Constants.SPORT_ACCESS_ID, sIsPrivateEvent);
         data.putExtra(Constants.SKILL_LEVEL, mSkillLevels);
+        data.putExtra(Constants.MATCH_MY_AVAILABILITY, mMatchMyAvailabilitySwitch.isChecked());
 
         /*set the boolean hashmap data on device*/
         saveDataOnDevice();
@@ -147,6 +157,7 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
         /*Asynchronous tasks*/
         mDataBaseSports.readSportTypes();
+
 
         mSkillLevels = new boolean[3];
 
@@ -237,60 +248,65 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
     @Override
     public void update(Observable observable, Object data) {
 
-        /*Filters chosen by the user that was saved on the device*/
-        HashMap<Integer, boolean[]> filters;
 
-        ArrayList<String> sps = new ArrayList<String>();
-        for (SportType sp : mDataBaseSports.sportTypes) {
-            sps.add(sp.getName());
-        }
+        /*Filters chosen by the user that was saved on the device*/
+            HashMap<Integer, boolean[]> filters;
+
+            ArrayList<String> sps = new ArrayList<String>();
+            for (SportType sp : mDataBaseSports.sportTypes) {
+                sps.add(sp.getName());
+            }
 
         /*pass the array from the database to get back a hashmap for adaper*/
-        mGatheringType = GatheringTypeProvider.getDataHashMap(sps.toArray(new String[sps.size()]));
+            mGatheringType = GatheringTypeProvider.getDataHashMap(sps.toArray(new String[sps.size()]));
 
         /*set the keys of the hashmap to this list*/
-        mGatheringList = new ArrayList<>(mGatheringType.keySet());
+            mGatheringList = new ArrayList<>(mGatheringType.keySet());
 
         /*sort the parents*/
-        Collections.sort(mGatheringList);
+            Collections.sort(mGatheringList);
 
-        Log.i(TAG, "update " + mGatheringType.size());
+            Log.i(TAG, "update " + mGatheringType.size());
 
         /*get the saved data that was stored on the device*/
-        filters = getFilterSettings();
+            filters = getFilterSettings();
 
         /*has not created a filter yet or filters is empty*/
-        if (filters == null) {
-            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList);
-        } else {
-            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList, filters);
-        }
+            if (filters == null) {
+                mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList);
+            } else {
+                mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList, filters);
+            }
 
         /*set adapter to our custom adapter*/
-        mExpandableListView.setAdapter(mExpandableListAdapter);
+            mExpandableListView.setAdapter(mExpandableListAdapter);
 
          /*have the list expanded at first
         * every call to setChecked is accompanied by
         * the setOnCheckChangedListener*/
-        mExpandAllSwitch.setChecked(true);
+            mExpandAllSwitch.setChecked(true);
 
-        mExpandableListAdapter.expandAllChildren(mExpandableListView);
+            mExpandableListAdapter.expandAllChildren(mExpandableListView);
 
         /*Turn on the listener so we can set the button to the static field*/
-        mSelectAllSwitch.setOnCheckedChangeListener(null);
+            mSelectAllSwitch.setOnCheckedChangeListener(null);
 
         /*Set the button is the static selected value*/
-        mSelectAllSwitch.setChecked(sIsAllSelected);
+            mSelectAllSwitch.setChecked(sIsAllSelected);
 
         /*turn the listener back on*/
-        mSelectAllSwitch.setOnCheckedChangeListener(this);
+            mSelectAllSwitch.setOnCheckedChangeListener(this);
 
         /*set the event specifier*/
-        mEventAccessSpecifier.setChecked(sIsPrivateEvent);
+            mEventAccessSpecifier.setChecked(sIsPrivateEvent);
 
-        mBegginerCheckBox.setChecked(mSkillLevels[0]);
-        mIntermediateCheckBox.setChecked(mSkillLevels[1]);
-        mAdvancedCheckBox.setChecked(mSkillLevels[2]);
+        /*set the schedule specifier*/
+            mMatchMyAvailabilitySwitch.setChecked(sIsScheduleEvent);
+
+
+            mBegginerCheckBox.setChecked(mSkillLevels[0]);
+            mIntermediateCheckBox.setChecked(mSkillLevels[1]);
+            mAdvancedCheckBox.setChecked(mSkillLevels[2]);
 
     } //end update
 }//end FilterActivity

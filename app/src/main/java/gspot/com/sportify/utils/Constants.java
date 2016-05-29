@@ -9,9 +9,13 @@ import gspot.com.sportify.BuildConfig;
 
 public class Constants {
 
+    /*Constants for Calendar*/
+    public static final int NOON = 12;
+    public static final int EARLY_MORNING = 4;
+    public static final int EVENING = 16;
+    public static final int NIGHT = 20;
+
     /*Constants for FireBase */
-
-
     public static final String PASSWORD_PROVIDER = "password";
     public static final String FIREBASE_PROPERTY_EMAIL = "email";
     public static final String FIREBASE_LOCATION_PROFILES = "profiles";
@@ -38,6 +42,7 @@ public class Constants {
     public final static String SKILL_LEVEL = "skill_level";
     public final static String SPORTS_FILTER_FILE = "checkedSportsFilter.txt";
     public final static String SKILL_LEVEL_FILE = "skilllevelfile.txt";
+    public final static String MATCH_MY_AVAILABILITY = "match_my_availability";
 
     /*Constants for profiles */
     public static final int NUM_TIMES_OF_DAY = 4;

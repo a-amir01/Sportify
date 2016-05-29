@@ -12,7 +12,7 @@
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:paddingTop="10dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#FF080CF4"
+        android:textColor="@color/white"
         android:textStyle="bold"
         />
 

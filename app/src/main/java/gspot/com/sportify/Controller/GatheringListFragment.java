@@ -1,11 +1,11 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,24 +15,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
+import gspot.com.sportify.Model.GspotCalendar;
+import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.Model.SportLab;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
@@ -57,6 +57,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     private final static boolean FILTER = true;
 
     private final static boolean ACTIVE = true;
+    private GspotCalendar mCalendar = new GspotCalendar();
 
     /*code to pass in startActivityForResult*/
     private static final int REQUEST_CODE_FILTER = 1;
@@ -69,12 +70,6 @@ public class GatheringListFragment extends Fragment implements Observer{
 
     /*contains the names of the sports chosen in filter*/
     private List<String> mChosenSports;
-
-    /*filter: show private events*/
-    private boolean mIsPrivateEvent;
-
-    /*filter: show based on skill level*/
-    private boolean [] mSkillLevels = { false, false, false };
 
     /*the current user's id to get their gatherings*/
     private String mCurrentUser;
@@ -99,6 +94,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*get the current user*/
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
+
     }
 
     /*2nd function that will be called when an Object of GatheringListFragment is created */
@@ -121,10 +117,12 @@ public class GatheringListFragment extends Fragment implements Observer{
         * update function will be waiting
         * for data to be updated*/
         mSportLab.addObserver(this);
+        mCalendar.addObserver(this);
 
         /*load the gatherings from the database*/
         /*update() will call updateUI*/
         mSportLab.loadGatherings();
+        mCalendar.getCalendar(mCurrentUser);
 
         //updateUI(false);
 
@@ -229,10 +227,12 @@ public class GatheringListFragment extends Fragment implements Observer{
 
             /*Get the sports that were chosen by the filter*/
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
-            mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
-            mSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
+            App.mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
+            App.mCurrentSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
+            App.mMatch_My_Availability = data.getBooleanExtra(Constants.MATCH_MY_AVAILABILITY, false);
 
             if(mChosenSports != null){
+                SportTypes st = new SportTypes();
                 Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
             }
 
@@ -285,7 +285,7 @@ public class GatheringListFragment extends Fragment implements Observer{
                 /*If the sport is not in the list*/
             if (mChosenSports != null && mChosenSports.size() > 0) {
                 //if the event type was in the filtered list
-                if (!mChosenSports.contains(event.getGatheringTitle())) {
+                if (!mChosenSports.contains(event.getSport())) {
                     gatherings.remove(event);
 
                     //changing the array size so go back and check the replacement
@@ -295,7 +295,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             }//end outer if
 
                 /*If the sport is in the list but the access to event is not same*/
-            if (mIsPrivateEvent && !event.getIsPrivate()){
+            if (App.mIsPrivateEvent && !event.getIsPrivate()){
                 gatherings.remove(event);
 
                 //changing the array size so go back and check the replacement
@@ -303,23 +303,34 @@ public class GatheringListFragment extends Fragment implements Observer{
                 continue;
             } //end if
 
+
+
                 /*if atleast one of the skill levels is selected*/
-            if(mSkillLevels[0] || mSkillLevels[1] || mSkillLevels[2]){
+            if(App.mCurrentSkillLevels[0] || App.mCurrentSkillLevels[1] || App.mCurrentSkillLevels[2]){
                 /*if we have the sport and the access is the same, check for skill level*/
                 /*remove if event is beginner and beginner is not checked*/
-                if (event.getSkillLevel() == (Gathering.SkillLevel.BEGINNER) && !mSkillLevels[0]) {
+                if (event.getSkillLevel() == (Gathering.SkillLevel.BEGINNER) && !App.mCurrentSkillLevels[0]) {
                     gatherings.remove(event);
                     --i;
-                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.INTERMEDIATE) && !mSkillLevels[1]) {
+                    continue;
+                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.INTERMEDIATE) && !App.mCurrentSkillLevels[1]) {
                     gatherings.remove(event);
                     --i;
+                    continue;
 
-                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.ADVANCED) && !mSkillLevels[2]) {
+                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.ADVANCED) && !App.mCurrentSkillLevels[2]) {
                     gatherings.remove(event);
                     --i;
+                    continue;
                 }
             }//end outer if
 
+            /*match my availability*/
+            if(App.mMatch_My_Availability && !mCalendar.playerCanMakeGathering(event)) {
+                gatherings.remove(event);
+                --i;
+                continue;
+            }
         }//end for
 
     }//end filter UI
@@ -331,17 +342,21 @@ public class GatheringListFragment extends Fragment implements Observer{
     public void update(Observable observable, Object data) {
         Log.i(TAG, "update");
 
-        /*If the data base is modified the listener will immediately be called
-        * if the user is viewing their gatherings, then dont update the UI until
-        * they un-check the active button*/
-        if(mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
-            Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
-            mActiveGatheringCheckBox.setChecked(false);
-            mAdapter.notifyDataSetChanged();
-            //return;
-        }
-
-        updateUI(FILTER, !ACTIVE, null);
+       if (data instanceof SportLab) {
+           /*If the data base is modified the listener will immediately be called
+            * if the user is viewing their gatherings, then dont update the UI until
+            * they un-check the active button*/
+           if (mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
+               Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
+               mActiveGatheringCheckBox.setChecked(false);
+               mAdapter.notifyDataSetChanged();
+               //return;
+           }
+       }else if (data instanceof GspotCalendar) {
+           Toast.makeText(getContext(), "Calendar Fetched", Toast.LENGTH_SHORT).show();
+       } else {
+           updateUI(FILTER, !ACTIVE, null);
+       }
     }
 
     /* this function will see if the gatherings parameter is part
@@ -414,7 +429,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             Log.d(TAG, "BIND SPORT" + mGathering.getGatheringTitle());
             mTitleTextView.setText(mGathering.getGatheringTitle());
             if (mGathering.getIsPrivate()) {
-                mEventStatusView.setText("Private");
+                mEventStatusView.setText("Closed");
             }
             else {
                 mEventStatusView.setText("Public");

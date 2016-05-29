@@ -2,6 +2,7 @@
 package gspot.com.sportify.Model;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -46,7 +47,7 @@ public class Gathering{
         }
     }
 
-    private String mSportTitle;
+    private String mSport;
     private SkillLevel mSkillLevel;
     private String mGatheringTitle;
     private String mLocation;
@@ -59,6 +60,7 @@ public class Gathering{
     private HashMap mPendings;
     private HashMap mAttendees;
     private int mTimeOfDay;
+    private int mDayOfWeek;
     private String mDate;
     private int attendeeSize, pendingSize;
 
@@ -67,9 +69,25 @@ public class Gathering{
         mAttendees = new HashMap();
         mPendings = new HashMap();
         mSkillLevel = SkillLevel.BEGINNER;
+        mDayOfWeek = 0;
         attendeeSize = 1;
         pendingSize = 0;
+        mSport = "AEROBATICS";
     }
+
+    /** Getter and Setters*/
+    public String getSport() {return mSport;}
+    public void setSport(String mSport) {this.mSport = mSport;}
+
+
+    public void setDayOfWeek(int mDayOfWeek) {
+        this.mDayOfWeek = mDayOfWeek;
+    }
+    public int getDayOfWeek() {
+        return mDayOfWeek;
+    }
+
+
     public void setGatheringTitle (String title) { this.mGatheringTitle = title.toUpperCase(); }
     public String getGatheringTitle () { return mGatheringTitle; }
 
@@ -94,7 +112,6 @@ public class Gathering{
     public String getmDate() {
         return mDate;
     }
-
     public void setmDate(String mDate) {
         this.mDate = mDate;
     }
@@ -115,7 +132,7 @@ public class Gathering{
     public String getDate () { return mDate; }
 
     public void setSkillLevel (SkillLevel skillLevel) { this.mSkillLevel = skillLevel; }
-    public SkillLevel toSkillLevel (String skillLevel) {
+    public static SkillLevel toSkillLevel (String skillLevel) {
         if (skillLevel.equals("Intermediate")) {
             return SkillLevel.INTERMEDIATE;
         }
@@ -206,6 +223,9 @@ public class Gathering{
             }
         });
     }
+
+
+
 
 }
 
