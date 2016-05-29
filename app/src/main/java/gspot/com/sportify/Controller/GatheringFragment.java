@@ -1,13 +1,7 @@
 package gspot.com.sportify.Controller;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
-
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.BinderThread;
-import android.support.v4.app.DialogFragment;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -15,28 +9,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Button;
-import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import org.w3c.dom.Text;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.Timer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import gspot.com.sportify.Model.Gathering;
-import gspot.com.sportify.R;
 import gspot.com.sportify.Model.Profile;
+import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
@@ -69,6 +56,7 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.time_variable) TextView mTimeField;
     @Bind(R.id.host_variable) TextView mHost;
     @Bind(R.id.public_or_private) TextView mPublicOrPrivate;
+    @Bind(R.id.sport_variable) TextView mSportName;
     @Bind(R.id.skill_level_variable) TextView mSkillLevel;
     @Bind(R.id.request_join_leave_delete_button) Button mDelete;
     @Bind(R.id.edit_gathering_button) Button mEdit;
@@ -203,15 +191,17 @@ public class GatheringFragment extends Fragment {
                     mTimeField.setText(mGathering.getTime());
                     mDate.setText(mGathering.getDate());
                     mLocationField.setText(mGathering.getLocation());
+                    mSportName.setText(mGathering.getSID());
                     mSkillLevel.setText(mGathering.getSkillLevel().toString());
                     if(mGathering.getIsPrivate() == true) {
-                        mPublicOrPrivate.setText("This Event is Private");
+                        mPublicOrPrivate.setText("Closed");
                     } else {
-                        mPublicOrPrivate.setText("This Event is Public");
+                        mPublicOrPrivate.setText("Public");
                     }
 
                     hostID = mGathering.getHostID();
                     getHostname(hostID);
+
                     if (mGathering == null) {
                         mDelete.setText("Join");
                     }
