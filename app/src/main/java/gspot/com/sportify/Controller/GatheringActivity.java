@@ -57,8 +57,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     private int mDayOfWeek;
     private String mDateString;
     private String mTimeString;
-    private Button dateButton;
-    private Button timeButton;
 
     @Bind(R.id.sport_title)
     EditText mTitleField;
@@ -66,6 +64,10 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     EditText mDescriptionField;
     @Bind(R.id.sport_location)
     EditText mLocationField;
+    @Bind(R.id.datepicker)
+    Button dateButton;
+    @Bind(R.id.timepicker)
+    Button timeButton;
 
     @OnCheckedChanged(R.id.sport_status)
     void onCheckChanged(boolean isChecked) {
@@ -202,16 +204,31 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     }
 
     private void updateGathering() {
-       // App.mCurrentGathering.setDate(mDateField.getText().toString());
+        if (!validateInputs()) {return;}
+        App.mCurrentGathering.setDate(dateButton.getText().toString());
         App.mCurrentGathering.setGatheringTitle(mTitleField.getText().toString());
         App.mCurrentGathering.setDescription(mDescriptionField.getText().toString());
         App.mCurrentGathering.setLocation(mLocationField.getText().toString());
-      //  App.mCurrentGathering.setTime(mTimeField.getText().toString());
+        App.mCurrentGathering.setTime(timeButton.getText().toString());
         App.mCurrentGathering.updateGathering();
         finish();
     }
 
+    private boolean validateInputs() {
+        if (dateButton.getText().toString().equals("DATE")
+                || mTitleField.getText().length() == 0
+                || mDescriptionField.getText().length() == 0
+                || mLocationField.getText().length() == 0
+                || timeButton.getText().toString().equals("TIME")){
+            Toast.makeText(this, "Please fill out all forms", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     private void submitGathering() {
+
+        if (!validateInputs()) { return;}
         Firebase postID = new Firebase(Constants.FIREBASE_URL).child("Gatherings");
 
         /*Gets user's UID*/

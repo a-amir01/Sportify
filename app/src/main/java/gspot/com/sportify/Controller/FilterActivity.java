@@ -70,12 +70,12 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
     @Bind(R.id.expand_all) SwitchCompat mExpandAllSwitch;
     @Bind(R.id.select_all) SwitchCompat mSelectAllSwitch;
+    @Bind(R.id.event_match_schedule) SwitchCompat mMatchMyAvailabilitySwitch;
     @Bind(R.id.event_access_specifier) SwitchCompat mEventAccessSpecifier;
     @Bind(R.id.begginerCheckBox) CheckBox mBegginerCheckBox;
     @Bind(R.id.IntermediateCheckBox) CheckBox mIntermediateCheckBox;
     @Bind(R.id.AdvancedCheckBox) CheckBox mAdvancedCheckBox;
 
-    @Bind(R.id.event_match_schedule) SwitchCompat mMatchMyAvailabilitySwitch;
 
     @OnCheckedChanged(R.id.event_match_schedule)
     public void onMatchMyAvailabilityCheckedChanged(CompoundButton buttonView, boolean isChecked) {

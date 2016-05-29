@@ -114,6 +114,7 @@ public class GspotCalendar extends Observable{
     }
 
     private static int convertTimeStringToEncodedInt(String time) {
+        if (time == null) { time = "00:00";}
         String hourString = time.split(":")[0];
         int hour =  Integer.parseInt(hourString);
         int encodedHour = -1;

@@ -9,21 +9,6 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Switch
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Match my availability"
-            android:id="@+id/match_my_availability"
-            android:paddingLeft="10dp"
-            android:paddingRight="20dp"
-            android:checked="false" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:weightSum="1">
