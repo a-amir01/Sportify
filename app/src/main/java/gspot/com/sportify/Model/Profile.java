@@ -165,6 +165,7 @@ public class Profile {
     public List<String> getMySportsAsString () {
 
         List<String> toReturn = new ArrayList<>();
+        if (mMySports == null) { mMySports = new ArrayList<>();}
         for (MySport sport: mMySports) {
             toReturn.add(sport.getmSport());
         }
