@@ -1,13 +1,17 @@
 package gspot.com.sportify.Controller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -15,12 +19,14 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
+import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.UserPicture;
 
 /**
  * This file views the attending List of Pending List
@@ -29,39 +35,49 @@ import gspot.com.sportify.utils.App;
 public class ViewAttendingPendingActivity extends BaseNavBarActivity {
     private static final String TAG = ViewAttendingPendingActivity.class.getSimpleName();
 
-    //Holds the Usersnames
-    private ArrayList<String> userList = new ArrayList();
 
+    private Context context;
     //Holds the UserUID
     private ArrayList<String> userUID = new ArrayList();
-    private String gatheringUID, cameFrom;
-    private ArrayAdapter<String> adapter;
-    private Profile mProfile;
-    @Bind (R.id.view_status) EditText mStatus;
-    @Bind(R.id.list_of_pending_requests_or_attendees) ListView list;
+    //Holds the profile of all the players
+    private ArrayList<Profile> mPlayersList = new ArrayList<>();
+    private String gatheringUID, cameFrom, mSport;
+    private PendingAttendingAdapter mAdapter;
+    /*the View to hold our list of Sports*/
+    private RecyclerView mAttendingPendingRecyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pending_attending);
         ButterKnife.bind(this);
+        context = getApplicationContext();
+
+        mAttendingPendingRecyclerView = (RecyclerView) findViewById(R.id.pending_attending_recycler_view);
+        /*recycler view delegates the positioning to the layout manager*/
+        mAttendingPendingRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         Intent intent = getIntent();
         gatheringUID = intent.getStringExtra("gatheringUID");
         cameFrom = intent.getStringExtra("cameFrom");
+        mSport = intent.getStringExtra("gatheringSport");
 
-        adapter = new ArrayAdapter<String>(this, R.layout.the_user, userList);
+        if(cameFrom.equals("attending")) {
+            setTitle("View Players");
+        }
 
-        //mStatus.setText("Attending");
-        if(cameFrom.equals("attending")) mStatus.setText("Attending");
-        else mStatus.setText("Pending Requests");
+        else if(cameFrom.equals("pending"))
+        {
+            setTitle("Requests");
+        }
 
-        mStatus.setEnabled(false);
-
-
+        //gets the users ids and then their profiles
         loadUserUID(gatheringUID);
-        list.setAdapter(adapter);
-        registerClickCallBack();
+
+        mAdapter = new PendingAttendingAdapter(mPlayersList);
+        mAttendingPendingRecyclerView.setAdapter(mAdapter);
+        //registerClickCallBack();
 
 
         Log.d(TAG, "popularList size:" + userUID.size());
@@ -71,18 +87,18 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
     } //end onCreate()
 
 
-    void getHostname(String hostID) {
-        Firebase profileRef = Profile.profileRef(hostID);
+    void getPlayerName(String playerID) {
+        Firebase profileRef = Profile.profileRef(playerID);
 
         profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String name =  dataSnapshot.getValue(Profile.class).getmName();
-                if (name == null ) { name = "Please don't crash"; }
-                userList.add(name);
-                Log.d(TAG, "NAME " + name);
-                adapter.notifyDataSetChanged();
+                Profile profile =  dataSnapshot.getValue(Profile.class);
+                if (profile == null ) { profile = new Profile(); }
+                mPlayersList.add(profile);
+                Log.d(TAG, "Profile " + profile.getmName());
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -91,38 +107,6 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             }
         });
 
-    }
-
-    private void registerClickCallBack()
-    {
-        if (list != null) {
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-
-                    if(cameFrom.equals("attending")) {
-                        Intent intent = new Intent(listView.getContext(), ProfileActivity.class);
-                        String UID = userUID.get(position);
-                        intent.putExtra("viewingUser", UID);
-                        intent.putExtra("cameFrom", "list");
-                        Log.i(TAG, "UID" + UID);
-                        listView.getContext().startActivity(intent);
-                        //or create other intents here
-                    }
-
-                    else if(cameFrom.equals("pending"))
-                    {
-                        String UID = userUID.get(position);
-                        App.mCurrentGathering.addPendingToAttending(UID);
-                        App.mCurrentGathering.updatePending(getApplicationContext());
-                        userList.remove(position);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            });
-        } else {
-            Log.e(TAG, "LOOLOOOLLOLOLLOOLLOLLLLOOLL");
-        }
     }
 
 
@@ -141,14 +125,13 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
         attendingRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userList.clear();
                 userUID.clear();
                 Log.d(TAG, userUID.size() + " is the size of the list after none iteration");
                 for (DataSnapshot attendeeSnapshot: dataSnapshot.getChildren()) {
                     String participant = attendeeSnapshot.getValue (String.class);
-                    Log.e(TAG,"HHHHHHHHHH " + participant);
+                    Log.d(TAG,"Adding " + participant);
                     userUID.add(participant);
-                    getHostname(participant);
+                    getPlayerName(participant);
                     Log.d(TAG, userUID.size() + " is the size of the list after iteration");
 
                 }
@@ -161,4 +144,138 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
         });
 
     }
+
+    /*Provide a reference to the views for each data item
+      Complex data items may need more than one view per item, and
+      you provide access to all the views for a data item in a view holder
+      Implements the onClickerListener so everytime a sport is clicked
+      an action will happen
+     */
+    private class PlayerHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
+        /*use for logging*/
+        private final String TAG = PlayerHolder.class.getSimpleName();
+
+        private Profile mPlayer;
+        private TextView mName;
+        private ImageView mPicture;
+        private TextView mSkill;
+
+
+        public PlayerHolder(View itemView) {
+            super(itemView);
+
+            Log.i(TAG, "SportHolder()");
+
+            /*link member with the widget*/
+            mName = (TextView)itemView.findViewById(R.id.player_name);
+            mPicture = (ImageView) itemView.findViewById(R.id.player_picture);
+            mSkill= (TextView) itemView.findViewById(R.id.player_skill_lv);
+
+            /*when the player is clicked in the list*/
+            itemView.setOnClickListener(this);
+        }//end Sport()
+
+        @Override
+        public void onClick(View v) {
+            Log.i(TAG, "onClick()" + mPlayer.getmOwner());
+
+            if(cameFrom.equals("attending")) {
+                Intent intent = new Intent(context, ProfileActivity.class);
+                String UID = mPlayer.getmOwner();
+                intent.putExtra("viewingUser", UID);
+                intent.putExtra("cameFrom", "list");
+                Log.i(TAG, "UID" + UID);
+                startActivity(intent);
+                //or create other intents here
+            }
+
+            else if(cameFrom.equals("pending"))
+            {
+                String UID = mPlayer.getmOwner();
+                App.mCurrentGathering.addPendingToAttending(UID);
+                App.mCurrentGathering.updatePending(getApplicationContext());
+                mPlayersList.remove(mPlayer);
+                mAdapter.notifyDataSetChanged();
+            }
+        } //end onClick()
+
+
+        /*function to display the data names on screen
+         *the RecyclerView will call onCreateViewHolder to
+         *update the screen*/
+        public void bindPlayer(Profile player) {
+
+            Log.i(TAG, "bindSport()");
+            mPlayer = player;
+            mName.setText(mPlayer.getmName());
+            mPicture.setImageBitmap(UserPicture.StringToBitMap(mPlayer.getmProfilePic()));
+
+            //set the skill of the player only if they have that sport in their profile
+            List<MySport> mySports = mPlayer.getmMySports();
+            int indexOfSport = -1;
+            if (mySports == null) {
+                indexOfSport = -1;
+            } else {
+                indexOfSport = mySports.indexOf(mSport);
+            }
+
+            if (indexOfSport == -1) {
+                mSkill.setVisibility(View.GONE);
+            } else {
+                mSkill.setVisibility(View.VISIBLE);
+                mSkill.setText(mySports.get(indexOfSport).getmSkillLevel().toString());
+            }
+
+        }/*end bindSport*/
+    }/*end SportHolder*/
+
+    public class PendingAttendingAdapter extends RecyclerView.Adapter<PlayerHolder>{
+
+        /*use for logging*/
+        private final String TAG = PendingAttendingAdapter.class.getSimpleName();
+
+        /*list of sports*/
+        private List<Profile> mPlayers;
+
+        PendingAttendingAdapter(List<Profile> players){ this.mPlayers = players; }
+
+
+        @Override
+        public int getItemCount() {
+            return mPlayers.size();
+        }
+
+        @Override
+        public PlayerHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.the_user, viewGroup, false);
+            PlayerHolder pvh = new PlayerHolder(v);
+            return pvh;
+        }
+
+        @Override
+        public void onBindViewHolder(PlayerHolder playerHolder, int position) {
+            Profile player = mPlayers.get(position);
+            playerHolder.bindPlayer(player);  /*give the proper description to the widets*/
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+
+
+    }
+
+    /*inflates a custom drop down menu and hides certain members
+    * The implementation of each field in the main menu will be done
+    * by the super class (BaseNavBarActivity) implicitly*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        return true;
+    } //end onCreateOptionsMenu
 }

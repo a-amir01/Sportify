@@ -29,6 +29,8 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -91,6 +93,7 @@ public class AddSportFragment extends DialogFragment {
         ButterKnife.bind(this, v);
 
         List<String> sport_types = new SportTypes().getSportTypes();
+        Collections.sort(sport_types);
         ProfileActivity activity = (ProfileActivity) getActivity();
         List<String> currentSports = activity.getMySportList();
         mProfile = activity.getProfile();

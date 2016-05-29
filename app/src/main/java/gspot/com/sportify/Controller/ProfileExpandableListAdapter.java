@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -80,7 +81,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         //bind
-        Spinner skillLevelSpinner = (Spinner) convertView.findViewById(R.id.skill_lv_spinner);
+        final Spinner skillLevelSpinner = (Spinner) convertView.findViewById(R.id.skill_lv_spinner);
         TextView skillLevelText = (TextView) convertView.findViewById(R.id.skill_lv_text);
         EditText sportBioContent = (EditText) convertView.findViewById(R.id.sport_bio_content);
         Button deleteSport = (Button) convertView.findViewById(R.id.delete_sport_button);
@@ -98,6 +99,21 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                 int spinnerPosition = adapter.getPosition(defaultSelection);
                 skillLevelSpinner.setSelection(spinnerPosition);
             }
+
+            //whenever they selected a skill level save it
+            skillLevelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    Log.e("TAGGGG", skillLevelSpinner.getSelectedItem().toString());
+                    mProfile.getmMySports().get(groupPosition).setSkillLevelString(skillLevelSpinner.getSelectedItem().toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+
+            });
 
             skillLevelText.setVisibility(View.GONE);
             sportBioContent.setEnabled(true);

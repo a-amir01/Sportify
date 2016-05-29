@@ -285,7 +285,7 @@ public class GatheringListFragment extends Fragment implements Observer{
                 /*If the sport is not in the list*/
             if (mChosenSports != null && mChosenSports.size() > 0) {
                 //if the event type was in the filtered list
-                if (!mChosenSports.contains(event.getGatheringTitle())) {
+                if (!mChosenSports.contains(event.getSport())) {
                     gatherings.remove(event);
 
                     //changing the array size so go back and check the replacement

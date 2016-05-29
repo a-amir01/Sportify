@@ -106,6 +106,7 @@ public class GatheringFragment extends Fragment {
         App.mCurrentGathering = mGathering;
         intent.putExtra("gatheringUID", mGathering.getID());
         intent.putExtra("cameFrom", "attending");
+        intent.putExtra("gatheringSport", mGathering.getSport());
         getActivity().finish();
         getActivity().startActivity(intent);
     }
@@ -121,6 +122,7 @@ public class GatheringFragment extends Fragment {
         App.mCurrentGathering = mGathering;
         intent.putExtra("gatheringUID", mGathering.getID());
         intent.putExtra("cameFrom", "pending");
+        intent.putExtra("gatheringSport", mGathering.getSport());
         getActivity().finish();
         getActivity().startActivity(intent);
     }

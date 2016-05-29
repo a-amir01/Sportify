@@ -23,6 +23,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,8 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     private int mDayOfWeek;
     private String mDateString;
     private String mTimeString;
+    private Spinner sportTypeSpinner;
+    private Spinner skillLevelSpinner;
 
     @Bind(R.id.sport_title)
     EditText mTitleField;
@@ -118,15 +121,16 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         setContentView(R.layout.fragment_gathering);
         ButterKnife.bind(this);
 
-        Spinner skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
+        skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
         skillLevelSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
         dataAdapter.setDropDownViewResource(R.layout.spinner_style);
         skillLevelSpinner.setAdapter(dataAdapter);
 
-        Spinner sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
+        sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
         sportTypeSpinner.setOnItemSelectedListener(this);
         List<String> sport_types = new ArrayList<>();
+        Collections.sort(sport_types);
         sport_types.addAll(App.mSportTypes);
         sport_types.add("Test");
         ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
@@ -147,8 +151,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
 
             timeButton = (Button) findViewById(R.id.timepicker);
             timeButton.setText((App.mCurrentGathering.getTime()));
-
-
 
             int sportspinnerPosition = sportTypeListAdapter.getPosition(App.mCurrentGathering.getSID());
             sportTypeSpinner.setSelection(sportspinnerPosition);
@@ -210,6 +212,8 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         App.mCurrentGathering.setDescription(mDescriptionField.getText().toString());
         App.mCurrentGathering.setLocation(mLocationField.getText().toString());
         App.mCurrentGathering.setTime(timeButton.getText().toString());
+        App.mCurrentGathering.setSport(sportTypeSpinner.getSelectedItem().toString());
+        App.mCurrentGathering.setSkillLevel(Gathering.toSkillLevel(skillLevelSpinner.getSelectedItem().toString()));
         App.mCurrentGathering.updateGathering();
         finish();
     }
@@ -252,6 +256,8 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         mgathering.setDate(mDateString);
         mgathering.setTime(mTimeString);
         mgathering.setDayOfWeek(mDayOfWeek);
+        mgathering.setSport(sportTypeSpinner.getSelectedItem().toString());
+        mgathering.setSkillLevel(Gathering.toSkillLevel(skillLevelSpinner.getSelectedItem().toString()));
         sportRef.setValue(mgathering);
         finish();
     }
