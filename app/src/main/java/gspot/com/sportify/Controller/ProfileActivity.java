@@ -225,8 +225,11 @@ public class ProfileActivity extends BaseNavBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        /*dont show this filed in this screen*/
-        menu.findItem(R.id.profile).setVisible(false);
+
+        if (!cameFrom.equals("list")) {
+            /*dont show this filed in this screen*/
+            menu.findItem(R.id.profile).setVisible(false);
+        }
 
         return true;
     } //end onCreateOptionsMenu
