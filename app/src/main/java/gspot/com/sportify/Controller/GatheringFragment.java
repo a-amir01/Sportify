@@ -18,6 +18,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -264,6 +269,8 @@ public class GatheringFragment extends Fragment {
 
     }
     void deleteGathering() {
+
+        removeAllAttendings();
         if(gathering != null && m_lis != null)
             gathering.removeEventListener(m_lis);
         App.mCurrentGathering.delete();
@@ -273,6 +280,19 @@ public class GatheringFragment extends Fragment {
         getActivity().finish();
     }
 
+    void removeAllAttendings()
+    {
+        HashMap currentAttendees = App.mCurrentGathering.getAttendees();
+        List<String> list = new ArrayList<String> (currentAttendees.values());
+        Firebase myGatheringRef;
+
+        for(String s : list)
+        {
+            myGatheringRef = App.dbref.child("MyGatherings").child(s).child("myGatherings").child(mGathering.getID());
+            myGatheringRef.removeValue();
+        }
+
+    }
     void leaveAttending () {
         Log.i(TAG, "LEAVE ATTENDING");
         /*Gets user's UID*/
@@ -282,6 +302,9 @@ public class GatheringFragment extends Fragment {
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.removeAttendee(mCurrentUser);
         mGathering.updateAttendees(getActivity().getApplicationContext());
+
+        Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mCurrentUser).child("myGatherings").child(mGathering.getID());
+        myGatheringsID.removeValue();
     }
     void leavePending () {
         Log.i(TAG, "LEAVE PENDING");
@@ -302,6 +325,11 @@ public class GatheringFragment extends Fragment {
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.addAttendee(mCurrentUser);
         mGathering.updateAttendees(getActivity().getApplicationContext());
+
+        Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mCurrentUser).child("myGatherings");
+        Map<String, Object> updates = new HashMap<String, Object>();
+        updates.put(mGathering.getID(), mGathering.getID());
+        myGatheringsID.updateChildren(updates);
     }
 
     void requestGathering() {
