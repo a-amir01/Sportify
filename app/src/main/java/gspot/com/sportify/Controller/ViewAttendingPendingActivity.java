@@ -195,7 +195,6 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             startActivity(intent);
             //or create other intents here
 
-
             Log.i(TAG, "END OF FUNCTION");
         } //end onClick()
 
@@ -209,6 +208,9 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             mPlayer = player;
             mName.setText(mPlayer.getmName());
             mPicture.setImageBitmap(UserPicture.StringToBitMap(mPlayer.getmProfilePic()));
+            if (cameFrom.equals("attending")) {
+                mAccept.setVisibility(View.GONE);
+            }
             int indexOfSport = -1;
 
 
@@ -231,15 +233,21 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             App.mCurrentGathering.updatePending(getApplicationContext());
             mPlayersList.remove(mPlayer);
 
-            Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(UID).child("myGatherings");
 
-            Map<String, Object> updates = new HashMap<String, Object>();
-            updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
-            Log.i(TAG, "UID IS" + UID);
-            Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
-            myGatheringsID.updateChildren(updates);
-            mAdapter.notifyDataSetChanged();
+            mAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mPlayer.getmOwner()).child("myGatherings");
 
+                    Map<String, Object> updates = new HashMap<String, Object>();
+                    updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
+                    Log.i(TAG, "UID IS" + mPlayer.getmOwner());
+                    Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
+                    myGatheringsID.updateChildren(updates);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+            });
         }/*end bindSport*/
     }/*end SportHolder*/
 
