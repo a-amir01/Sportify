@@ -86,6 +86,9 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*If we have came from filter activity*/
     private boolean mFromFilter;
 
+    /*User is viewing their own events*/
+    private boolean mInActive;
+
     /*user's gathering ID's*/
     List<String> mActiveGatheringIds;
 
@@ -177,6 +180,9 @@ public class GatheringListFragment extends Fragment implements Observer{
 
                 break;
             case R.id.active:
+
+                /*reduce lis to user's events*/
+                mInActive = true;
                 mActiveGatheringButton.setVisible(false);
                 mHomeButton.setVisible(true);
                 updateUI(!FILTER, ACTIVE, mActiveGatheringIds);
@@ -185,6 +191,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             case R.id.home:
                 /*dont reduce list to user's events*/
                 mFromFilter = false;
+                mInActive = false;
 
                 mActiveGatheringButton.setVisible(true);
                 mHomeButton.setVisible(false);
@@ -303,7 +310,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     private void filterGatheringList(List<Gathering> gatherings, List<String> activeGatheringIds) {
 
         /*filter the user's events*/
-        if(mFromFilter) updateListWithActiveEvents(gatherings, activeGatheringIds);
+        if(mFromFilter && mInActive) updateListWithActiveEvents(gatherings, activeGatheringIds);
 
         /*remove the user's events*/
         else{
