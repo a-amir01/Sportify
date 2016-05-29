@@ -27,23 +27,25 @@
             android:gravity="left|right">
 
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Date"
                 android:id="@+id/datepicker"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:theme="@style/AppTheme.Button"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="TIME"
                 android:id="@+id/timepicker"
                 android:layout_marginRight="20dp"
                 android:layout_marginLeft="10dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:theme="@style/AppTheme.Button"/>
 
         </LinearLayout>
 
@@ -52,7 +54,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/sport_location"
             android:hint="@string/hint_location"
-            android:maxLines="1"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />

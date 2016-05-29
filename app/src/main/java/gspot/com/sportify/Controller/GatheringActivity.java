@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
@@ -209,15 +210,43 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     }
 
     private boolean validateInputs() {
+        boolean validInput = true;
+
         if (dateButton.getText().toString().equals("DATE")
-                || mTitleField.getText().length() == 0
-                || mDescriptionField.getText().length() == 0
-                || mLocationField.getText().length() == 0
                 || timeButton.getText().toString().equals("TIME")){
-            Toast.makeText(this, "Please fill out all forms", Toast.LENGTH_SHORT).show();
-            return false;
+            Toast.makeText(this, "Please select Date and Time", Toast.LENGTH_SHORT).show();
+            validInput = false;
         }
-        return true;
+
+        if(mTitleField.getText().length() == 0) {
+            mTitleField.setError("Please fill out title");
+            validInput = false;
+        }
+        else if(mTitleField.getText().length() > 50) {
+            mTitleField.setError("Title must be less than 50 characters");
+            validInput = false;
+        }
+
+        if(mDescriptionField.getText().length() == 0) {
+            mDescriptionField.setError("Please fill out description");
+            validInput = false;
+        }
+        else if(mDescriptionField.getText().length() > 300) {
+            mDescriptionField.setError("Description must be less than 300 characters");
+            validInput = false;
+        }
+
+        if(mLocationField.getText().length() == 0) {
+            mLocationField.setError("Please fill out location");
+            validInput = false;
+        }
+        else if(mLocationField.getText().length() > 100) {
+            mLocationField.setError("Location must be lass than 100 characters");
+            validInput = false;
+        }
+
+
+        return validInput;
     }
 
     private void submitGathering() {
