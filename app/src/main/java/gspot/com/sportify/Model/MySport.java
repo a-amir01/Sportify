@@ -37,14 +37,14 @@ public class MySport {
 
     public MySport() {
         this.mSkillLevel = SkillLevel.BEGINNER;
-        this.mBio = "Write about yourself with respect to this sport.";
+        this.mBio = "This sport is great.";
         this.mSport = "BASKETBALL";
     }
 
     public MySport(String sport) {
         this.mSport = sport;
         this.mSkillLevel = SkillLevel.BEGINNER;
-        this.mBio = "Write about yourself with respect to this sport.";
+        this.mBio = "This sport is great.";
     }
 
     public SkillLevel getmSkillLevel() {

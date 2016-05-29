@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:largeHeap="true">
-        <activity android:name=".Controller.StarterActivity">
+        <activity android:name=".Controller.StarterActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,25 +21,26 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Controller.LoginActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Controller.SignupActivity" android:label="Sign Up" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Controller.GatheringListActivity" android:theme="@style/AppTheme" />
-        <activity android:name=".Controller.FilterActivity" android:theme="@style/AppTheme" />
-        <activity android:name=".Controller.GatheringActivity" android:theme="@style/AppTheme" />
-        <activity android:name=".Controller.ViewAttendingPendingActivity" android:theme="@style/AppTheme" />
+        <activity android:name=".Controller.LoginActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Controller.SignupActivity" android:screenOrientation="portrait" android:label="Sign Up" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Controller.GatheringListActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme" />
+        <activity android:name=".Controller.FilterActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme" />
+        <activity android:name=".Controller.GatheringActivity" android:screenOrientation="portrait" android:label="Create An Event" android:theme="@style/AppTheme.BlackTextField"/>
+        <activity android:name=".Controller.ViewAttendingPendingActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme" />
         <activity
-            android:name=".Controller.GatheringPagerActivity" android:label="@string/app_name"
+            android:name=".Controller.GatheringPagerActivity" android:screenOrientation="portrait" android:label="@string/app_name"
             android:parentActivityName=".Controller.GatheringListActivity">
         </activity>
 
         <activity
             android:name=".Controller.ProfileActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_view_profile"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <activity android:name=".Controller.ForgotPasswordActivity" android:label="@string/title_activity_forgot_pwd" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Controller.ChangePasswordActivity" android:label="@string/title_activity_change_pwd" android:theme="@style/AppTheme.WhiteTextField" />
+        <activity android:name=".Controller.ForgotPasswordActivity" android:screenOrientation="portrait" android:label="@string/title_activity_forgot_pwd" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Controller.ChangePasswordActivity" android:screenOrientation="portrait" android:label="@string/title_activity_change_pwd" android:theme="@style/AppTheme.WhiteTextField" />
 
         <meta-data
             android:name="com.google.android.gms.version"

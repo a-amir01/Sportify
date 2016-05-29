@@ -42,8 +42,8 @@ public class Profile {
     public Profile(String mName, String mOwner) {
         this.mName = mName;
         this.mOwner = mOwner;
-        this.mBio = "Write a short description of yourself.";
-        this.mContactInfo = "How would you like people to contact you? Write it here.";
+        this.mBio = "This is my description.";
+        this.mContactInfo = "(555)555-5555, email@ucsd.edu";
         this.mCalendar = new GspotCalendar();
         this.mMySports = new ArrayList<MySport>();
         this.mProfilePic = Constants.DEFAULT_PROFILE_PIC;
