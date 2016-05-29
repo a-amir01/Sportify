@@ -60,11 +60,6 @@ public class AddSportFragment extends DialogFragment implements Observer{
     private SportTypes mDataBaseSports = new SportTypes();
     private ListView listView;
 
-    public interface OnDataPass {
-        public void onDataPass(String data);
-    }
-
-    OnDataPass dataPasser;
     private static final String TAG = AddSportFragment.class.getSimpleName();
 
     String mCurrentUser;

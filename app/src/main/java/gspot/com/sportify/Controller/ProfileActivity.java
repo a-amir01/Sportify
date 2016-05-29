@@ -230,6 +230,11 @@ public class ProfileActivity extends BaseNavBarActivity {
         menu.findItem(R.id.active).setVisible(false);
         menu.findItem(R.id.home).setVisible(false);
 
+        if (!cameFrom.equals("list")) {
+            /*dont show this filed in this screen*/
+            menu.findItem(R.id.profile).setVisible(false);
+        }
+
         return true;
     } //end onCreateOptionsMenu
 
