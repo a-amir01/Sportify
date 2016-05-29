@@ -312,20 +312,24 @@ public class GatheringListFragment extends Fragment implements Observer{
                 if (event.getSkillLevel() == (Gathering.SkillLevel.BEGINNER) && !App.mCurrentSkillLevels[0]) {
                     gatherings.remove(event);
                     --i;
+                    continue;
                 } else if (event.getSkillLevel().equals(Gathering.SkillLevel.INTERMEDIATE) && !App.mCurrentSkillLevels[1]) {
                     gatherings.remove(event);
                     --i;
+                    continue;
 
                 } else if (event.getSkillLevel().equals(Gathering.SkillLevel.ADVANCED) && !App.mCurrentSkillLevels[2]) {
                     gatherings.remove(event);
                     --i;
+                    continue;
                 }
             }//end outer if
 
             /*match my availability*/
-            if(!mCalendar.playerCanMakeGathering(event)) {
+            if(App.mMatch_My_Availability && !mCalendar.playerCanMakeGathering(event)) {
                 gatherings.remove(event);
                 --i;
+                continue;
             }
         }//end for
 

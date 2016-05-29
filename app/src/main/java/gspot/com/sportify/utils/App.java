@@ -22,6 +22,6 @@ public class App {
     public static boolean [] mCurrentSkillLevels = { false, false, false };
     /*Match my availability*/
     public static boolean mMatch_My_Availability;
-    /*filter: show private events*/
+    /*filter: show closed events*/
     public static boolean mIsPrivateEvent;
 }

@@ -62,6 +62,7 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
     /*Is the private filed selected?*/
     private static boolean sIsPrivateEvent;
+    private static boolean sIsScheduleEvent;
 
     /*Are all options selected?*/
     private static boolean sIsAllSelected;
@@ -79,7 +80,7 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
     @OnCheckedChanged(R.id.event_match_schedule)
     public void onMatchMyAvailabilityCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mMatchMyAvailabilitySwitch.setChecked(isChecked);
+        sIsScheduleEvent = isChecked;
     }
 
 
@@ -298,6 +299,10 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
         /*set the event specifier*/
             mEventAccessSpecifier.setChecked(sIsPrivateEvent);
+
+        /*set the schedule specifier*/
+            mMatchMyAvailabilitySwitch.setChecked(sIsScheduleEvent);
+
 
             mBegginerCheckBox.setChecked(mSkillLevels[0]);
             mIntermediateCheckBox.setChecked(mSkillLevels[1]);
