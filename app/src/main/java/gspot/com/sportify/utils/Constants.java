@@ -9,9 +9,13 @@ import gspot.com.sportify.BuildConfig;
 
 public class Constants {
 
+    /*Constants for Calendar*/
+    public static final int NOON = 12;
+    public static final int EARLY_MORNING = 4;
+    public static final int EVENING = 16;
+    public static final int NIGHT = 20;
+
     /*Constants for FireBase */
-
-
     public static final String PASSWORD_PROVIDER = "password";
     public static final String FIREBASE_PROPERTY_EMAIL = "email";
     public static final String FIREBASE_LOCATION_PROFILES = "profiles";

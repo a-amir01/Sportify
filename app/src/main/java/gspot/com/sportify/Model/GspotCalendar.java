@@ -101,6 +101,24 @@ public class GspotCalendar extends Observable{
         });
     }
 
+    public boolean playerCanMakeGathering (Gathering gathering) {
+
+        Log.e("Gathering", this.toString());
+
+        int dayOfWeek = gathering.getDayOfWeek();
+        String time = gathering.getTime();
+        String hourString = time.split(":")[0];
+        int hour =  Integer.parseInt(hourString);
+        int encodedHour = -1;
+
+
+
+
+
+
+        return true;
+    }
+
 
 
 }

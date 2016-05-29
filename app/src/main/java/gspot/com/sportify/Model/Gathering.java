@@ -2,6 +2,7 @@
 package gspot.com.sportify.Model;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
@@ -218,10 +219,7 @@ public class Gathering{
         });
     }
 
-    public static boolean playerCanMakeGathering (GspotCalendar calendar) {
-        //// TODO: 5/28/16
-        return true;
-    }
+
 
 
 }
