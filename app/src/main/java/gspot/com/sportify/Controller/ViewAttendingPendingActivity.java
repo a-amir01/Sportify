@@ -210,15 +210,14 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             mPlayer = player;
             mName.setText(mPlayer.getmName());
             mPicture.setImageBitmap(UserPicture.StringToBitMap(mPlayer.getmProfilePic()));
+            int indexOfSport = -1;
+
 
             //set the skill of the player only if they have that sport in their profile
             List<MySport> mySports = mPlayer.getmMySports();
-            int indexOfSport = -1;
-            if (mySports == null) {
-                indexOfSport = -1;
-            } else {
-                indexOfSport = mySports.indexOf(mSport);
-            }
+            //finds the index of the users sport profile
+            indexOfSport = mPlayer.getIndexOfSport(mSport);
+
 
             if (indexOfSport == -1) {
                 mSkill.setVisibility(View.GONE);
