@@ -15,21 +15,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.Profile;
@@ -72,12 +69,6 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*contains the names of the sports chosen in filter*/
     private List<String> mChosenSports;
 
-    /*filter: show private events*/
-    private boolean mIsPrivateEvent;
-
-    /*filter: show based on skill level*/
-    private boolean [] mSkillLevels = { false, false, false };
-
     /*the current user's id to get their gatherings*/
     private String mCurrentUser;
 
@@ -87,8 +78,6 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*Hold a reference to the menuItem for active gatherings*/
     private MenuItem mActiveGatheringCheckBox;
 
-    /*Match my availability*/
-    private boolean mMatch_My_Availability;
     /*
     * 1st function to be called when the object gets instantiated
     * tell the host activity that your fragment
@@ -233,9 +222,9 @@ public class GatheringListFragment extends Fragment implements Observer{
 
             /*Get the sports that were chosen by the filter*/
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
-            mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
-            mSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
-            mMatch_My_Availability = data.getBooleanExtra(Constants.MATCH_MY_AVAILABILITY, false);
+            App.mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
+            App.mCurrentSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
+            App.mMatch_My_Availability = data.getBooleanExtra(Constants.MATCH_MY_AVAILABILITY, false);
 
             if(mChosenSports != null){
                 SportTypes st = new SportTypes();
@@ -301,7 +290,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             }//end outer if
 
                 /*If the sport is in the list but the access to event is not same*/
-            if (mIsPrivateEvent && !event.getIsPrivate()){
+            if (App.mIsPrivateEvent && !event.getIsPrivate()){
                 gatherings.remove(event);
 
                 //changing the array size so go back and check the replacement
@@ -310,17 +299,17 @@ public class GatheringListFragment extends Fragment implements Observer{
             } //end if
 
                 /*if atleast one of the skill levels is selected*/
-            if(mSkillLevels[0] || mSkillLevels[1] || mSkillLevels[2]){
+            if(App.mCurrentSkillLevels[0] || App.mCurrentSkillLevels[1] || App.mCurrentSkillLevels[2]){
                 /*if we have the sport and the access is the same, check for skill level*/
                 /*remove if event is beginner and beginner is not checked*/
-                if (event.getSkillLevel() == (Gathering.SkillLevel.BEGINNER) && !mSkillLevels[0]) {
+                if (event.getSkillLevel() == (Gathering.SkillLevel.BEGINNER) && !App.mCurrentSkillLevels[0]) {
                     gatherings.remove(event);
                     --i;
-                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.INTERMEDIATE) && !mSkillLevels[1]) {
+                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.INTERMEDIATE) && !App.mCurrentSkillLevels[1]) {
                     gatherings.remove(event);
                     --i;
 
-                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.ADVANCED) && !mSkillLevels[2]) {
+                } else if (event.getSkillLevel().equals(Gathering.SkillLevel.ADVANCED) && !App.mCurrentSkillLevels[2]) {
                     gatherings.remove(event);
                     --i;
                 }
