@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Bio:"
+        android:text="@string/bio"
         android:id="@+id/sport_bio"
         android:textColor="@color/colorPrimaryText" />
 
@@ -41,20 +41,17 @@
         android:id="@+id/sport_bio_content"
         android:inputType="textMultiLine"
         android:textColor="@color/colorPrimaryText"
-        android:text="This is a sports bio"
+        android:text="@string/sports_bio"
         android:maxLines="14"
         android:minLines="1" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete Sport"
-        android:textColor="@color/colorPrimaryTextInverse"
+        android:gravity="center_vertical|center_horizontal"
+        android:minWidth="100dp"
+        android:text="@string/delete_sport"
         android:id="@+id/delete_sport_button"
-        android:background="@drawable/profile_button"
-        android:textStyle="bold"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:textSize="10dp" />
+        android:theme="@style/AppTheme.Button.Colored"/>
 
 </LinearLayout>

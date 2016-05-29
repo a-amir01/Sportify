@@ -1,45 +1,35 @@
 package gspot.com.sportify.Controller;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import gspot.com.sportify.Model.Gathering;
-import gspot.com.sportify.Model.SportLab;
-import gspot.com.sportify.Model.SportType;
-import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
-import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.DatePickerFragment;
 import gspot.com.sportify.utils.TimePickerFragment;
 
@@ -118,7 +108,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_gathering);
+        setContentView(R.layout.fragment_gathering_update);
         ButterKnife.bind(this);
 
         skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
@@ -141,6 +131,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         Intent intent = getIntent();
         toEdit = intent.getBooleanExtra("Edit", false);
         if (toEdit) {
+            setTitle("Edit Event");
             mTitleField.setText(App.mCurrentGathering.getGatheringTitle());
             mDescriptionField.setText(App.mCurrentGathering.getDescription());
             mLocationField.setText(App.mCurrentGathering.getLocation());
@@ -219,15 +210,43 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     }
 
     private boolean validateInputs() {
+        boolean validInput = true;
+
         if (dateButton.getText().toString().equals("DATE")
-                || mTitleField.getText().length() == 0
-                || mDescriptionField.getText().length() == 0
-                || mLocationField.getText().length() == 0
                 || timeButton.getText().toString().equals("TIME")){
-            Toast.makeText(this, "Please fill out all forms", Toast.LENGTH_SHORT).show();
-            return false;
+            Toast.makeText(this, "Please select Date and Time", Toast.LENGTH_SHORT).show();
+            validInput = false;
         }
-        return true;
+
+        if(mTitleField.getText().length() == 0) {
+            mTitleField.setError("Please fill out title");
+            validInput = false;
+        }
+        else if(mTitleField.getText().length() > 50) {
+            mTitleField.setError("Title must be less than 50 characters");
+            validInput = false;
+        }
+
+        if(mDescriptionField.getText().length() == 0) {
+            mDescriptionField.setError("Please fill out description");
+            validInput = false;
+        }
+        else if(mDescriptionField.getText().length() > 300) {
+            mDescriptionField.setError("Description must be less than 300 characters");
+            validInput = false;
+        }
+
+        if(mLocationField.getText().length() == 0) {
+            mLocationField.setError("Please fill out location");
+            validInput = false;
+        }
+        else if(mLocationField.getText().length() > 100) {
+            mLocationField.setError("Location must be lass than 100 characters");
+            validInput = false;
+        }
+
+
+        return validInput;
     }
 
     private void submitGathering() {

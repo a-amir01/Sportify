@@ -50,16 +50,14 @@
                     android:maxLines="4"
                     android:minLines="1" />
 
-                <Button
+                <android.support.v7.widget.AppCompatButton
                     android:id="@+id/edit_save_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical|center_horizontal"
                     android:minWidth="100dp"
-                    android:text="Save"
-                    android:background="@drawable/profile_button"
-                    android:textColor="@color/abc_primary_text_material_dark"
-                    android:textStyle="bold" />
+                    android:text="@string/save"
+                    android:theme="@style/AppTheme.Button.Colored"/>
             </LinearLayout>
 
         </LinearLayout>
