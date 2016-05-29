@@ -56,6 +56,7 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.time_variable) TextView mTimeField;
     @Bind(R.id.host_variable) TextView mHost;
     @Bind(R.id.public_or_private) TextView mPublicOrPrivate;
+    @Bind(R.id.sport_variable) TextView mSportName;
     @Bind(R.id.skill_level_variable) TextView mSkillLevel;
     @Bind(R.id.request_join_leave_delete_button) Button mDelete;
     @Bind(R.id.edit_gathering_button) Button mEdit;
@@ -190,6 +191,7 @@ public class GatheringFragment extends Fragment {
                     mTimeField.setText(mGathering.getTime());
                     mDate.setText(mGathering.getDate());
                     mLocationField.setText(mGathering.getLocation());
+                    mSportName.setText(mGathering.getSID());
                     mSkillLevel.setText(mGathering.getSkillLevel().toString());
                     if(mGathering.getIsPrivate() == true) {
                         mPublicOrPrivate.setText("Closed");
