@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -60,11 +61,6 @@ public class AddSportFragment extends DialogFragment implements Observer{
     private SportTypes mDataBaseSports = new SportTypes();
     private ListView listView;
 
-    public interface OnDataPass {
-        public void onDataPass(String data);
-    }
-
-    OnDataPass dataPasser;
     private static final String TAG = AddSportFragment.class.getSimpleName();
 
     String mCurrentUser;
@@ -75,7 +71,9 @@ public class AddSportFragment extends DialogFragment implements Observer{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
-        return super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setTitle("Choose a Sport.");
+        return dialog;
     }
 
     /** On Create View Method
@@ -85,17 +83,6 @@ public class AddSportFragment extends DialogFragment implements Observer{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView()");
-
-        Resources res = getResources();
-        TextView title = (TextView) getDialog().findViewById(android.R.id.title);
-        title.setText("Choose a sport");
-        title.setTextColor( res.getColor(R.color.colorPrimaryText));
-
-        final int titleDividerId = res.getIdentifier("titleDivider", "id", "android");
-        final View titleDivider = getDialog().findViewById(titleDividerId);
-        if (titleDivider != null) {
-            titleDivider.setBackgroundColor(res.getColor(R.color.colorPrimary));
-        }
 
         View v = inflater.inflate(R.layout.fragment_add_sport, container, false);
         ButterKnife.bind(this, v);
@@ -114,11 +101,15 @@ public class AddSportFragment extends DialogFragment implements Observer{
     @Override
     public void update(Observable observable, Object data) {
 
-
+        Log.i(TAG, "update");
         /*Filters chosen by the user that was saved on the device*/
         HashMap<Integer, boolean[]> filters;
 
-        List<String> sport_types = mDataBaseSports.getSportTypes();
+        ArrayList<String> sport_types = new ArrayList<String>();
+        for (SportType sport_type : mDataBaseSports.sportTypes) {
+            sport_types.add(sport_type.getName());
+        }
+
         Collections.sort(sport_types);
         ProfileActivity activity = (ProfileActivity) getActivity();
         List<String> currentSports = activity.getMySportList();

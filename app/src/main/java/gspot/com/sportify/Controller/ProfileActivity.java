@@ -228,6 +228,13 @@ public class ProfileActivity extends BaseNavBarActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         /*dont show this filed in this screen*/
         menu.findItem(R.id.profile).setVisible(false);
+        menu.findItem(R.id.active).setVisible(false);
+        menu.findItem(R.id.home).setVisible(false);
+
+        if (!cameFrom.equals("list")) {
+            /*dont show this filed in this screen*/
+            menu.findItem(R.id.profile).setVisible(false);
+        }
 
         return true;
     } //end onCreateOptionsMenu

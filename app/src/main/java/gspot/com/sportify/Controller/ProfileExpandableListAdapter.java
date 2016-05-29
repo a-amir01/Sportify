@@ -1,9 +1,7 @@
 package gspot.com.sportify.Controller;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,16 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
@@ -118,7 +112,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
             skillLevelText.setVisibility(View.GONE);
             sportBioContent.setEnabled(true);
             deleteSport.setVisibility(View.VISIBLE);
-
+            //deleteSport.setFocusable(false);
             deleteSport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -149,7 +143,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
 
                     if(mProfile.getmMySports().size() > 0 ) {
                         if(editable.toString().length() == 0) {
-                            mProfile.getmMySports().get(groupPosition ).setmBio("Write about yourself with respect to this sport.");
+                            mProfile.getmMySports().get(groupPosition ).setmBio("This sport is great.");
                         } else if (editable.toString().length() > 200){
                             mProfile.getmMySports().get(groupPosition).setmBio("Please keep your bio shorter than 200 character.");
                         } else {

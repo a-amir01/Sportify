@@ -61,6 +61,7 @@ public class GatheringFragment extends Fragment {
     @Bind(R.id.time_variable) TextView mTimeField;
     @Bind(R.id.host_variable) TextView mHost;
     @Bind(R.id.public_or_private) TextView mPublicOrPrivate;
+    @Bind(R.id.sport_variable) TextView mSportName;
     @Bind(R.id.skill_level_variable) TextView mSkillLevel;
     @Bind(R.id.request_join_leave_delete_button) Button mDelete;
     @Bind(R.id.edit_gathering_button) Button mEdit;
@@ -100,7 +101,6 @@ public class GatheringFragment extends Fragment {
         Intent intent = new Intent(getActivity(), GatheringActivity.class);
         intent.putExtra("Edit", true);
         App.mCurrentGathering = mGathering;
-        getActivity().finish();
         startActivity(intent);
     }
 
@@ -112,7 +112,6 @@ public class GatheringFragment extends Fragment {
         intent.putExtra("gatheringUID", mGathering.getID());
         intent.putExtra("cameFrom", "attending");
         intent.putExtra("gatheringSport", mGathering.getSport());
-        getActivity().finish();
         getActivity().startActivity(intent);
     }
 
@@ -128,7 +127,6 @@ public class GatheringFragment extends Fragment {
         intent.putExtra("gatheringUID", mGathering.getID());
         intent.putExtra("cameFrom", "pending");
         intent.putExtra("gatheringSport", mGathering.getSport());
-        getActivity().finish();
         getActivity().startActivity(intent);
     }
 
@@ -140,7 +138,6 @@ public class GatheringFragment extends Fragment {
         intent.putExtra("viewingUser", mGathering.getHostID());
         intent.putExtra("cameFrom", "viewing");
         Log.d(TAG, "HOSTID" + mGathering.getHostID());
-        getActivity().finish();
         getActivity().startActivity(intent);
     }
 
@@ -167,6 +164,8 @@ public class GatheringFragment extends Fragment {
         Log.i(TAG, "onCreate");
 
         gatheringUID = getArguments().getString(Constants.ARG_SPORT_ID);
+
+
 
     }//end onCreate
 
@@ -197,6 +196,7 @@ public class GatheringFragment extends Fragment {
                     mTimeField.setText(mGathering.getTime());
                     mDate.setText(mGathering.getDate());
                     mLocationField.setText(mGathering.getLocation());
+                    mSportName.setText(mGathering.getSID());
                     mSkillLevel.setText(mGathering.getSkillLevel().toString());
                     if(mGathering.getIsPrivate() == true) {
                         mPublicOrPrivate.setText("Closed");
