@@ -1,20 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-<items version="2" >
-
-    <item
-        jar="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="f086030bd2b33a52d257a57aa0c5cd8c5326b820">
-        <dex dex="/Users/patrickhayes/AndroidStudioProjects/SportsApp/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_5edd8f3ce3fa5409957697bd0218f0fedbd23ed4.jar" />
-    </item>
-
-</items>
-=======
 <items version="2" />
-<<<<<<< HEAD
-=======
-
->>>>>>> b6fe8d0d0876cb68c7dd3cf2483f47f193ec63ae
->>>>>>> c1b3fcc1039c361c01d40885354803b1575d7925
