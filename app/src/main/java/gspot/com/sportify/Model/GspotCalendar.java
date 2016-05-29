@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import gspot.com.sportify.utils.Constants;
+
 /** GSpot Calendar
  * Represents a calendar indicating a user's
  * times of availability.
@@ -106,17 +108,27 @@ public class GspotCalendar extends Observable{
         Log.e("Gathering", this.toString());
 
         int dayOfWeek = gathering.getDayOfWeek();
-        String time = gathering.getTime();
+        int time = GspotCalendar.convertTimeStringToEncodedInt(gathering.getTime());
+
+        return getAvailability(dayOfWeek, time);
+    }
+
+    private static int convertTimeStringToEncodedInt(String time) {
         String hourString = time.split(":")[0];
         int hour =  Integer.parseInt(hourString);
         int encodedHour = -1;
 
+        if (Constants.EARLY_MORNING <= hour && hour < Constants.NOON) {
+            encodedHour = 0;
+        } else if (Constants.NOON <= hour && hour < Constants.EVENING) {
+            encodedHour = 1;
+        } else if (Constants.EVENING <= hour && hour < Constants.NIGHT) {
+            encodedHour = 2;
+        } else {
+            encodedHour = 3;
+        }
 
-
-
-
-
-        return true;
+        return encodedHour;
     }
 
 

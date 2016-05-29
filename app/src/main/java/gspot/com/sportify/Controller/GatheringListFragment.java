@@ -1,11 +1,11 @@
 package gspot.com.sportify.Controller;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,21 +15,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.GspotCalendar;
@@ -334,10 +331,10 @@ public class GatheringListFragment extends Fragment implements Observer{
             }//end outer if
 
             /*match my availability*/
-            if(!mCalendar.playerCanMakeGathering(event)) {
-                gatherings.remove(event);
-                --i;
-            }
+//            if(!mCalendar.playerCanMakeGathering(event)) {
+//                gatherings.remove(event);
+//                --i;
+//            }
         }//end for
 
     }//end filter UI
@@ -436,7 +433,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             Log.d(TAG, "BIND SPORT" + mGathering.getGatheringTitle());
             mTitleTextView.setText(mGathering.getGatheringTitle());
             if (mGathering.getIsPrivate()) {
-                mEventStatusView.setText("Private");
+                mEventStatusView.setText("Closed");
             }
             else {
                 mEventStatusView.setText("Public");
