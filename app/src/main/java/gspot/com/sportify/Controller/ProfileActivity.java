@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -354,12 +355,12 @@ public class ProfileActivity extends BaseNavBarActivity {
         /* If the user is available at this time, set button to green */
         if (mCalendar.getAvailability(day, time)) {
             mDaysOfWeek[day][time].setImageResource(R.drawable.ic_check_box_filled);
-            mDaysOfWeek[day][time].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            mDaysOfWeek[day][time].setColorFilter(Color.parseColor("#009688"), PorterDuff.Mode.SRC_IN);
 
         /* If the user is busy at this time, set button to red */
         } else {
             mDaysOfWeek[day][time].setImageResource(R.drawable.ic_check_box_outline);
-            mDaysOfWeek[day][time].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            mDaysOfWeek[day][time].setColorFilter(Color.parseColor("#009688"), PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -512,12 +513,12 @@ public class ProfileActivity extends BaseNavBarActivity {
                 /* Set the checkout box to filled if available */
                 if (mCalendar.getAvailability(i, j)) {
                     mDaysOfWeek[i][j].setImageResource(R.drawable.ic_check_box_filled);
-                    mDaysOfWeek[i][j].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                    mDaysOfWeek[i][j].setColorFilter(Color.parseColor("#009688"), PorterDuff.Mode.SRC_IN);
 
                 /* Set the checkbox to empty if unavailable*/
                 } else {
                     mDaysOfWeek[i][j].setImageResource(R.drawable.ic_check_box_outline);
-                    mDaysOfWeek[i][j].setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                    mDaysOfWeek[i][j].setColorFilter(Color.parseColor("#009688"), PorterDuff.Mode.SRC_IN);
                 }
 
             }
