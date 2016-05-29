@@ -1,5 +1,7 @@
 package gspot.com.sportify.Model;
 
+import android.util.Log;
+
 /**
  * Class to represent a sport on a users profile. Purpose: to let other user know that this user
  * plays this sport and they have this skill level and these experiences or preferences.
@@ -36,7 +38,7 @@ public class MySport {
     public MySport() {
         this.mSkillLevel = SkillLevel.BEGINNER;
         this.mBio = "Write about yourself with respect to this sport.";
-        this.mSport = "Basketball";
+        this.mSport = "BASKETBALL";
     }
 
     public MySport(String sport) {
@@ -67,6 +69,16 @@ public class MySport {
 
     public void setmBio(String mBio) {
         this.mBio = mBio;
+    }
+
+    public void setSkillLevelString(String skill) {
+        if (skill.equals(SkillLevel.BEGINNER.toString())){
+            this.mSkillLevel = SkillLevel.BEGINNER;
+        } else if (skill.equals(SkillLevel.INTERMEDIATE.toString())) {
+            this.mSkillLevel = SkillLevel.INTERMEDIATE;
+        } else if (skill.equals(SkillLevel.ADVANCED.toString())){
+            this.mSkillLevel = SkillLevel.ADVANCED;
+        }
     }
 
 }
