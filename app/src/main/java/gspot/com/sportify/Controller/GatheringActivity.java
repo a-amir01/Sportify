@@ -16,11 +16,16 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -209,15 +214,52 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         finish();
     }
 
+    /**
+     * Checks all inputs in the create a gathering form and lets the user know
+     * if any inputs need to be filled out or changed.
+     * @return true if all inputs are valid, false otherwise
+     */
     private boolean validateInputs() {
-        boolean validInput = true;
+        boolean validInput = true; // Flag to indicate whether or not all inputs are valid
 
+        /* If date and time have not been selected display a toast */
         if (dateButton.getText().toString().equals("DATE")
-                || timeButton.getText().toString().equals("TIME")){
+                || timeButton.getText().toString().equals("TIME")) {
             Toast.makeText(this, "Please select Date and Time", Toast.LENGTH_SHORT).show();
             validInput = false;
         }
 
+        /*
+         * If the user selected date and time are before the current datetime,
+         * notify the user
+         */
+        else{
+            try {
+                // Create a format with the user's timezone to parse the dates
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yy hh:mm");
+                sdf.setTimeZone(TimeZone.getDefault());
+
+                // Parse the user entered datetime
+                Date userDate = sdf.parse(mDateString.concat(" ").concat(mTimeString));
+
+                // Get the current datetime
+                Date currentDate = new Date();
+
+                Log.v(TAG, userDate.toString());
+                Log.v(TAG, currentDate.toString());
+
+                // Notify the user
+                if (userDate.before(currentDate)) {
+                    Toast.makeText(this, "Select a valid date and time", Toast.LENGTH_SHORT).show();
+                    validInput = false;
+                }
+            }
+            catch(ParseException ex){
+                Log.e(TAG, "COULD NOT PARSE");
+            }
+        }
+
+        /* Checks for empty title and too long title */
         if(mTitleField.getText().length() == 0) {
             mTitleField.setError("Please fill out title");
             validInput = false;
@@ -227,6 +269,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
             validInput = false;
         }
 
+        /* Checks for no description and too long description */
         if(mDescriptionField.getText().length() == 0) {
             mDescriptionField.setError("Please fill out description");
             validInput = false;
@@ -236,6 +279,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
             validInput = false;
         }
 
+        /* Checks for no location and too long location */
         if(mLocationField.getText().length() == 0) {
             mLocationField.setError("Please fill out location");
             validInput = false;
@@ -244,7 +288,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
             mLocationField.setError("Location must be lass than 100 characters");
             validInput = false;
         }
-
 
         return validInput;
     }
