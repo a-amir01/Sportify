@@ -39,11 +39,6 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
         switch (id) {
 
-            case R.id.home:
-                intent = new Intent(this, GatheringListActivity.class);
-                startActivity(intent);
-                break;
-
             case R.id.log_out:
                 SharedPreferences settings = getSharedPreferences(Constants.STARTER_ID, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
@@ -56,13 +51,6 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
                 startActivity(intent);
                 finish();
-                break;
-
-            case R.id.active:
-                if(item.isChecked())
-                    item.setChecked(false);
-                else
-                    item.setChecked(true);
                 break;
 
             case R.id.profile:
