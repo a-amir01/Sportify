@@ -26,11 +26,11 @@ public class App {
     public static Gathering mCurrentGathering = null;
 
     /*filter: show based on skill level*/
-    public static boolean [] mCurrentSkillLevels = { false, false, false };
+    public static boolean [] mCurrentSkillLevels = { true, true, true };
     /*Match my availability*/
     public static boolean mMatch_My_Availability = false;
     /*filter: show closed events*/
-    public static boolean mIsPrivateEvent = true;
+    public static boolean mIsPrivateEvent = false;
     /*contains the names of the sports chosen in filter*/
     public static List<String> mChosenSports;
 

@@ -359,9 +359,7 @@ public class GatheringListFragment extends Fragment implements Observer{
                 continue;
             } //end if
 
-
-
-                /*if atleast one of the skill levels is selected*/
+            /*if atleast one of the skill levels is selected*/
             if(App.mCurrentSkillLevels[0] || App.mCurrentSkillLevels[1] || App.mCurrentSkillLevels[2]){
                 /*if we have the sport and the access is the same, check for skill level*/
                 /*remove if event is beginner and beginner is not checked*/
