@@ -30,9 +30,7 @@ import java.util.Observer;
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.GspotCalendar;
-import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.Model.SportLab;
-import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
@@ -433,11 +431,12 @@ public class GatheringListFragment extends Fragment implements Observer{
         private final String TAG = SportHolder.class.getSimpleName();
 
         private Gathering mGathering;
-        private List<Gathering> matherings;
         private TextView mTitleTextView;
         private TextView mEventStatusView;
         private TextView mEventTime;
         private TextView mEventDate;
+        private TextView mSportName;
+
 
 
         public SportHolder(View itemView) {
@@ -450,6 +449,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             mEventStatusView = (TextView)itemView.findViewById(R.id.gathering_status);
             mEventTime = (TextView)itemView.findViewById(R.id.gathering_time);
             mEventDate = (TextView)itemView.findViewById(R.id.gathering_date);
+            mSportName = (TextView)itemView.findViewById(R.id.sport_title);
 
             /*when the Gathering is clicked in the list*/
             itemView.setOnClickListener(this);
@@ -484,6 +484,8 @@ public class GatheringListFragment extends Fragment implements Observer{
             }
             mEventTime.setText(mGathering.getTime());
             mEventDate.setText(mGathering.getDate());
+            mSportName.setText(mGathering.getSID());
+
         }/*end bindSport*/
     }/*end SportHolder*/
 
