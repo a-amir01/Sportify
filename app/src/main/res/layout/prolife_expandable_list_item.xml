@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="10dp"
     android:paddingTop="5dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/colorPrimaryText"
-        android:text="Skill Level:"
-        android:id="@+id/skill_lv" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryText"
-        android:text="New Text"
-        android:id="@+id/skill_lv_text" />
-
-    <Spinner
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryText"
-        android:id="@+id/skill_lv_spinner"
-        android:popupBackground="#ffffff" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorPrimaryText"
+            android:text="Skill Level:"
+            android:id="@+id/skill_lv" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:text="New Text"
+            android:id="@+id/skill_lv_text" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:id="@+id/skill_lv_spinner"
+            android:popupBackground="#ffffff" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,12 +53,15 @@
         android:minLines="1" />
 
     <android.support.v7.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:minWidth="100dp"
-        android:text="@string/delete_sport"
         android:id="@+id/delete_sport_button"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:minWidth="120dp"
+        android:text="@string/delete_sport"
+        android:layout_weight="1"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:theme="@style/AppTheme.Button.Colored"/>
 
 </LinearLayout>
