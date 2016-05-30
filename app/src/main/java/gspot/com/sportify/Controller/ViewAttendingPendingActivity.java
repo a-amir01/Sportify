@@ -116,6 +116,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 if (profile == null ) { profile = new Profile(); }
                 mPlayersList.add(profile);
                 Log.d(TAG, "Profile " + profile.getmName());
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -141,7 +142,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 /*refresh the list for the next lookup*/
-                mPlayersList.removeAll(mPlayersList);
+                mPlayersList = new ArrayList<Profile>();
                 userUID.clear();
                 Log.d(TAG, userUID.size() + " is the size of the list after none iteration");
                 for (DataSnapshot attendeeSnapshot: dataSnapshot.getChildren()) {
