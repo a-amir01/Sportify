@@ -72,9 +72,6 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*Use to maintain the data for list and produce the view*/
     private SportAdapter mAdapter;
 
-    /*contains the names of the sports chosen in filter*/
-    private List<String> mChosenSports;
-
     /*the current user's id to get their gatherings*/
     private String mCurrentUser;
 
@@ -272,7 +269,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             /*to enable filtering for the user's activities*/
             sFromFilter = true;
             /*Get the sports that were chosen by the filter*/
-            mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
+            App.mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
             App.mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
             App.mCurrentSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
             App.mMatch_My_Availability = data.getBooleanExtra(Constants.MATCH_MY_AVAILABILITY, false);
@@ -351,9 +348,9 @@ public class GatheringListFragment extends Fragment implements Observer{
         for (int i = 0; i < gatherings.size(); i++) {
             Gathering event = gatherings.get(i);
                 /*If the sport is not in the list*/
-            if (mChosenSports != null && mChosenSports.size() > 0) {
+            if (App.mChosenSports != null && App.mChosenSports.size() > 0) {
                 //if the event type was in the filtered list
-                if (!mChosenSports.contains(event.getSport())) {
+                if (!App.mChosenSports.contains(event.getSport())) {
                     gatherings.remove(event);
 
                     //changing the array size so go back and check the replacement

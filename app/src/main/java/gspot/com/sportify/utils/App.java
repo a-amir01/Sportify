@@ -1,5 +1,7 @@
 package gspot.com.sportify.utils;
 
+import android.app.Activity;
+
 import com.firebase.client.Firebase;
 
 import java.util.ArrayList;
@@ -26,7 +28,14 @@ public class App {
     /*filter: show based on skill level*/
     public static boolean [] mCurrentSkillLevels = { false, false, false };
     /*Match my availability*/
-    public static boolean mMatch_My_Availability;
+    public static boolean mMatch_My_Availability = false;
     /*filter: show closed events*/
-    public static boolean mIsPrivateEvent;
+    public static boolean mIsPrivateEvent = true;
+    /*contains the names of the sports chosen in filter*/
+    public static List<String> mChosenSports;
+
+    public static void deleteConfigFiles(Activity activity) {
+        activity.deleteFile(Constants.SPORTS_FILTER_FILE);
+        activity.deleteFile(Constants.SKILL_LEVEL_FILE);
+    }
 }

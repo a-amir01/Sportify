@@ -185,12 +185,14 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
             oStream.writeObject(mExpandableListAdapter.getSelectedBooleanHashMap());
             oStream.flush();
             oStream.close();
+            fStream.close();
 
             fStream = openFileOutput(Constants.SKILL_LEVEL_FILE, Context.MODE_PRIVATE);
             oStream = new ObjectOutputStream(fStream);
             oStream.writeObject(mSkillLevels);
             oStream.flush();
             oStream.close();
+            fStream.close();
 
             Log.i(TAG, "Serialization Success");
         } catch (Exception e) {
