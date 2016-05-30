@@ -58,6 +58,7 @@
         android:minWidth="100dp"
         android:text="@string/delete_sport"
         android:id="@+id/delete_sport_button"
-        android:theme="@style/AppTheme.Button.Colored"/>
+        android:theme="@style/AppTheme.Button.Colored"
+        android:background="@color/colorPrimary" />
 
 </LinearLayout>
