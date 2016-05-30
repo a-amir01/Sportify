@@ -297,6 +297,8 @@ public class GatheringFragment extends Fragment {
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.removePending(mCurrentUser);
         mGathering.updatePending(getActivity().getApplicationContext());
+
+
     }
     void joinGathering () {
         Log.i(TAG, "JOIN");
