@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -227,17 +228,17 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 mSkill.setText(mySports.get(indexOfSport).getmSkillLevel().toString());
             }
 
-            Log.i(TAG, "PENDING");
-            String UID = mPlayer.getmOwner();
-            App.mCurrentGathering.addPendingToAttending(UID);
-            App.mCurrentGathering.updatePending(getApplicationContext());
-            mPlayersList.remove(mPlayer);
+
 
 
             mAccept.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mPlayer.getmOwner()).child("myGatherings");
+                    String UID = mPlayer.getmOwner();
+                    App.mCurrentGathering.addPendingToAttending(UID);
+                    App.mCurrentGathering.updatePending(getApplicationContext());
+                    mPlayersList.remove(mPlayer);
 
                     Map<String, Object> updates = new HashMap<String, Object>();
                     updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
@@ -245,6 +246,8 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                     Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
                     myGatheringsID.updateChildren(updates);
                     mAdapter.notifyDataSetChanged();
+                    Toast.makeText(view.getContext() ,"You have successfully accepted " + mPlayer.getmName() , Toast.LENGTH_SHORT).show();
+
                 }
 
             });
