@@ -19,13 +19,16 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.UserPicture;
 
 /**
@@ -75,10 +78,6 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
         //gets the users ids and then their profiles
         loadUserUID(gatheringUID);
 
-        mAdapter = new PendingAttendingAdapter(mPlayersList);
-        mAttendingPendingRecyclerView.setAdapter(mAdapter);
-        //registerClickCallBack();
-
 
         Log.d(TAG, "popularList size:" + userUID.size());
 
@@ -86,19 +85,35 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
 
     } //end onCreate()
 
+    /*utility function to update the UI for new data*/
+    public void updateUI(){
+        /*there are currently no gatherings listed*/
+        if(mAdapter == null) {
+            mAdapter = new PendingAttendingAdapter(mPlayersList);
+
+            /*set the data behind the list view*/
+            mAttendingPendingRecyclerView.setAdapter(mAdapter);
+        }/*end if*/
+
+        /*only one sport will change at a time*/
+        else {
+            Log.i(TAG, "notify");
+            mAdapter.setSports(mPlayersList);
+            mAdapter.notifyDataSetChanged();
+        }/*end else*/
+    }
 
     void getPlayerName(String playerID) {
         Firebase profileRef = Profile.profileRef(playerID);
 
-        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        profileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                Log.i("onDataChange", "loadUserId jkhsbfhjwebfhjbwefhjbew");
                 Profile profile =  dataSnapshot.getValue(Profile.class);
                 if (profile == null ) { profile = new Profile(); }
                 mPlayersList.add(profile);
                 Log.d(TAG, "Profile " + profile.getmName());
-                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -108,11 +123,8 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
         });
 
     }
-
-
     private void loadUserUID (String gatheringUID) {
         userUID.clear();
-
 
         Firebase attendingRef;
 
@@ -123,8 +135,11 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             attendingRef = App.dbref.child("Gatherings").child(gatheringUID).child("attendees");
         }
         attendingRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                /*refresh the list for the next lookup*/
+                mPlayersList.removeAll(mPlayersList);
                 userUID.clear();
                 Log.d(TAG, userUID.size() + " is the size of the list after none iteration");
                 for (DataSnapshot attendeeSnapshot: dataSnapshot.getChildren()) {
@@ -133,8 +148,8 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                     userUID.add(participant);
                     getPlayerName(participant);
                     Log.d(TAG, userUID.size() + " is the size of the list after iteration");
-
                 }
+                updateUI();
             }
 
             @Override
@@ -196,6 +211,13 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 App.mCurrentGathering.addPendingToAttending(UID);
                 App.mCurrentGathering.updatePending(getApplicationContext());
                 mPlayersList.remove(mPlayer);
+                Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(UID).child("myGatherings");
+
+                Map<String, Object> updates = new HashMap<String, Object>();
+                updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
+                Log.i(TAG, "UID IS" + UID);
+                Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
+                myGatheringsID.updateChildren(updates);
                 mAdapter.notifyDataSetChanged();
             }
         } //end onClick()
@@ -263,6 +285,7 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
             super.onAttachedToRecyclerView(recyclerView);
         }
 
+        public void setSports(List<Profile> players) { mPlayers = players; }
 
     }
 
