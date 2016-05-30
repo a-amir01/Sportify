@@ -19,13 +19,16 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.MySport;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
+import gspot.com.sportify.utils.Constants;
 import gspot.com.sportify.utils.UserPicture;
 
 /**
@@ -208,6 +211,13 @@ public class ViewAttendingPendingActivity extends BaseNavBarActivity {
                 App.mCurrentGathering.addPendingToAttending(UID);
                 App.mCurrentGathering.updatePending(getApplicationContext());
                 mPlayersList.remove(mPlayer);
+                Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(UID).child("myGatherings");
+
+                Map<String, Object> updates = new HashMap<String, Object>();
+                updates.put(App.mCurrentGathering.getID(), App.mCurrentGathering.getID());
+                Log.i(TAG, "UID IS" + UID);
+                Log.i(TAG, "mCurrentGathering ID" + App.mCurrentGathering.getID());
+                myGatheringsID.updateChildren(updates);
                 mAdapter.notifyDataSetChanged();
             }
         } //end onClick()
