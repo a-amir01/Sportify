@@ -150,6 +150,8 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
         ButterKnife.bind(this);
 
+        setTitle(R.string.filter);
+
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
 
         /*create an observer*/
@@ -250,63 +252,63 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
 
         /*Filters chosen by the user that was saved on the device*/
-            HashMap<Integer, boolean[]> filters;
+        HashMap<Integer, boolean[]> filters;
 
-            ArrayList<String> sps = new ArrayList<String>();
-            for (SportType sp : mDataBaseSports.sportTypes) {
-                sps.add(sp.getName());
-            }
+        ArrayList<String> sps = new ArrayList<String>();
+        for (SportType sp : mDataBaseSports.sportTypes) {
+            sps.add(sp.getName());
+        }
 
         /*pass the array from the database to get back a hashmap for adaper*/
-            mGatheringType = GatheringTypeProvider.getDataHashMap(sps.toArray(new String[sps.size()]));
+        mGatheringType = GatheringTypeProvider.getDataHashMap(sps.toArray(new String[sps.size()]));
 
         /*set the keys of the hashmap to this list*/
-            mGatheringList = new ArrayList<>(mGatheringType.keySet());
+        mGatheringList = new ArrayList<>(mGatheringType.keySet());
 
         /*sort the parents*/
-            Collections.sort(mGatheringList);
+        Collections.sort(mGatheringList);
 
-            Log.i(TAG, "update " + mGatheringType.size());
+        Log.i(TAG, "update " + mGatheringType.size());
 
         /*get the saved data that was stored on the device*/
-            filters = getFilterSettings();
+        filters = getFilterSettings();
 
         /*has not created a filter yet or filters is empty*/
-            if (filters == null) {
-                mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList);
-            } else {
-                mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList, filters);
-            }
+        if (filters == null) {
+            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList);
+        } else {
+            mExpandableListAdapter = new CustomExpandableFilterListAdapter(this, mGatheringType, mGatheringList, filters);
+        }
 
         /*set adapter to our custom adapter*/
-            mExpandableListView.setAdapter(mExpandableListAdapter);
+        mExpandableListView.setAdapter(mExpandableListAdapter);
 
          /*have the list expanded at first
         * every call to setChecked is accompanied by
         * the setOnCheckChangedListener*/
-            mExpandAllSwitch.setChecked(true);
+        mExpandAllSwitch.setChecked(true);
 
-            mExpandableListAdapter.expandAllChildren(mExpandableListView);
+        mExpandableListAdapter.expandAllChildren(mExpandableListView);
 
         /*Turn on the listener so we can set the button to the static field*/
-            mSelectAllSwitch.setOnCheckedChangeListener(null);
+        mSelectAllSwitch.setOnCheckedChangeListener(null);
 
         /*Set the button is the static selected value*/
-            mSelectAllSwitch.setChecked(sIsAllSelected);
+        mSelectAllSwitch.setChecked(sIsAllSelected);
 
         /*turn the listener back on*/
-            mSelectAllSwitch.setOnCheckedChangeListener(this);
+        mSelectAllSwitch.setOnCheckedChangeListener(this);
 
         /*set the event specifier*/
-            mEventAccessSpecifier.setChecked(sIsPrivateEvent);
+        mEventAccessSpecifier.setChecked(sIsPrivateEvent);
 
         /*set the schedule specifier*/
-            mMatchMyAvailabilitySwitch.setChecked(sIsScheduleEvent);
+        mMatchMyAvailabilitySwitch.setChecked(sIsScheduleEvent);
 
 
-            mBegginerCheckBox.setChecked(mSkillLevels[0]);
-            mIntermediateCheckBox.setChecked(mSkillLevels[1]);
-            mAdvancedCheckBox.setChecked(mSkillLevels[2]);
+        mBegginerCheckBox.setChecked(mSkillLevels[0]);
+        mIntermediateCheckBox.setChecked(mSkillLevels[1]);
+        mAdvancedCheckBox.setChecked(mSkillLevels[2]);
 
     } //end update
 }//end FilterActivity

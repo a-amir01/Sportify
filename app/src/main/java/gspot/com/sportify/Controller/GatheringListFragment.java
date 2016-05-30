@@ -22,17 +22,21 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.TimeZone;
 
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
 import gspot.com.sportify.Model.GspotCalendar;
-import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.Model.SportLab;
-import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
@@ -78,7 +82,19 @@ public class GatheringListFragment extends Fragment implements Observer{
     private SportLab mSportLab;
 
     /*Hold a reference to the menuItem for active gatherings*/
-    private MenuItem mActiveGatheringCheckBox;
+    private MenuItem mActiveGatheringButton;
+
+    /*Hold a reference to the home button*/
+    private MenuItem mHomeButton;
+
+    /*If we have came from filter activity*/
+    private static boolean sFromFilter;
+    
+    /*User is viewing their own events*/
+    private static boolean sInActive;
+
+    /*user's gathering ID's*/
+    List<String> mActiveGatheringIds;
 
     /*
     * 1st function to be called when the object gets instantiated
@@ -94,7 +110,6 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*get the current user*/
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
-
     }
 
     /*2nd function that will be called when an Object of GatheringListFragment is created */
@@ -113,6 +128,9 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*create a new sport lab*/
         mSportLab = new SportLab();
 
+        /*user's gatherings*/
+        mActiveGatheringIds = new ArrayList<>();
+
         /*let the observer know that this classes
         * update function will be waiting
         * for data to be updated*/
@@ -128,8 +146,9 @@ public class GatheringListFragment extends Fragment implements Observer{
 
         return view;
     }/*end onCreateView*/
+    
 
-    /*Load the toobar onto the screen*/
+    /*Load the toolbar onto the screen*/
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.i(TAG, "onCreateOptionsMenu()");
@@ -139,8 +158,21 @@ public class GatheringListFragment extends Fragment implements Observer{
         inflater.inflate(R.menu.activity_main_actions, menu);
         inflater.inflate(R.menu.main, menu);
 
-        /*dont show the home button*/
-        menu.findItem(R.id.home).setVisible(false);
+        /*get a reference to the menu buttons*/
+        mActiveGatheringButton = menu.findItem(R.id.active);
+        mHomeButton = menu.findItem(R.id.home);
+
+        /*if we have returned from gatheringPagerActivity*/
+        if(sInActive){
+            getActivity().setTitle(R.string.my_events);
+            mActiveGatheringButton.setVisible(false);
+            mHomeButton.setVisible(true);
+        }
+        else{
+            getActivity().setTitle(R.string.events);
+            /*dont show the home button*/
+            mHomeButton.setVisible(false);
+        }
     }
 
     /*respond to a click event on one of the choices on the toolbar*/
@@ -154,20 +186,33 @@ public class GatheringListFragment extends Fragment implements Observer{
                 intent = new Intent(getActivity(), FilterActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_FILTER);
                 break;
+
             case R.id.action_add:
                 intent = new Intent(getActivity(), GatheringActivity.class);
-                //getActivity().finish();
                 startActivity(intent);
-
                 break;
+
             case R.id.active:
-                mActiveGatheringCheckBox = item;
+                getActivity().setTitle(R.string.my_events);
+                Toast.makeText(getActivity(), "Your events based on filter settings", Toast.LENGTH_SHORT).show();
 
-                if(item.isChecked())
-                    loadActiveGatherings();
-                else
-                    updateUI(FILTER, !ACTIVE, null);
+                /*reduce lis to user's events*/
+                sInActive = true;
+                mActiveGatheringButton.setVisible(false);
+                mHomeButton.setVisible(true);
+                updateUI();
+                break;
 
+            case R.id.home:
+                getActivity().setTitle(R.string.events);
+                /*dont reduce list to user's events*/
+                sFromFilter = false;
+                sInActive = false;
+
+                mActiveGatheringButton.setVisible(true);
+                mHomeButton.setVisible(false);
+                /*reload list with all events*/
+                updateUI();
                 break;
         }//end case
 
@@ -180,8 +225,6 @@ public class GatheringListFragment extends Fragment implements Observer{
     private void loadActiveGatherings() {
 
         Log.i(TAG, "loadActiveGatherings");
-        /*contains a list of a user's gathering id*/
-        final List<String> activeGatheringIds = new ArrayList<>();
 
         App.dbref.child("MyGatherings").child(mCurrentUser).child("myGatherings").addValueEventListener(new ValueEventListener() {
             @Override
@@ -189,10 +232,11 @@ public class GatheringListFragment extends Fragment implements Observer{
                 Log.i(TAG, "onDataChange");
                 for(DataSnapshot data: dataSnapshot.getChildren()){
                     /*gathering ID*/
-                    activeGatheringIds.add(data.getValue(String.class));
+                    mActiveGatheringIds.add(data.getValue(String.class));
                 }
                 /*update the UI without any filtering*/
-                updateUI(!FILTER, ACTIVE, activeGatheringIds);
+                updateUI();
+
             }
 
             @Override
@@ -225,35 +269,36 @@ public class GatheringListFragment extends Fragment implements Observer{
         if(requestCode == REQUEST_CODE_FILTER){
             if(data == null) return;
 
+            /*to enable filtering for the user's activities*/
+            sFromFilter = true;
             /*Get the sports that were chosen by the filter*/
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
             App.mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
             App.mCurrentSkillLevels = data.getBooleanArrayExtra(Constants.SKILL_LEVEL);
             App.mMatch_My_Availability = data.getBooleanExtra(Constants.MATCH_MY_AVAILABILITY, false);
 
-            if(mChosenSports != null){
-                SportTypes st = new SportTypes();
-                Toast.makeText(getContext(), mChosenSports.toString(), Toast.LENGTH_LONG).show();
-            }
-
         }
-        updateUI(FILTER, !ACTIVE, null);
+        updateUI();
     }//end onActivityResult
 
     /*
      * UpdateUI populates the view with the list of all Sports or
      * sports that were changed in the GatheringFragment
      */
-    private void updateUI(boolean filter, boolean active, List<String> activeIDs) {
+    private void updateUI() {
         Log.i(TAG, "updateUI() ");
 
         /*make a shallow copy*/
-        List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
+        final List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
 
         /*filter this list to specification and we have already filtered before*/
-        if(filter) filterGatheringList(gatherings);
+        filterGatheringList(gatherings, mActiveGatheringIds);
 
-        else if(active) updateListWithActiveEvents(gatherings, activeIDs);
+        //else if(active) updateListWithActiveEvents(gatherings, activeIDs);
+
+        /*All the gatherings based on filter for gatheringPagerActivity to use*/
+        App.mFilteredGatherings = gatherings;
+
 
         /*there are currently no gatherings listed*/
         if(mAdapter == null) {
@@ -277,8 +322,31 @@ public class GatheringListFragment extends Fragment implements Observer{
     * @Param gatherings: the list of gatherings to filter
     * since gatherings is a reference the change will happen
     * on the heap*/
-    private void filterGatheringList(List<Gathering> gatherings) {
-        /*go through the list and set the filters*/
+    private void filterGatheringList(List<Gathering> gatherings, List<String> activeGatheringIds) {
+
+        /*Making sure that dates are in order and past dates will not appear*/
+        Date todaysDate = new Date();
+        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yy hh:mm");
+        sdf.setTimeZone(TimeZone.getDefault());
+
+        /*filter the user's events*/
+        if(sInActive) {
+            Log.i(TAG, "filterGatheringList");
+            updateListWithActiveEvents(gatherings, activeGatheringIds);
+        }
+
+        /*remove the user's events*/
+        else{
+            /*Remove the user's gatherings from the list*/
+            for(int i = 0; i < gatherings.size(); i++){
+                Gathering event = gatherings.get(i);
+                if(activeGatheringIds.contains(event.getID())) {
+                    gatherings.remove(event);
+                    --i;
+                }
+
+            } //end for
+        }
 
         for (int i = 0; i < gatherings.size(); i++) {
             Gathering event = gatherings.get(i);
@@ -331,8 +399,36 @@ public class GatheringListFragment extends Fragment implements Observer{
                 --i;
                 continue;
             }
+
+            /*if the event is older than todays event delete it
+            * dont touch it if the user is viewing their own events*/
+            try {
+                if (sdf.parse(event.getDate().concat(" ").concat(event.getTime())).compareTo(todaysDate) < 0 && !sInActive) {
+                    gatherings.remove(event);
+                    --i;
+                }
+            }
+            catch (ParseException e){
+                e.printStackTrace();
+            }
         }//end for
 
+
+        /*Sort the list by event date and time*/
+        Collections.sort(gatherings, new Comparator<Gathering>() {
+            @Override
+            public int compare(Gathering lhs, Gathering rhs) {
+                try {
+                    Date lhsDate = sdf.parse(lhs.getDate().concat(" ").concat(lhs.getTime()));
+                    Date rhsDate = sdf.parse(rhs.getDate().concat(" ").concat(rhs.getTime()));
+
+                    return lhsDate.compareTo(rhsDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
     }//end filter UI
 
     /*Once the data is loaded from the databse update the UI
@@ -342,21 +438,11 @@ public class GatheringListFragment extends Fragment implements Observer{
     public void update(Observable observable, Object data) {
         Log.i(TAG, "update");
 
-       if (data instanceof SportLab) {
-           /*If the data base is modified the listener will immediately be called
-            * if the user is viewing their gatherings, then dont update the UI until
-            * they un-check the active button*/
-           if (mActiveGatheringCheckBox != null && mActiveGatheringCheckBox.isChecked()) {
-               Toast.makeText(getContext(), "Fetching new data", Toast.LENGTH_SHORT).show();
-               mActiveGatheringCheckBox.setChecked(false);
-               mAdapter.notifyDataSetChanged();
-               //return;
-           }
-       }else if (data instanceof GspotCalendar) {
-           Toast.makeText(getContext(), "Calendar Fetched", Toast.LENGTH_SHORT).show();
-       } else {
-           updateUI(FILTER, !ACTIVE, null);
-       }
+        if (data instanceof GspotCalendar) {
+            Toast.makeText(getContext(), "Calendar Fetched", Toast.LENGTH_SHORT).show();
+        }
+
+        loadActiveGatherings();
     }
 
     /* this function will see if the gatherings parameter is part
@@ -390,6 +476,8 @@ public class GatheringListFragment extends Fragment implements Observer{
         private TextView mEventStatusView;
         private TextView mEventTime;
         private TextView mEventDate;
+        private TextView mSportName;
+
 
 
         public SportHolder(View itemView) {
@@ -402,6 +490,7 @@ public class GatheringListFragment extends Fragment implements Observer{
             mEventStatusView = (TextView)itemView.findViewById(R.id.gathering_status);
             mEventTime = (TextView)itemView.findViewById(R.id.gathering_time);
             mEventDate = (TextView)itemView.findViewById(R.id.gathering_date);
+            mSportName = (TextView)itemView.findViewById(R.id.sport_title);
 
             /*when the Gathering is clicked in the list*/
             itemView.setOnClickListener(this);
@@ -436,6 +525,8 @@ public class GatheringListFragment extends Fragment implements Observer{
             }
             mEventTime.setText(mGathering.getTime());
             mEventDate.setText(mGathering.getDate());
+            mSportName.setText(mGathering.getSID());
+
         }/*end bindSport*/
     }/*end SportHolder*/
 

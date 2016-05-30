@@ -22,16 +22,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Date;
 import java.util.TimeZone;
+
+import java.util.Observable;
+import java.util.Observer;
+
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import gspot.com.sportify.Model.Gathering;
+import gspot.com.sportify.Model.SportType;
+import gspot.com.sportify.Model.SportTypes;
 import gspot.com.sportify.R;
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
@@ -42,7 +47,7 @@ import gspot.com.sportify.utils.TimePickerFragment;
 /**
  * Created by DannyChan on 5/8/16.
  */
-public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener {
+public class GatheringActivity extends BaseNavBarActivity implements OnItemSelectedListener, Observer {
 
     private static final String TAG = GatheringActivity.class.getSimpleName();
     private static final int REQUEST_DATE = 0;
@@ -55,6 +60,11 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     private String mTimeString;
     private Spinner sportTypeSpinner;
     private Spinner skillLevelSpinner;
+
+    /*List of sports from database*/
+    //private List<String> mSportTypes;
+
+    private SportTypes mDataBaseSports;
 
     @Bind(R.id.sport_title)
     EditText mTitleField;
@@ -113,53 +123,23 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_gathering);
+
         setContentView(R.layout.fragment_gathering_update);
         ButterKnife.bind(this);
 
         skillLevelSpinner = (Spinner) findViewById(R.id.skill_lv_spinner);
-        skillLevelSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_style);
-        skillLevelSpinner.setAdapter(dataAdapter);
-
         sportTypeSpinner = (Spinner) findViewById(R.id.sport_type_spinner);
-        sportTypeSpinner.setOnItemSelectedListener(this);
-        List<String> sport_types = new ArrayList<>();
-        Collections.sort(sport_types);
-        sport_types.addAll(App.mSportTypes);
-        sport_types.add("Test");
-        ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
-        Log.e(TAG, "Sportype Size " + sport_types.size());
-        sportTypeListAdapter.setDropDownViewResource(R.layout.spinner_style);
-        sportTypeSpinner.setAdapter(sportTypeListAdapter);
 
-        Intent intent = getIntent();
-        toEdit = intent.getBooleanExtra("Edit", false);
-        if (toEdit) {
-            setTitle("Edit Event");
-            mTitleField.setText(App.mCurrentGathering.getGatheringTitle());
-            mDescriptionField.setText(App.mCurrentGathering.getDescription());
-            mLocationField.setText(App.mCurrentGathering.getLocation());
-            //Set date and time box
 
-            dateButton = (Button) findViewById(R.id.datepicker);
-            dateButton.setText(App.mCurrentGathering.getmDate());
+        ButterKnife.bind(this);
 
-            timeButton = (Button) findViewById(R.id.timepicker);
-            timeButton.setText((App.mCurrentGathering.getTime()));
+        /*intialize the observer*/
+        mDataBaseSports = new SportTypes();
+        mDataBaseSports.addObserver(this);
 
-            int sportspinnerPosition = sportTypeListAdapter.getPosition(App.mCurrentGathering.getSID());
-            sportTypeSpinner.setSelection(sportspinnerPosition);
-
-            int skillLevelPosition = dataAdapter.getPosition(App.mCurrentGathering.getSkillLevel().toString());
-            skillLevelSpinner.setSelection(skillLevelPosition);
-
-        } else {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            m_hostID = prefs.getString(Constants.KEY_UID, "");
-            mgathering = new Gathering();
-            mgathering.setHostID(m_hostID);
-        }
+        /*get the sport types from database and call update when done*/
+        mDataBaseSports.readSportTypes();
     }
 
     @Override
@@ -318,6 +298,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         mgathering.setDate(mDateString);
         mgathering.setTime(mTimeString);
         mgathering.setDayOfWeek(mDayOfWeek);
+
         mgathering.setSport(sportTypeSpinner.getSelectedItem().toString());
         mgathering.setSkillLevel(Gathering.toSkillLevel(skillLevelSpinner.getSelectedItem().toString()));
         sportRef.setValue(mgathering);
@@ -340,5 +321,58 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
      */
     public void setmTimeString(String mTimeString) {
         this.mTimeString = mTimeString;
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+
+        skillLevelSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_style);
+        skillLevelSpinner.setAdapter(dataAdapter);
+
+
+        sportTypeSpinner.setOnItemSelectedListener(this);
+        ArrayList<String> sport_types = new ArrayList<String>();
+        for (SportType sport_type : mDataBaseSports.sportTypes) {
+            sport_types.add(sport_type.getName());
+        }
+
+        Collections.sort(sport_types);
+        sport_types.addAll(sport_types);
+
+        ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
+        Log.e(TAG, "Sportype Size " + sport_types.size());
+        sportTypeListAdapter.setDropDownViewResource(R.layout.spinner_style);
+        sportTypeSpinner.setAdapter(sportTypeListAdapter);
+
+        Intent intent = getIntent();
+        toEdit = intent.getBooleanExtra("Edit", false);
+        if (toEdit) {
+            setTitle("Edit Event");
+            mTitleField.setText(App.mCurrentGathering.getGatheringTitle());
+            mDescriptionField.setText(App.mCurrentGathering.getDescription());
+            mLocationField.setText(App.mCurrentGathering.getLocation());
+            //Set date and time box
+
+            dateButton = (Button) findViewById(R.id.datepicker);
+            dateButton.setText(App.mCurrentGathering.getmDate());
+
+            timeButton = (Button) findViewById(R.id.timepicker);
+            timeButton.setText((App.mCurrentGathering.getTime()));
+
+            int sportspinnerPosition = sportTypeListAdapter.getPosition(App.mCurrentGathering.getSID());
+            sportTypeSpinner.setSelection(sportspinnerPosition);
+
+            int skillLevelPosition = dataAdapter.getPosition(App.mCurrentGathering.getSkillLevel().toString());
+            skillLevelSpinner.setSelection(skillLevelPosition);
+
+        } else {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            m_hostID = prefs.getString(Constants.KEY_UID, "");
+            mgathering = new Gathering();
+            mgathering.setHostID(m_hostID);
+        }
+
     }
 }

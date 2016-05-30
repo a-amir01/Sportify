@@ -37,7 +37,7 @@
             android:screenOrientation="portrait"
             android:label="@string/title_activity_view_profile"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+            android:windowSoftInputMode="adjustPan"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <activity android:name=".Controller.ForgotPasswordActivity" android:screenOrientation="portrait" android:label="@string/title_activity_forgot_pwd" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Controller.ChangePasswordActivity" android:screenOrientation="portrait" android:label="@string/title_activity_change_pwd" android:theme="@style/AppTheme.WhiteTextField" />

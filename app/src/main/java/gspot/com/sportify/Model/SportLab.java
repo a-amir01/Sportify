@@ -50,16 +50,16 @@ public class SportLab extends Observable{
         gatheringRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i(TAG, "onDataChange");
-                App.mGatherings.removeAll(App.mGatherings);
-                for (DataSnapshot gatheringSnapshot: dataSnapshot.getChildren()) {
-                    Gathering gathering = gatheringSnapshot.getValue (Gathering.class);
-                    App.mGatherings.add(gathering);
-                }
-                Log.i(TAG, "end onDataChange");
+                    Log.i(TAG, "onDataChange");
+                    App.mGatherings.removeAll(App.mGatherings);
+                    for (DataSnapshot gatheringSnapshot : dataSnapshot.getChildren()) {
+                        Gathering gathering = gatheringSnapshot.getValue(Gathering.class);
+                        App.mGatherings.add(gathering);
+                    }
+                    Log.i(TAG, "end onDataChange");
                  /*To notify the observers we have changed*/
-                setChanged();
-                notifyObservers();
+                    setChanged();
+                    notifyObservers();
             }
 
             @Override

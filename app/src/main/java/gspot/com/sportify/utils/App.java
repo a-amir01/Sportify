@@ -13,8 +13,13 @@ import gspot.com.sportify.Model.SportTypes;
  */
 public class App {
     public static Firebase dbref = new Firebase(Constants.FIREBASE_URL);
+
+    /*All gatherings from data base*/
     public static List<Gathering> mGatherings = new ArrayList<>();
-    public static List<String> mSportTypes = new SportTypes().getSportTypes();
+
+    /*Gathering's based on user's filters*/
+    public static List<Gathering> mFilteredGatherings = null;
+
     /* current gathering selected*/
     public static Gathering mCurrentGathering = null;
 

@@ -63,7 +63,7 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         mViewPager = (ViewPager) findViewById(R.id.activity_sport_pager_view_pager);
 
         /*get all the gatherings*/
-        mGatherings = App.mGatherings;
+        mGatherings = App.mFilteredGatherings;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -114,9 +114,12 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         /*dont show this filed in this screen*/
         menu.findItem(R.id.home).setVisible(false);
+
+        menu.findItem(R.id.active).setVisible(false);
         /*dont enable the user to log out from this page*/
         menu.findItem(R.id.log_out).setVisible(false);
-
+        menu.findItem(R.id.profile).setVisible(false);
+        menu.findItem(R.id.active).setVisible(false);
         return true;
     } //end onCreateOptionsMenu
 

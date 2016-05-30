@@ -143,7 +143,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
 
                     if(mProfile.getmMySports().size() > 0 ) {
                         if(editable.toString().length() == 0) {
-                            mProfile.getmMySports().get(groupPosition ).setmBio("Write about yourself with respect to this sport.");
+                            mProfile.getmMySports().get(groupPosition ).setmBio("This sport is great.");
                         } else if (editable.toString().length() > 200){
                             mProfile.getmMySports().get(groupPosition).setmBio("Please keep your bio shorter than 200 character.");
                         } else {
