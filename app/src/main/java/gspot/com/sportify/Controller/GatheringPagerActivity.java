@@ -63,7 +63,7 @@ public class GatheringPagerActivity extends BaseNavBarActivity {
         mViewPager = (ViewPager) findViewById(R.id.activity_sport_pager_view_pager);
 
         /*get all the gatherings*/
-        mGatherings = App.mGatherings;
+        mGatherings = App.mFilteredGatherings;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 

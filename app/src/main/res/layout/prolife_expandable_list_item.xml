@@ -5,27 +5,33 @@
     android:paddingLeft="10dp"
     android:paddingTop="5dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/colorPrimaryText"
-        android:text="Skill Level:"
-        android:id="@+id/skill_lv" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryText"
-        android:text="New Text"
-        android:id="@+id/skill_lv_text" />
-
-    <Spinner
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryText"
-        android:id="@+id/skill_lv_spinner"
-        android:popupBackground="#ffffff" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorPrimaryText"
+            android:text="Skill Level:"
+            android:id="@+id/skill_lv" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:text="New Text"
+            android:id="@+id/skill_lv_text" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:id="@+id/skill_lv_spinner"
+            android:popupBackground="#ffffff" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -70,7 +71,9 @@ public class AddSportFragment extends DialogFragment implements Observer{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
-        return super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.setTitle("Choose a Sport.");
+        return dialog;
     }
 
     /** On Create View Method
@@ -80,17 +83,6 @@ public class AddSportFragment extends DialogFragment implements Observer{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView()");
-
-        Resources res = getResources();
-//        TextView title = (TextView) getDialog().findViewById(android.R.id.title);
-//        title.setText("Choose a sport");
-//        title.setTextColor( res.getColor(R.color.colorPrimaryText));
-
-        final int titleDividerId = res.getIdentifier("titleDivider", "id", "android");
-        final View titleDivider = getDialog().findViewById(titleDividerId);
-        if (titleDivider != null) {
-            titleDivider.setBackgroundColor(res.getColor(R.color.colorPrimary));
-        }
 
         View v = inflater.inflate(R.layout.fragment_add_sport, container, false);
         ButterKnife.bind(this, v);
