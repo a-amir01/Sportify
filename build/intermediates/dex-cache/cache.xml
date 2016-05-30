@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <items version="2" >
 
     <item
@@ -150,3 +151,20 @@
     </item>
 
 </items>
+=======
+<<<<<<< HEAD
+<items version="2" />
+=======
+<items version="2" >
+
+    <item
+        jar="/Users/yunfanyang/Sportify_12/SportsApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="513b816407cfb337204941ee15543c7fbfa03759">
+        <dex dex="/Users/yunfanyang/Sportify_12/SportsApp/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_2099b543074ad38c42a7e79301513ba959e79966.jar" />
+    </item>
+
+</items>
+>>>>>>> 93b67a211a45effe48fbb26750a73141f03eb9ea
+>>>>>>> 6317647a8670d9e22c26a44d9bedca93cc2ba5f5

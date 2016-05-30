@@ -15,7 +15,7 @@
     <string name="hint_location">Location</string>
     <string name="hint_time">Enter a time</string>
     <string name="log_out">Log Out</string>
-    <string name="home">Events</string>
+    <string name="home">Find Events</string>
     <string name="profile">Profile</string>
     <string name="active">My Events</string>
     <string name="action_filter">Filter</string>
