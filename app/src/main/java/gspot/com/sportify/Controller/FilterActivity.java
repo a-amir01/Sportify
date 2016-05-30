@@ -161,7 +161,7 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
         mDataBaseSports.readSportTypes();
 
 
-        mSkillLevels = new boolean[3];
+        mSkillLevels = new boolean[] {true, true, true};
 
     }//end onCreate
 

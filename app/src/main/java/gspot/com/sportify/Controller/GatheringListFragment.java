@@ -58,9 +58,6 @@ public class GatheringListFragment extends Fragment implements Observer{
 
     private final static String SPORT_TYPE_ID= "sport_type_id";
 
-    private final static boolean FILTER = true;
-
-    private final static boolean ACTIVE = true;
     private GspotCalendar mCalendar = new GspotCalendar();
 
     /*code to pass in startActivityForResult*/
@@ -86,9 +83,6 @@ public class GatheringListFragment extends Fragment implements Observer{
 
     /*Hold a reference to the home button*/
     private MenuItem mHomeButton;
-
-    /*If we have came from filter activity*/
-    private static boolean sFromFilter;
     
     /*User is viewing their own events*/
     private static boolean sInActive;
@@ -115,7 +109,7 @@ public class GatheringListFragment extends Fragment implements Observer{
     /*2nd function that will be called when an Object of GatheringListFragment is created */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle SavedInstanceState){
-        Log.i(TAG, "onCreateView() Amir Assad");
+        Log.i(TAG, "onCreateView()");
 
         View view = inflater.inflate(R.layout.fragment_gathering_list, container, false);
 
@@ -206,7 +200,6 @@ public class GatheringListFragment extends Fragment implements Observer{
             case R.id.home:
                 getActivity().setTitle(R.string.events);
                 /*dont reduce list to user's events*/
-                sFromFilter = false;
                 sInActive = false;
 
                 mActiveGatheringButton.setVisible(true);
@@ -268,9 +261,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         /*update the UI based on the filter settings*/
         if(requestCode == REQUEST_CODE_FILTER){
             if(data == null) return;
-
-            /*to enable filtering for the user's activities*/
-            sFromFilter = true;
+            
             /*Get the sports that were chosen by the filter*/
             mChosenSports = data.getStringArrayListExtra(SPORT_TYPE_ID);
             App.mIsPrivateEvent = data.getBooleanExtra(Constants.SPORT_ACCESS_ID, false);
@@ -289,7 +280,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         Log.i(TAG, "updateUI() ");
 
         /*make a shallow copy*/
-        final List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
+        List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
 
         /*filter this list to specification and we have already filtered before*/
         filterGatheringList(gatherings, mActiveGatheringIds);
@@ -392,6 +383,12 @@ public class GatheringListFragment extends Fragment implements Observer{
                     continue;
                 }
             }//end outer if
+
+            /*No skill levels were checked*/
+            else{
+                gatherings.removeAll(gatherings);
+                return;
+            }
 
             /*match my availability*/
             if(App.mMatch_My_Availability && !mCalendar.playerCanMakeGathering(event)) {
