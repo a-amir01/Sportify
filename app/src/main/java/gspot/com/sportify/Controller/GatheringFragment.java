@@ -283,7 +283,7 @@ public class GatheringFragment extends Fragment {
     void removeAllAttendings()
     {
         HashMap currentAttendees = App.mCurrentGathering.getAttendees();
-        List<String> list = new ArrayList<String> (currentAttendees.values());
+        List<String> list = new ArrayList<String>(currentAttendees.values());
         Firebase myGatheringRef;
 
         for(String s : list)
@@ -293,6 +293,7 @@ public class GatheringFragment extends Fragment {
         }
 
     }
+
     void leaveAttending () {
         Log.i(TAG, "LEAVE ATTENDING");
         /*Gets user's UID*/
@@ -306,6 +307,8 @@ public class GatheringFragment extends Fragment {
         Firebase myGatheringsID = new Firebase(Constants.FIREBASE_URL_MY_GATHERINGS).child(mCurrentUser).child("myGatherings").child(mGathering.getID());
         myGatheringsID.removeValue();
     }
+
+
     void leavePending () {
         Log.i(TAG, "LEAVE PENDING");
         /*Gets user's UID*/
@@ -315,6 +318,8 @@ public class GatheringFragment extends Fragment {
         mCurrentUser = prefs.getString(Constants.KEY_UID, "");
         mGathering.removePending(mCurrentUser);
         mGathering.updatePending(getActivity().getApplicationContext());
+
+
     }
     void joinGathering () {
         Log.i(TAG, "JOIN");

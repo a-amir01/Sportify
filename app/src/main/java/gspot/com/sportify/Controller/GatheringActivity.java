@@ -306,6 +306,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         Intent intent = getIntent();
         toEdit = intent.getBooleanExtra("Edit", false);
         if (toEdit) {
+            setTitle("Edit Event");
             mTitleField.setText(App.mCurrentGathering.getGatheringTitle());
             mDescriptionField.setText(App.mCurrentGathering.getDescription());
             mLocationField.setText(App.mCurrentGathering.getLocation());
