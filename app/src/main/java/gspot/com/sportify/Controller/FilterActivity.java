@@ -150,6 +150,8 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
 
         ButterKnife.bind(this);
 
+        setTitle(R.string.filter);
+
         mExpandableListView = (ExpandableListView) findViewById(R.id.expandableList);
 
         /*create an observer*/
