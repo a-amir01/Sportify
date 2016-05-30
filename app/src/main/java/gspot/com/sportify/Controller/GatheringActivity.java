@@ -16,19 +16,16 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Date;
-import java.util.TimeZone;
-
 import java.util.Observable;
 import java.util.Observer;
-
+import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,8 +53,8 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     private String m_hostID, mCurrentUser;
     private boolean toEdit;
     private int mDayOfWeek;
-    private String mDateString;
-    private String mTimeString;
+    private String mDateString = "";
+    private String mTimeString = "";
     private Spinner sportTypeSpinner;
     private Spinner skillLevelSpinner;
 
@@ -201,10 +198,12 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
      */
     private boolean validateInputs() {
         boolean validInput = true; // Flag to indicate whether or not all inputs are valid
+        String date = dateButton.getText().toString();
+        String time =  timeButton.getText().toString();
 
         /* If date and time have not been selected display a toast */
-        if (dateButton.getText().toString().equals("DATE")
-                || timeButton.getText().toString().equals("TIME")) {
+        if (date.equals("DATE")
+                || time.equals("TIME")) {
             Toast.makeText(this, "Please select Date and Time", Toast.LENGTH_SHORT).show();
             validInput = false;
         }
@@ -213,14 +212,14 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
          * If the user selected date and time are before the current datetime,
          * notify the user
          */
-        else{
+        else {
             try {
                 // Create a format with the user's timezone to parse the dates
                 SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yy hh:mm");
                 sdf.setTimeZone(TimeZone.getDefault());
 
                 // Parse the user entered datetime
-                Date userDate = sdf.parse(mDateString.concat(" ").concat(mTimeString));
+                Date userDate = sdf.parse(date.concat(" ").concat(time));
 
                 // Get the current datetime
                 Date currentDate = new Date();
