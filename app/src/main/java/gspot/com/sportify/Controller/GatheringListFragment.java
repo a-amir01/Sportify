@@ -22,10 +22,16 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.TimeZone;
 
 import butterknife.ButterKnife;
 import gspot.com.sportify.Model.Gathering;
@@ -285,7 +291,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         Log.i(TAG, "updateUI() ");
 
         /*make a shallow copy*/
-        List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
+        final List<Gathering> gatherings = new ArrayList<>(mSportLab.getSports());
 
         /*filter this list to specification and we have already filtered before*/
         filterGatheringList(gatherings, mActiveGatheringIds);
@@ -294,6 +300,7 @@ public class GatheringListFragment extends Fragment implements Observer{
 
         /*All the gatherings based on filter for gatheringPagerActivity to use*/
         App.mFilteredGatherings = gatherings;
+
 
         /*there are currently no gatherings listed*/
         if(mAdapter == null) {
@@ -318,6 +325,11 @@ public class GatheringListFragment extends Fragment implements Observer{
     * since gatherings is a reference the change will happen
     * on the heap*/
     private void filterGatheringList(List<Gathering> gatherings, List<String> activeGatheringIds) {
+
+        /*Making sure that dates are in order and past dates will not appear*/
+        Date todaysDate = new Date();
+        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yy hh:mm");
+        sdf.setTimeZone(TimeZone.getDefault());
 
         /*filter the user's events*/
         if(sInActive) {
@@ -387,9 +399,38 @@ public class GatheringListFragment extends Fragment implements Observer{
             if(App.mMatch_My_Availability && !mCalendar.playerCanMakeGathering(event)) {
                 gatherings.remove(event);
                 --i;
+                continue;
+            }
+
+            /*if the event is older than todays event delete it
+            * dont touch it if the user is viewing their own events*/
+            try {
+                if (sdf.parse(event.getDate().concat(" ").concat(event.getTime())).compareTo(todaysDate) < 0 && !sInActive) {
+                    gatherings.remove(event);
+                    --i;
+                }
+            }
+            catch (ParseException e){
+                e.printStackTrace();
             }
         }//end for
 
+
+        /*Sort the list by event date and time*/
+        Collections.sort(gatherings, new Comparator<Gathering>() {
+            @Override
+            public int compare(Gathering lhs, Gathering rhs) {
+                try {
+                    Date lhsDate = sdf.parse(lhs.getDate().concat(" ").concat(lhs.getTime()));
+                    Date rhsDate = sdf.parse(rhs.getDate().concat(" ").concat(rhs.getTime()));
+
+                    return lhsDate.compareTo(rhsDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
     }//end filter UI
 
     /*Once the data is loaded from the databse update the UI
