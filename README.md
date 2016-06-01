@@ -16,22 +16,22 @@ systems of Android 4.1 and above. (API level 15+)
 
 ## Installation
 To install the Sportify App:
-1. On the mobile device's web browser, go to:
-   https://play.google.com/apps/testing/gspot.com.sportify.
-2. Tap on the button labelled **BECOME A TESTER**.
-3. Tap the clickable text, "download it on Google Play".
-4. Open the respective Google Play page through the Play Store app.
-5. Install the Sportify application and follow Google Play installation
+* On the mobile device's web browser, go to:
+  https://play.google.com/apps/testing/gspot.com.sportify.
+* Tap on the button labelled **BECOME A TESTER**.
+* Tap the clickable text, "download it on Google Play".
+* Open the respective Google Play page through the Play Store app.
+* Install the Sportify application and follow Google Play installation
    instructions.
 
 In the case that the installation instructions do not work, please
 use the following alternative method of installation:
-1. Turn on the phone's USB Debug mode.
-2. On the mobile device's web browser, go to:
+* Turn on the phone's USB Debug mode.
+* On the mobile device's web browser, go to:
    https://drive.google.com/file/d/0B37dzQQi9IrlUFl0RkZlck4yV2c/view?usp=sharing
-3. Tap on the button labelled **Download** and open it using the current
+* Tap on the button labelled **Download** and open it using the current
    web brwoser.
-4. The Sportify APK should be downloaded. Install the application
+* The Sportify APK should be downloaded. Install the application
    and follow the installation instructions prompted by the mobile device.
 
 **Result**: The Sportify App is should be installed onto the device.
