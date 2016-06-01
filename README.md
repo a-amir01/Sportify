@@ -1,4 +1,4 @@
-## Sportify
+# Sportify
 Sportify is an Android application whose goal is to connect
 users who are interested in engaging in outdoor activities 
 with other users who share the same interest. 
@@ -7,6 +7,14 @@ Meet-Up or social networking websites like Facebook,
 Sportify intends to simplify the communication process 
 between users and allow users of the application to join and 
 host outdoor activities with ease.
+
+## Table of Contents
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Test Suites](#test-suites)
+- [Dummy Accounts](#dummy-accounts)
+- [Authors](#authors)
+- [Point of Contact](#point-of-contact)
 
 ## Requirements
 In terms of testing, two Android smartphones with internet access and
