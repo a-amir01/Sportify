@@ -18,27 +18,30 @@ host outdoor activities with ease.
 
 ## Requirements
 In terms of testing, two Android smartphones with internet access and
-access to the Google Play Store are required. (Installation should
-be performed for both devices.) Both Android devices must have operating
-systems of Android 4.1 and above. (API level 15+)
+access to downloading content on the Google Play Store are required. 
+(Users of these mobile devices will need their own accounts for downloading.)
+(Installation should be performed for both devices.) Both Android devices 
+must have operating systems of Android 4.1 and above. (API level 15+)
 
 ## Installation
 To install the Sportify App:
+* (Ensure that the current user is logged into the Google Play store and 
+  is logged in Gmail from their mobile device's web browser.)
 * On the mobile device's web browser, go to:
   https://play.google.com/apps/testing/gspot.com.sportify.
-* Tap on the button labelled **BECOME A TESTER**.
+* Tap on the button labeled **BECOME A TESTER**.
 * Tap the clickable text, "download it on Google Play".
 * Open the respective Google Play page through the Play Store app.
-* Install the Sportify application and follow Google Play installation
+* Install the Sportify application and follow Google Play's installation
    instructions.
 
 In the case that the installation instructions do not work, please
 use the following alternative method of installation:
-* Turn on the phone's USB Debug mode.
+* Ensure that the the phone's USB Debug mode is turned on.
 * On the mobile device's web browser, go to:
    https://drive.google.com/file/d/0B37dzQQi9IrlUFl0RkZlck4yV2c/view?usp=sharing
-* Tap on the button labelled **Download** and open it using the current
-   web brwoser.
+* Tap on the button labeled **Download** and open it using the current
+   web browser.
 * The Sportify APK should be downloaded. Install the application
    and follow the installation instructions prompted by the mobile device.
 
