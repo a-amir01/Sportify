@@ -42,7 +42,7 @@ use the following alternative method of installation:
 * The Sportify APK should be downloaded. Install the application
    and follow the installation instructions prompted by the mobile device.
 
-**Result**: The Sportify App is should be installed onto the device.
+**Result**: The Sportify App is installed onto the device.
 
 ## Test Suites
 As presented in the Test Cases document, most test cases require 
