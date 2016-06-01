@@ -45,7 +45,8 @@ prior test cases that are in the same suite have already been tested.
 Unless otherwise specified, use the Player and Host accounts for testing
 and the Backup account as the Player or Host account in case of log in
 failure. For all test suites, ensure that UA1 is performed on the
-Player account.
+Player account and that UA2 has been performed for both the Player and
+the Host accounts.
 
 **Test Suite #1 - Forgot Password**
 * UA3 - User Forgot Password
