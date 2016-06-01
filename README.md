@@ -150,5 +150,4 @@ Note: These accounts are used to log into https://mail.google.com in
 
 ## Point of Contact
 In the case that  technical difficulty arises in the installation of 
-Sportify, feel free to call us at (424) 209 - 5335 or email us at
-**cse110.gspot@gmail.com**.
+Sportify, feel free to call us at (424) 209 - 5335.
