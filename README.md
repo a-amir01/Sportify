@@ -1,4 +1,4 @@
-## Synopsis
+## Sportify - Synopsis
 Sportify is an Android application whose goal is to connect
 users who are interested in engaging in outdoor activities 
 with other users who share the same interest. 
