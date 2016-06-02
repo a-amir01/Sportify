@@ -201,5 +201,6 @@
     <string name="delete_sport">Delete Sport</string>
     <string name="sports_bio">This is a sports bio</string>
     <string name="bio">Bio:</string>
+    <string name="sport_title">Text</string>
 
 </resources>

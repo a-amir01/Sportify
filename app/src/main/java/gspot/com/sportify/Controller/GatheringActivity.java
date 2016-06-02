@@ -284,9 +284,9 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
     public void update(Observable observable, Object data) {
 
         skillLevelSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
-        dataAdapter.setDropDownViewResource(R.layout.spinner_style);
-        skillLevelSpinner.setAdapter(dataAdapter);
+        ArrayAdapter<CharSequence> skillLevelAdapter = ArrayAdapter.createFromResource(this.getApplicationContext(), R.array.skill_lv_array, R.layout.spinner_style);
+        skillLevelAdapter.setDropDownViewResource(R.layout.spinner_style);
+        skillLevelSpinner.setAdapter(skillLevelAdapter);
 
 
         sportTypeSpinner.setOnItemSelectedListener(this);
@@ -296,7 +296,6 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
         }
 
         Collections.sort(sport_types);
-        sport_types.addAll(sport_types);
 
         ArrayAdapter<String> sportTypeListAdapter = new ArrayAdapter<String>(this.getApplicationContext(), R.layout.spinner_style, sport_types);
         Log.e(TAG, "Sportype Size " + sport_types.size());
@@ -321,7 +320,7 @@ public class GatheringActivity extends BaseNavBarActivity implements OnItemSelec
             int sportspinnerPosition = sportTypeListAdapter.getPosition(App.mCurrentGathering.getSID());
             sportTypeSpinner.setSelection(sportspinnerPosition);
 
-            int skillLevelPosition = dataAdapter.getPosition(App.mCurrentGathering.getSkillLevel().toString());
+            int skillLevelPosition = skillLevelAdapter.getPosition(App.mCurrentGathering.getSkillLevel().toString());
             skillLevelSpinner.setSelection(skillLevelPosition);
 
         } else {
