@@ -133,7 +133,6 @@ public class GatheringListFragment extends Fragment implements Observer{
         mSportLab.loadGatherings();
         mCalendar.getCalendar(mCurrentUser);
 
-        //updateUI(false);
 
         return view;
     }/*end onCreateView*/
@@ -331,6 +330,7 @@ public class GatheringListFragment extends Fragment implements Observer{
                 if(activeGatheringIds.contains(event.getID())) {
                     gatherings.remove(event);
                     --i;
+                    continue;
                 }
 
             } //end for
@@ -339,7 +339,7 @@ public class GatheringListFragment extends Fragment implements Observer{
         for (int i = 0; i < gatherings.size(); i++) {
             Gathering event = gatherings.get(i);
                 /*If the sport is not in the list*/
-            if (App.mChosenSports != null && App.mChosenSports.size() > 0) {
+            if (App.mChosenSports != null) {
                 //if the event type was in the filtered list
                 if (!App.mChosenSports.contains(event.getSport())) {
                     gatherings.remove(event);
@@ -358,6 +358,14 @@ public class GatheringListFragment extends Fragment implements Observer{
                 --i;
                 continue;
             } //end if
+
+            /*match my availability*/
+            Log.e("TAG",""  + App.mMatch_My_Availability + " " + !mCalendar.playerCanMakeGathering(event) );
+            if(App.mMatch_My_Availability && !mCalendar.playerCanMakeGathering(event)) {
+                gatherings.remove(event);
+                --i;
+                continue;
+            }
 
             /*if atleast one of the skill levels is selected*/
             if(App.mCurrentSkillLevels[0] || App.mCurrentSkillLevels[1] || App.mCurrentSkillLevels[2]){
@@ -383,13 +391,6 @@ public class GatheringListFragment extends Fragment implements Observer{
             else{
                 gatherings.removeAll(gatherings);
                 return;
-            }
-
-            /*match my availability*/
-            if(App.mMatch_My_Availability && !mCalendar.playerCanMakeGathering(event)) {
-                gatherings.remove(event);
-                --i;
-                continue;
             }
 
             /*if the event is older than todays event delete it

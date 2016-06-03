@@ -69,6 +69,9 @@ public class GspotCalendar extends Observable{
      */
     public void setAvailability(boolean availability, int dayOfWeek, int timeOfDay) {
         calendarGrid.get(dayOfWeek).set(timeOfDay, availability);
+        /*To notify the observers we have changed*/
+        setChanged();
+        notifyObservers();
     }
 
     /** Get Availability Method
@@ -84,7 +87,7 @@ public class GspotCalendar extends Observable{
     public void getCalendar(String UID) {
         Firebase profileRef = Profile.profileRef(UID);
 
-        profileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        profileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
