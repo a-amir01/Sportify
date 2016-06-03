@@ -132,6 +132,9 @@ public class FilterActivity extends AppCompatActivity implements CompoundButton.
         /*pass back the sport types*/
         setResult(RESULT_OK, data);
 
+        Toast.makeText(this, "Your preferences have been saved", Toast.LENGTH_SHORT).show();
+
+
         /*close the activity*/
         finish();
     }
