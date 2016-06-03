@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,6 +63,7 @@ public class DatePickerFragment extends DialogFragment
         SimpleDateFormat simpledateformat = new SimpleDateFormat("EEE, MMM d, yy");
         GregorianCalendar date = new GregorianCalendar(year, month, day);
         simpledateformat.setCalendar(date);
+
         String dateString = simpledateformat.format(date.getTime());
         int dayOfTheWeek = date.get(date.DAY_OF_WEEK) - 1;
         // Return dateString to calling activity (GatheringActivity.Java)

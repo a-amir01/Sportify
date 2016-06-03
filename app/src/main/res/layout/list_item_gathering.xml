@@ -14,8 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="2dp"
-        card_view:cardCornerRadius="10dp">
+        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="3dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,12 +27,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Text"
+                android:text="Large Text"
                 android:id="@+id/gathering_title"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:maxWidth="250dp" />
+                android:layout_alignParentTop="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="text"
+                android:text="Text"
                 android:id="@+id/sport_title"
                 android:layout_below="@+id/gathering_status"
                 android:layout_alignParentRight="true"

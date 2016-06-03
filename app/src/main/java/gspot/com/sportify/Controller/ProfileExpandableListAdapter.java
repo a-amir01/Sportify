@@ -115,7 +115,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
             skillLevelText.setVisibility(View.GONE);
             sportBioContent.setEnabled(true);
             deleteSport.setVisibility(View.VISIBLE);
-            //deleteSport.setFocusable(false);
+
             deleteSport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
