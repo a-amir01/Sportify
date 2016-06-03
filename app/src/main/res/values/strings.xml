@@ -27,7 +27,7 @@
     <string name="new_pwd_hint">New Password</string>
     <string name="re_pwd_hint">Confirm Password</string>
     <string name="msg_failed_to_get_intent_data">No image selected</string>
-    <string name="events">Events</string>
+    <string name="events">Find Events</string>
     <string name="my_events">My Events</string>
     <string name="filter">Filter</string>
     <string-array name="skill_lv_array">
@@ -201,5 +201,6 @@
     <string name="delete_sport">Delete Sport</string>
     <string name="sports_bio">This is a sports bio</string>
     <string name="bio">Bio:</string>
+    <string name="sport_title">Text</string>
 
 </resources>

@@ -7,11 +7,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
-import gspot.com.sportify.utils.DataBaseSports;
 
 /**
- * Created by amir assad on 4/17/16.
+ * Created by amir, assad, yunfan on 4/17/16.
  * This class is the first class that will be called everytime the application starts
  * The Job of this class is to determine where the user has currently logged in to the app
  * if they have then they will be redirected to the Gathering list else they will
@@ -27,12 +27,6 @@ public class StarterActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Log.i(TAG, "onCreate()");
-
-        /*start fresh and delete the file that is stored on user device*/
-        Log.i(TAG, "Deleteting file " + Constants.SPORTS_FILTER_FILE + " from device");
-        deleteFile(Constants.SPORTS_FILTER_FILE);
-        deleteFile(Constants.SKILL_LEVEL_FILE);
-
 
         /*the value stored here will remain on device until the app is deleted*/
         SharedPreferences settings = getSharedPreferences(Constants.STARTER_ID, Context.MODE_PRIVATE);
@@ -55,6 +49,10 @@ public class StarterActivity extends Activity {
         /*already logged in*/
         else {
             Log.i(TAG, "Not logged in yet");
+
+            /*start fresh and delete the file that is stored on user device*/
+            Log.i(TAG, "Deleteting file " + Constants.SPORTS_FILTER_FILE + " from device");
+            App.deleteConfigFiles(this);
 
             /*start the login activity*/
             intent = new Intent(StarterActivity.this, LoginActivity.class);

@@ -12,10 +12,11 @@ import android.widget.Toast;
 import butterknife.Bind;
 import gspot.com.sportify.Model.Profile;
 import gspot.com.sportify.R;
+import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;
 
 /**
- * Authors: amir assad on 4/24/16.
+ * Authors: amir assad, yunfan yang on 4/24/16.
  *
  * This is the base class for the navigationBar
  * this class over writes the onOptionsItemSelected()
@@ -45,6 +46,9 @@ public class BaseNavBarActivity extends AppCompatActivity {
 
                 /*flag to search if app was run before*/
                 editor.putBoolean("logged_in",false).commit();
+
+                /*delete config files*/
+                App.deleteConfigFiles(this);
 
                 /*go back to the login activity*/
                 intent = new Intent(this, LoginActivity.class);

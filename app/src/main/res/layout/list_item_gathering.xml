@@ -31,8 +31,7 @@
                 android:id="@+id/gathering_title"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/gathering_status"/>
+                android:layout_alignParentTop="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,7 +51,9 @@
                 android:id="@+id/sport_title"
                 android:layout_below="@+id/gathering_status"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:maxWidth="90dp"
+                android:textSize="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"

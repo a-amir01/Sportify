@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.UUID;
-import gspot.com.sportify.Model.Attendee;
 
 import gspot.com.sportify.utils.App;
 import gspot.com.sportify.utils.Constants;

@@ -51,14 +51,18 @@
         android:maxLines="14"
         android:minLines="1" />
 
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
         android:minWidth="100dp"
         android:text="@string/delete_sport"
         android:id="@+id/delete_sport_button"
-        android:theme="@style/AppTheme.Button.Colored"
-        android:background="@color/colorPrimary" />
+        android:background="@drawable/profile_button"
+        android:textColor="@color/colorPrimaryTextInverse"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textSize="15dp"
+        />
 
 </LinearLayout>

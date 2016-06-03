@@ -96,7 +96,8 @@
             android:id="@+id/begginerCheckBox"
             app:buttonTint="@color/white"
             android:layout_weight="1"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:checked="false" />
 
         <!--Intermediate-->
         <android.support.v7.widget.AppCompatCheckBox
@@ -107,7 +108,8 @@
             android:id="@+id/IntermediateCheckBox"
             app:buttonTint="@color/white"
             android:layout_weight="1"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:checked="false" />
 
         <!--Advanced-->
         <android.support.v7.widget.AppCompatCheckBox
@@ -118,7 +120,8 @@
             android:id="@+id/AdvancedCheckBox"
             app:buttonTint="@color/white"
             android:layout_weight="1"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:checked="false" />
 
     </LinearLayout>
 

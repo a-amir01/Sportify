@@ -92,8 +92,8 @@ public class ChangePasswordActivity extends Activity {
         mRePwd = mRePwdText.getText().toString();
 
         /* Ensure the new password is the correct length */
-        if (mNewPwd.isEmpty() || mNewPwd.length() < 4 || mNewPwd.length() > 10) {
-            mNewPwdText.setError("Between 4 and 10 alphanumeric characters");
+        if (mNewPwd.isEmpty() || mNewPwd.length() < 4 || mNewPwd.length() > 15) {
+            mNewPwdText.setError("Between 4 and 15 alphanumeric characters");
             mChangePwdButton.setEnabled(true);
         }//end if
 
