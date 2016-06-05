@@ -30,7 +30,7 @@ To install the Sportify App:
 * On the mobile device's web browser, go to:
   https://play.google.com/apps/testing/gspot.com.sportify.
 * Tap on the button labeled **BECOME A TESTER**.
-* Tap the clickable text, "download it on Google Play".
+* Tap the clickable text, "Download the Sportify app on Google Play".
 * Open the respective Google Play page through the Play Store app.
 * Install the Sportify application and follow Google Play's installation
    instructions.
