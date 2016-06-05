@@ -13,6 +13,7 @@ host outdoor activities with ease.
 - [Installation](#installation)
 - [Test Suites](#test-suites)
 - [Dummy Accounts](#dummy-accounts)
+- [Source Code](#source-code)
 - [Authors](#authors)
 - [Point of Contact](#point-of-contact)
 
@@ -45,8 +46,9 @@ use the following alternative method of installation:
 * The Sportify APK should be downloaded. Install the application
    and follow the installation instructions prompted by the mobile device.
 
-Alternatively, files on Sportify's GitHub page can be downloaded into Android
-Studio and installed directly on the User's device.
+Alternatively, files on Sportify's GitHub page (see below) can be downloaded into Android
+Studio and installed directly on the User's device (or opened on an emulator after following
+the instructions on CSE 110's lab 5. 
 
 **Result**: The Sportify App is installed onto the device.
 
@@ -141,6 +143,15 @@ Note: These accounts are used to log into https://mail.google.com in
       account cannot be used to log into the application, do use 
       the Backup account. Follow test case UA2 for specific instructions
       for logging in.
+
+## Source Code
+To access the code used for this project please visit our private
+Githib repository. To do so, use the following account below, and go to
+https://github.com/andrewyang95/SportsApp or access the SportsApp repository.
+
+* **Login**: cse110.gspot@gmail.com
+* **Password**: SanDiego110
+
 
 ## Authors
 
