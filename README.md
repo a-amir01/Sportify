@@ -39,11 +39,14 @@ In the case that the installation instructions do not work, please
 use the following alternative method of installation:
 * Ensure that the the phone's USB Debug mode is turned on.
 * On the mobile device's web browser, go to:
-   https://drive.google.com/file/d/0B37dzQQi9IrlUFl0RkZlck4yV2c/view?usp=sharing
+   https://app.box.com/s/pphh3roop372r4fpf0ojl04sfeh81x2i
 * Tap on the button labeled **Download** and open it using the current
    web browser.
 * The Sportify APK should be downloaded. Install the application
    and follow the installation instructions prompted by the mobile device.
+
+Alternatively, files on Sportify's GitHub page can be downloaded into Android
+Studio and installed directly on the User's device.
 
 **Result**: The Sportify App is installed onto the device.
 
