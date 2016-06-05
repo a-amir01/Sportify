@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
     /*Returns the MySport that was just clicked on */
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this.mListDataChild.get(this.mListDataHeader.get(groupPosition));
+        return mListDataChild.get(mListDataHeader.get(groupPosition));
     }
 
     @Override
@@ -66,20 +67,28 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
 
+
         final MySport childSport = (MySport) getChild(groupPosition, childPosition);
         final int locationOfSport = mProfile.getmMySports().indexOf(childSport);
 
-        if (convertView == null) {
+        if (mProfile.getmMySports().indexOf(childSport) == -1){
+            return convertView;
+        }
+
+
+            for (String header : mListDataHeader) {
+            Log.e("This view has: ", header);
+        }
+
             LayoutInflater infalInflater = (LayoutInflater) this.mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.prolife_expandable_list_item, null);
-        }
+            convertView = infalInflater.inflate(R.layout.prolife_expandable_list_item, null, false);
 
         //bind
         final Spinner skillLevelSpinner = (Spinner) convertView.findViewById(R.id.skill_lv_spinner);
-        TextView skillLevelText = (TextView) convertView.findViewById(R.id.skill_lv_text);
-        EditText sportBioContent = (EditText) convertView.findViewById(R.id.sport_bio_content);
-        Button deleteSport = (Button) convertView.findViewById(R.id.delete_sport_button);
+        final TextView skillLevelText = (TextView) convertView.findViewById(R.id.skill_lv_text);
+        final EditText sportBioContent = (EditText) convertView.findViewById(R.id.sport_bio_content);
+        final Button deleteSport = (Button) convertView.findViewById(R.id.delete_sport_button);
         //always set the bio
         sportBioContent.setText(childSport.getmBio());
 
@@ -89,7 +98,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
             adapter.setDropDownViewResource(R.layout.spinner_style);
             skillLevelSpinner.setAdapter(adapter);
             skillLevelSpinner.setVisibility(View.VISIBLE);
-            String defaultSelection = mProfile.getmMySports().get(locationOfSport).getmSkillLevel().getSkillLevel();
+            String defaultSelection = mProfile.getmMySports().get(mProfile.getmMySports().indexOf(childSport)).getmSkillLevel().getSkillLevel();
             if (!defaultSelection.equals(null)) {
                 int spinnerPosition = adapter.getPosition(defaultSelection);
                 skillLevelSpinner.setSelection(spinnerPosition);
@@ -99,7 +108,6 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
             skillLevelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    Log.e("TAGGGG", skillLevelSpinner.getSelectedItem().toString());
                     List<MySport> tempList = mProfile.getmMySports();
 
                     mProfile.getmMySports().get(locationOfSport).setSkillLevelString(skillLevelSpinner.getSelectedItem().toString());
@@ -120,11 +128,20 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View view) {
                     if(mProfile.getmMySports().size() > 0) {
-                        mProfile.getmMySports().remove(locationOfSport);
 
-                        mListDataChild.remove(mListDataHeader.get(locationOfSport));
-                        mListDataHeader.remove(locationOfSport);
+                        mProfile.getmMySports().remove(mProfile.getmMySports().indexOf(childSport));
+
+
+                        Log.e("REMOVE", mListDataChild.get(mListDataHeader.get(groupPosition)).toString());
+                        Log.e("REMOVE", mListDataHeader.get(groupPosition));
+
+                        mListDataChild.remove(mListDataHeader.get(groupPosition));
+                        mListDataHeader.remove(groupPosition);
+                        for (String header : mListDataHeader) {
+                            Log.e("The Header still has: ", header);
+                        }
                         notifyDataSetChanged();
+                        return;
                     }
                 }
             });
@@ -144,16 +161,21 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    if(mProfile.getmMySports().size() > 0 ) {
-                        if(editable.toString().length() == 0) {
+
+                    if (mProfile.getmMySports().size() > 0) {
+                        if (editable.toString().length() == 0 && mProfile.getmMySports().indexOf(childSport) != -1) {
+
                             mProfile.getmMySports().get(locationOfSport).setmBio("This sport is great.");
-                        } else if (editable.toString().length() > 200){
+                        } else if (editable.toString().length() > 200 && mProfile.getmMySports().indexOf(childSport) != -1) {
                             mProfile.getmMySports().get(locationOfSport).setmBio("Please keep your bio shorter than 200 character.");
-                        } else {
+                        } else if (mProfile.getmMySports().indexOf(childSport) != -1) {
+                            //Log.e("TAGGGG", childSport.getmSport().toString() + " " + mProfile.getmMySports().indexOf(childSport) );
+                            Log.e("TAGGGG", childSport.getmSport().toString() + " G:" + groupPosition);
                             mProfile.getmMySports().get(locationOfSport).setmBio(editable.toString());
                         }
                     }
                 }
+
             });
         }
 
@@ -217,5 +239,7 @@ public class ProfileExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
+
+
 
 }
