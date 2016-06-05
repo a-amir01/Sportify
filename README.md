@@ -87,7 +87,7 @@ the Host accounts.
 * PB1 - Create Default Profile
 * PB3 - Set Availability
 * FG1 - Set Filter Settings
-* FG2 - View Gathering List with Filters
+* FG2 - View Find Events with Filters
 
 **Test Suite #8 - Host Creates and Edits Gathering**
 * HA1 - Create Gathering
@@ -97,16 +97,17 @@ the Host accounts.
 * HA1 - Create Gathering
 * HA3 - Delete Gathering
 
-**Test Suite #10 - Host Creates Gathering and Player Joins and Leaves Public Gathering**
+**Test Suite #10 - Host Creates Gathering and Player Joins Public Gathering and Views Players**
 * HA1 - Create Gathering
 * PA1 - View and Join a Gathering
-* PA2 - Leave a Gathering
+* PA3 - View Players
 
-**Test Suite #11 - Host Creates Gathering and Player Joins Closed Gathering and Views Players**
+**Test Suite #11 - Host Creates Gathering and Player Joins and Leaves Closed Gathering**
 * HA1 - Create Gathering
 * PA1 - View and Join a Gathering
 * HA4 - Accept Request for Closed Gatherings
-* PA3 - View Players
+* PA2 - Leave a Gathering
+
 
 
 ## Dummy Accounts
