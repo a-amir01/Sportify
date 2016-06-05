@@ -31,7 +31,8 @@
                 android:id="@+id/gathering_title"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/gathering_status"/>
 
             <TextView
                 android:layout_width="wrap_content"
