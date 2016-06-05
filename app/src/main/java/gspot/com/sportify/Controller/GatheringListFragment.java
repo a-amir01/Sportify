@@ -237,7 +237,10 @@ public class GatheringListFragment extends Fragment implements Observer{
 //    @Override
 //    public void onResume(){
 //        super.onResume();
-//        if (mAdapter != null) mAdapter.notifyDataSetChanged();
+//        if (mAdapter != null){
+//            mAdapter.notifyDataSetChanged();
+//            updateUI();
+//        }
 //    }
 
     /*
