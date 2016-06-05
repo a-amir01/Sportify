@@ -13,6 +13,7 @@ host outdoor activities with ease.
 - [Installation](#installation)
 - [Test Suites](#test-suites)
 - [Dummy Accounts](#dummy-accounts)
+- [Source Code](#source-code)
 - [Authors](#authors)
 - [Point of Contact](#point-of-contact)
 
@@ -30,7 +31,7 @@ To install the Sportify App:
 * On the mobile device's web browser, go to:
   https://play.google.com/apps/testing/gspot.com.sportify.
 * Tap on the button labeled **BECOME A TESTER**.
-* Tap the clickable text, "download it on Google Play".
+* Tap the clickable text, "Download the Sportify app on Google Play".
 * Open the respective Google Play page through the Play Store app.
 * Install the Sportify application and follow Google Play's installation
    instructions.
@@ -39,11 +40,15 @@ In the case that the installation instructions do not work, please
 use the following alternative method of installation:
 * Ensure that the the phone's USB Debug mode is turned on.
 * On the mobile device's web browser, go to:
-   https://drive.google.com/file/d/0B37dzQQi9IrlUFl0RkZlck4yV2c/view?usp=sharing
+   https://app.box.com/s/pphh3roop372r4fpf0ojl04sfeh81x2i
 * Tap on the button labeled **Download** and open it using the current
    web browser.
 * The Sportify APK should be downloaded. Install the application
    and follow the installation instructions prompted by the mobile device.
+
+Alternatively, files on Sportify's GitHub page (see below) can be downloaded into Android
+Studio and installed directly on the User's device (or opened on an emulator after following
+the instructions on CSE 110's lab 5. 
 
 **Result**: The Sportify App is installed onto the device.
 
@@ -87,7 +92,7 @@ the Host accounts.
 * PB1 - Create Default Profile
 * PB3 - Set Availability
 * FG1 - Set Filter Settings
-* FG2 - View Gathering List with Filters
+* FG2 - View Find Events with Filters
 
 **Test Suite #8 - Host Creates and Edits Gathering**
 * HA1 - Create Gathering
@@ -97,16 +102,17 @@ the Host accounts.
 * HA1 - Create Gathering
 * HA3 - Delete Gathering
 
-**Test Suite #10 - Host Creates Gathering and Player Joins and Leaves Public Gathering**
+**Test Suite #10 - Host Creates Gathering and Player Joins Public Gathering and Views Players**
 * HA1 - Create Gathering
 * PA1 - View and Join a Gathering
-* PA2 - Leave a Gathering
+* PA3 - View Players
 
-**Test Suite #11 - Host Creates Gathering and Player Joins Closed Gathering and Views Players**
+**Test Suite #11 - Host Creates Gathering and Player Joins and Leaves Closed Gathering**
 * HA1 - Create Gathering
 * PA1 - View and Join a Gathering
 * HA4 - Accept Request for Closed Gatherings
-* PA3 - View Players
+* PA2 - Leave a Gathering
+
 
 
 ## Dummy Accounts
@@ -137,6 +143,15 @@ Note: These accounts are used to log into https://mail.google.com in
       account cannot be used to log into the application, do use 
       the Backup account. Follow test case UA2 for specific instructions
       for logging in.
+
+## Source Code
+To access the code used for this project please visit our private
+Githib repository. To do so, use the following account below, and go to
+https://github.com/andrewyang95/SportsApp or access the SportsApp repository.
+
+* **Login**: cse110.gspot@gmail.com
+* **Password**: SanDiego110
+
 
 ## Authors
 

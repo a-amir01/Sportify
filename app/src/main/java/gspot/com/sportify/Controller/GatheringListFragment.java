@@ -234,6 +234,15 @@ public class GatheringListFragment extends Fragment implements Observer{
         });
     }
 
+//    @Override
+//    public void onResume(){
+//        super.onResume();
+//        if (mAdapter != null){
+//            mAdapter.notifyDataSetChanged();
+//            updateUI();
+//        }
+//    }
+
     /*
     * this Function will be called when the activity resumes back
     * just as if the onResume method was created.
